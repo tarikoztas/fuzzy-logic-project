@@ -1,0 +1,37 @@
+# Environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets (never commit)
+.env
+*.key
+*.pem
+secrets*
+
+# Publisher / course PDFs kept locally only (copyright)
+references/papers/*.pdf
+
+# Large or downloaded data (document the source in data/README.md instead)
+data/raw/
+data/BSR/
+data/*.zip
+data/*.tar*
+
+# Caches and temporary outputs
+cache/
+*.npz
+*.log
+.DS_Store
+Thumbs.db
+
+# LaTeX/Word build leftovers
+report/*.aux
+report/*.log
+report/*.out
+report/*.synctex.gz
+~$*
