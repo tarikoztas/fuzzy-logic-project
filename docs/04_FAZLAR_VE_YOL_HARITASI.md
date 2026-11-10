@@ -23,10 +23,10 @@
 ---
 
 ## Faz 0 — Kurulum ve temel (18.10)
-- [ ] `git init`, ilk commit (doküman + klasör iskeleti); GitHub'da repo oluştur (private→teslimde erişilebilir yap)
-- [ ] `.venv` + `pip install -r requirements.txt`; `import dtcwt, numba, skimage, cv2` testi
-- [ ] `docs/06_KARARLAR.md` "Açık" maddelerini gözden geçir; **hocaya sorulacak soruları gönder** (MRR, FCM uygunluğu, rapor dili, checkpoint tarihleri, resmi kod kullanımı)
-- [ ] README iskeleti (zorunlu 15 başlık, içi yer tutucu)
+- [x] `git init`, ilk commit (doküman + klasör iskeleti) — **GitHub uzak repo: bekliyor** (`gh` yok, öğrenci oluşturacak; D-025)
+- [x] `.venv` (Python 3.12) + `pip install -r requirements.txt`; `import dtcwt, numba, skimage, cv2` testi ✓ (numpy<2 sabitlendi; DTCWT gidiş-dönüş hatası 3e-16)
+- [x] `docs/06_KARARLAR.md` gözden geçirildi (D-023…D-025) — **hocaya mesaj: öğrenci gönderecek** (taslak `docs/10_HOCAYA_MESAJ.md`)
+- [x] README iskeleti (zorunlu 15 başlık, içi yer tutucu)
 - **Çıktı:** çalışan ortam, ilk commit
 - **Biter:** `python -c "import dtcwt, numba, skimage"` hatasız
 

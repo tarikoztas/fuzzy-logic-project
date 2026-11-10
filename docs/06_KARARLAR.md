@@ -10,6 +10,9 @@ Yeni karar → yeni satır. Claude "Öneri/Açık" kararları öğrenci onaylama
 | D-001 | Proje yönergeye (puan tablolarına) birebir uygun yürütülecek | 18.10.2026 |
 | D-002 | Referans makale: Wu et al. 2024, ESWA 256:124943 (öğrencinin sorumlu olduğu makale) | 18.10.2026 |
 | D-003 | Uygulama Claude Code ile terminalde yürütülecek; bağlam bu `docs/` dosyaları ve `CLAUDE.md` ile taşınır | 18.10.2026 |
+| D-023 | Öğrenci, B bölümündeki önerileri (D-005, D-007…D-016) "en mantıklı şekilde" uygulama yetkisini Claude'a devretti → hepsi önerilen haliyle kabul edildi (D-014: varsayılan `floor`). Hocaya bağlı C maddeleri yine **Açık**; hoca cevabıyla çelişirse güncellenir. D-006 (katkı) seçimi CP4'te kesinleşir; çalışma varsayımı C1+C2 | 10.11.2026 |
+| D-024 | Python ortamı: **Python 3.12** ile `.venv` (sistemdeki 3.13 yerine; dtcwt/numba uyumluluğu için daha güvenli) | 10.11.2026 |
+| D-025 | GitHub: makinede `gh` CLI yok → repo şimdilik yalnız yerel git; uzak repo öğrenci tarafından oluşturulup `git remote add origin …` ile bağlanacak | 10.11.2026 |
 
 ## B. Öneriler (onay bekliyor)
 

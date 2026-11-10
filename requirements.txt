@@ -1,14 +1,15 @@
-# Minimum versions; pin exact versions with `pip freeze > requirements.lock.txt`
-# after the environment is verified (course guideline: library versions must be stated).
-numpy>=1.24
-scipy>=1.10
-scikit-image>=0.21
-opencv-python>=4.8
-matplotlib>=3.7
-pandas>=2.0
-scikit-learn>=1.3
-dtcwt>=0.12
-numba>=0.58
+# Verified on Python 3.12 (Windows 11), see requirements.lock.txt for the exact frozen versions.
+# numpy is capped below 2.0 because dtcwt 0.13 still calls np.asfarray (removed in NumPy 2.0);
+# the other upper bounds keep packages on builds that support NumPy 1.26.
+numpy>=1.24,<2
+scipy>=1.10,<1.15
+scikit-image>=0.21,<0.25
+opencv-python>=4.8,<4.11
+matplotlib>=3.7,<3.10
+pandas>=2.0,<2.3
+scikit-learn>=1.3,<1.6
+dtcwt==0.13.0
+numba>=0.58,<0.61
 pyyaml>=6.0
 tqdm>=4.66
 pytest>=7.4

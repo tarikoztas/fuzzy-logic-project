@@ -65,7 +65,9 @@ pip install -r requirements.txt
 
 ## Requirements
 
-Python ≥ 3.10; see `requirements.txt` (numpy, scipy, scikit-image, opencv-python, matplotlib, pandas, dtcwt, numba, scikit-learn, pyyaml, tqdm, pytest). `TODO: pin exact versions with pip freeze after the environment is verified.`
+Tested with **Python 3.12** on Windows 11. Version ranges are in `requirements.txt`; the exact frozen environment is in `requirements.lock.txt` (`pip install -r requirements.lock.txt` for an identical setup).
+
+Note: `numpy` must be `< 2.0` because `dtcwt 0.13.0` still uses `np.asfarray`, which was removed in NumPy 2.0.
 
 ## How to Run
 

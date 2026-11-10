@@ -41,12 +41,14 @@ Orijinal PDF'ler: `references/papers/` (yönerge ve makale). Çelişki olursa **
 - **Metrikler:** V_PC, V_PE, ACC, F-score, NMI, Kappa (+ iterasyon sayısı, süre).
 - **Bilinen makale belirsizlikleri / tuzakları:** `docs/02_MAKALE_ANALIZI.md` §9 — kodlamadan ÖNCE oku (ör. hard threshold sonrası sıfırlanan sütunlar, Eq. 10'daki y_j/y_q, Eq. 15-16 işaret belirsizliği).
 
-## 5. Komutlar (Faz 0'da doğrulanacak)
+## 5. Komutlar (Faz 0'da doğrulandı: Python 3.12, Windows)
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-pytest -q                                   # birim testler
+py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
+.venv/Scripts/python.exe -m pip install -r requirements.txt   # (Linux/mac: .venv/bin/python)
+.venv/Scripts/python.exe -m pytest -q        # birim testler
+# Not: numpy<2 zorunlu (dtcwt 0.13 np.asfarray kullanıyor); tam sürümler requirements.lock.txt
+# Not: dtcwt 1 seviyede lowpass tam boyut (H×W), highpasses[0] (H/2×W/2×6) — Faz 3c'de dikkat
 python experiments/baseline/run_baseline.py --config experiments/baseline/config.yaml
 python experiments/proposed/run_proposed.py --config experiments/proposed/config.yaml
 ```
