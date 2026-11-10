@@ -54,4 +54,5 @@ Yeni karar → yeni satır. Claude "Öneri/Açık" kararları öğrenci onaylama
 | D-019 | Rapor dili (İngilizce mi Türkçe mi)? Şablon (IEEE konferans/dergi)? | Rapor | **Açık** |
 | D-020 | Makalenin resmi kodu varsa kullanım izni/şekli? (Biz sıfırdan yazıyoruz) | Etik | **Açık** |
 | D-021 | Sunum biçimi (PPTX/PDF), canlı demo için kendi laptop mu? | Sunum | **Açık** |
-| D-022 | Öğrenci bilgisi (ad-soyad, numara) README için | README | **Açık** |
+| D-022 | Öğrenci bilgisi (ad-soyad, numara) README için | README | **Kapandı** (10.11.2026): Tarık Öztaş, 1306230040; hoca adı README'de zorunlu başlık değil → yazılmadı |
+| D-026 | Son teslim / sunum tarihi hâlâ geçerli mi? (bugün 10.11.2026, dokümandaki teslim 27.10.2026) | Takvim | **Açık** — hocaya mesajda soruldu |

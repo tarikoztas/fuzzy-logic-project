@@ -48,6 +48,7 @@ Bu kurallar yönergenin puanlama ve etik maddelerinden türetilmiştir. İhlal =
 - `main` dalı çalışır durumda kalsın; büyük denemeler `exp/<ad>` dalında.
 - Yüklenmeyecekler: `.venv/`, büyük veri, gizli bilgiler, yayıncı PDF'i, geçici dosyalar (`.gitignore`).
 - Gizli bilgi: API anahtarı, parola, token **asla** commit'lenmez; `git grep` ile teslim öncesi kontrol.
+- Commit'lerde **Claude co-author / `Co-Authored-By` satırı yok**; yazar ve push yapan yalnızca öğrencinin hesabı. YZ kullanımı commit'te değil, `docs/genai_usage_log.md` ve rapordaki GenAI Disclosure bölümünde şeffafça belirtilir.
 
 ## 7. Dokümantasyon standartları
 

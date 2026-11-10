@@ -9,11 +9,10 @@ Reproduction and Extension of *"Adaptive sparse regularized fuzzy clustering noi
 
 ## Student Information
 
-- **Name:** Tarık `TODO: surname`
-- **Student ID:** `TODO`
+- **Name:** Tarık Öztaş
+- **Student ID:** 1306230040
 - **University / Department:** İstanbul Üniversitesi-Cerrahpaşa, Computer Engineering
 - **Course:** Fuzzy Logic (Bulanık Mantık) — Term Project, 2026–2027 Fall
-- **Instructor:** `TODO`
 
 ## Original Paper
 

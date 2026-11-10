@@ -6,7 +6,8 @@
 ## 1. Proje özeti
 
 - **Ders:** Bulanık Mantık — Dönem Projesi (İstanbul Üniversitesi-Cerrahpaşa, Bilgisayar Mühendisliği)
-- **Öğrenci:** Tarık (README'de ad-soyad/numara alanlarını öğrenci dolduracak)
+- **Öğrenci:** Tarık Öztaş, 1306230040 (README'ye işlendi)
+- **Git:** commit'lere Claude co-author/trailer EKLENMEZ; yalnız öğrencinin hesabı (`tarikoztas`) — bkz. `docs/05_KURALLAR.md` §6
 - **Referans makale:** J. Wu, X. Wang, Y. Liu, C. Fang, *"Adaptive sparse regularized fuzzy clustering noise image segmentation algorithm based on complementary spatial information"*, Expert Systems With Applications 256 (2024) 124943. DOI: 10.1016/j.eswa.2024.124943
 - **Proje akışı:** İNCELE → ANLA → UYGULA → GELİŞTİR → DENEY YAP → KARŞILAŞTIR → ANALİZ ET → SUN → RAPORLA
 - **Tarihler:** Bugün (plan başlangıcı) 18.10.2026 · **Son teslim 27.10.2026** (Classroom) · **Sunumlar 03.11.2026**
