@@ -109,7 +109,7 @@ Girdiler: gürültülü görüntü I; K; w; S; g; σ; k; δ; m; T; ε.
 Çıktı: U, c.
 
 ### 4.7 Karmaşıklık (§3.5)
-Makale adım sayısı: `5N + N·w² + 5t·K·N + 7·N·S²·w²` (t = yakınsamaya kadar geçen iterasyon; makalede T değil t) ve "tüm değişkenler n yapılınca" **O(n⁵)** der (FCM O(n³), ADFLICM/DSFCM_N/FSC_LNML de O(n⁵)). *(Bu soyutlama kaba — bkz. §9-7; raporda gerçek ölçülen süreyi ayrıca ver.)*
+Makale adım sayısı: `5N + N·w² + 5t·K·N + 7·N·S²·w²` (makale §3.5'te önce `5tKN` (t = yakınsama iterasyonu) sonra `5TKN` yazıyor, Tablo 11'de de `5TKN`; iki yazım da PDF'te var) ve "tüm değişkenler n yapılınca" **O(n⁵)** der (FCM O(n³), ADFLICM/DSFCM_N/FSC_LNML de O(n⁵)). *(Bu soyutlama kaba — bkz. §9-7; raporda gerçek ölçülen süreyi ayrıca ver.)*
 
 ## 5. Deneysel kurulum (makalenin §4)
 

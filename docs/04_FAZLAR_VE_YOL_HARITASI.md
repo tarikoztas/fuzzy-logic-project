@@ -31,9 +31,9 @@
 - **Biter:** `python -c "import dtcwt, numba, skimage"` hatasız
 
 ## Faz 1 — Makale analizi + literatür (CP1)
-- [ ] `docs/02_MAKALE_ANALIZI.md`'yi PDF ile karşılaştırarak doğrula (özellikle denklemler, parametreler)
-- [ ] Problem/amaç/girdi-çıktı/deneysel yapı özeti (CP1 teslimi için 1–2 sayfa)
-- [ ] **Literatür:** makalenin kaynakçasından gerçek çalışmalar (BCFCM 2002, FGFCM 2007, FLICM 2010, FRFCM 2018, FSC_LNML 2022, SRFCM 2021, FCM_SICM 2020, DSFCM_N 2019 …) + **en az 5 ek güncel çalışma** (2022–2026) web araştırmasıyla bul. Her biri için: yazar/yıl/yayın/DOI doğrulanmış, 2–3 cümle yöntem, güçlü/zayıf yön
+- [x] `docs/02_MAKALE_ANALIZI.md`'yi PDF ile karşılaştırarak doğrula (özellikle denklemler, parametreler)
+- [x] Problem/amaç/girdi-çıktı/deneysel yapı özeti → `docs/cp/CP1_paper_and_problem_analysis.md`
+- [x] **Literatür** (`references/README.md`: 23 makale-kaynakçası + 10 güncel, hepsi Crossref'te doğrulandı; 5 güncel çalışmanın abstract'ı okundu; Türkçe notlar `docs/11_LITERATUR_NOTLARI.md`; Related Work taslağı `report/drafts/related_work.md`). **Öğrenci:** [29] Wu 2023 CVIU'yu üniversite erişimiyle oku. Orijinal plan: makalenin kaynakçasından gerçek çalışmalar (BCFCM 2002, FGFCM 2007, FLICM 2010, FRFCM 2018, FSC_LNML 2022, SRFCM 2021, FCM_SICM 2020, DSFCM_N 2019 …) + **en az 5 ek güncel çalışma** (2022–2026) web araştırmasıyla bul. Her biri için: yazar/yıl/yayın/DOI doğrulanmış, 2–3 cümle yöntem, güçlü/zayıf yön
 - [ ] `references/README.md` (IEEE formatında doğrulanmış liste) + karşılaştırma tablosu (yöntem × spatial bilgi × non-local × sparse × adaptif × süre)
 - **Çıktı:** CP1 notu; literatür tablosu; Related Work taslağı
 - **Biter:** her kaynağın DOI'si açılıp kontrol edildi (`docs/05_KURALLAR.md` §2)
