@@ -11,6 +11,8 @@ Protocol choices the paper does not state (documented in D-028):
   * clusters are matched to classes with the Hungarian algorithm (matching.py);
   * F-score is the *macro* average of the per-class F = 2TP / (2TP + FP + FN);
   * NMI uses natural logarithms (the ratio does not depend on the base).
+  * Kappa is Cohen's kappa; `kappa_paper` reproduces how the paper's Kappa
+    numbers behave for K > 2 (D-031) and is used only for comparison with it.
 """
 from __future__ import annotations
 
@@ -99,6 +101,23 @@ def kappa(gt: np.ndarray, pred: np.ndarray) -> float:
     return float((p0 - pe) / (1.0 - pe) * 100.0)
 
 
+def kappa_paper(gt: np.ndarray, pred: np.ndarray, K: int | None = None) -> float:
+    """Kappa as the paper's reported numbers behave (reverse-engineered, D-031).
+
+    Solving Eq. (35) for p_e with the paper's own ACC and Kappa values gives
+    p_e = 0.5556 for every 3-class cell of Tables 4 and 7 (all images, all noise
+    levels, FCM and Ours), i.e. p_e does not depend on the prediction at all.
+    The constant fits  p_e = (1/K)^2 + ((K-1)/K)^2  (1/2 for K=2, 5/9 for K=3).
+    So the paper's "Kappa" is a fixed rescaling of ACC, not Cohen's kappa.
+    We use it ONLY to compare with the paper; `kappa` above is the correct one.
+    """
+    gt = np.asarray(gt).ravel()
+    K = int(gt.max()) + 1 if K is None else K
+    p0 = accuracy(gt, pred) / 100.0
+    pe = (1.0 / K) ** 2 + ((K - 1.0) / K) ** 2
+    return float((p0 - pe) / (1.0 - pe) * 100.0)
+
+
 def defuzzify(U: np.ndarray) -> np.ndarray:
     """Crisp labels from memberships: label_j = argmax_i u_ij (shape of U without its first axis)."""
     U = np.asarray(U)
@@ -118,5 +137,6 @@ def evaluate(gt: np.ndarray, U: np.ndarray | None = None, pred: np.ndarray | Non
         "F": f_score(gt, pred),
         "NMI": nmi(gt, pred),
         "Kappa": kappa(gt, pred),
+        "Kappa_paper": kappa_paper(gt, pred),
     }
     return out

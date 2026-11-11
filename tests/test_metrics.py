@@ -5,7 +5,7 @@ import pytest
 from sklearn.metrics import cohen_kappa_score, f1_score, normalized_mutual_info_score
 
 from src.eval.matching import confusion_matrix, match_labels
-from src.eval.metrics import accuracy, evaluate, f_score, kappa, nmi, vpc, vpe
+from src.eval.metrics import accuracy, evaluate, f_score, kappa, kappa_paper, nmi, vpc, vpe
 
 
 def test_vpc_vpe_crisp_and_uniform():
@@ -56,6 +56,18 @@ def test_hand_example_two_classes():
     assert f_score(gt, pred) == pytest.approx((10 / 12 + 6 / 8) / 2 * 100)
     # p0 = 0.8 ; pe = (6*6 + 4*4)/100 = 0.52 ; kappa = 0.28/0.48
     assert kappa(gt, pred) == pytest.approx(0.28 / 0.48 * 100)
+    # paper-style kappa, K=2: pe = 1/4 + 1/4 = 0.5 -> (0.8 - 0.5) / 0.5
+    assert kappa_paper(gt, pred) == pytest.approx(60.0)
+
+
+def test_kappa_paper_matches_paper_table_values():
+    # Paper Table 4/7, FCM, sy2 (K=3) 10 %: ACC 67.75 -> Kappa 27.44 (constant pe = 5/9)
+    gt = np.array([0] * 3 + [1] * 3 + [2] * 3)
+    pred = gt.copy()
+    pred[:3] = 1  # 6/9 correct
+    acc = 6 / 9
+    assert kappa_paper(gt, pred) == pytest.approx((acc - 5 / 9) / (4 / 9) * 100)
+    assert (0.6775 - 5 / 9) / (4 / 9) * 100 == pytest.approx(27.44, abs=0.01)
 
 
 @pytest.mark.parametrize("seed", range(5))
@@ -80,6 +92,6 @@ def test_evaluate_from_U():
     gt = np.array([[0, 1], [1, 0]])
     U = np.array([[[0.1, 0.8], [0.7, 0.2]], [[0.9, 0.2], [0.3, 0.8]]])  # argmax -> [[1,0],[0,1]]
     res = evaluate(gt, U=U)
-    assert set(res) == {"VPC", "VPE", "ACC", "F", "NMI", "Kappa"}
+    assert set(res) == {"VPC", "VPE", "ACC", "F", "NMI", "Kappa", "Kappa_paper"}
     assert res["ACC"] == pytest.approx(100.0)
     assert res["VPC"] == pytest.approx(vpc(U))
