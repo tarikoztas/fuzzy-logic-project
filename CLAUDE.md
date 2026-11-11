@@ -47,7 +47,9 @@ Orijinal PDF'ler: `references/papers/` (yönerge ve makale). Çelişki olursa **
 ```bash
 py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 .venv/Scripts/python.exe -m pip install -r requirements.txt   # (Linux/mac: .venv/bin/python)
-.venv/Scripts/python.exe -m pytest -q        # birim testler
+.venv/Scripts/python.exe -m pytest           # birim testler (pytest.ini: pythonpath=.)
+PYTHONPATH=. .venv/Scripts/python.exe experiments/noise_check/check_noise_levels.py   # gürültü tanımı kontrolü
+.venv/Scripts/python.exe -m src.data.bsds500  # BSDS500 8 görüntü kontrolü (veri: data/README.md)
 # Not: numpy<2 zorunlu (dtcwt 0.13 np.asfarray kullanıyor); tam sürümler requirements.lock.txt
 # Not: dtcwt 1 seviyede lowpass tam boyut (H×W), highpasses[0] (H/2×W/2×6) — Faz 3c'de dikkat
 python experiments/baseline/run_baseline.py --config experiments/baseline/config.yaml

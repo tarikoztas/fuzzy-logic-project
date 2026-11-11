@@ -6,10 +6,11 @@ Amaç: (1) makalenin temel deneyini yeniden üretmek (Uygulama 30p), (2) katkın
 
 | Ayar | Değer |
 |---|---|
-| Görüntüler | sy1, sy2, sy3 (256×256, kendi ürettiğimiz; Fig.9'a benzer) · BSDS500 8 görüntü: 100007, 118035, 167062, 201080, 241004, 42049, 67079, 86016 |
-| Gürültü | karışık (Gaussian + tuz-biber + multiplicative, eşit oran) %1/5/10/15 (sentetik), %5 (BSDS), kararlılık için %0–20; ayrıca C1 için her tür tek başına |
+| Görüntüler | sy1, sy2, sy3 (256×256, makale Fig. 9'dan çıkarıldı, D-030) · BSDS500 8 görüntü (321×481, BT.601 gri): 100007, 118035, 167062, 201080, 241004, 42049, 67079, 86016 (D-029) |
+| Gürültü | karışık = Gaussian(var p) → speckle(var p) → tuz-biber(p) (D-027) %1/5/10/15 (sentetik), %5 (BSDS), kararlılık için %0–20; ayrıca C1 için her tür tek başına. `add_noise(img, kind, p, seed)` |
 | Seed | 0–9 (gürültü gerçekleşimi sabit: seed → aynı gürültü; kümeleme başlatması da seed'e bağlı) |
-| K | sy1=2, sy2=3, sy3=3; BSDS: görüntü başına belirle ve raporla (D-008) |
+| K | sy1=2, sy2=3, sy3=3 (Fig. 9 gri seviyeleriyle doğrulandı); BSDS: E6'da belirle ve raporla (D-029) |
+| Metrik protokolü | Macar eşleme, makro F, NMI doğal log (D-028); `src/eval/metrics.py::evaluate` |
 | Ortak | m=2, ε=1e-6, T=100 |
 | ASRFCM parametreleri | w=5, S=15, υ=4, g=10, σ=0.3, k=15, δ=0.4 (makale) |
 | Metrikler | V_PC, V_PE, ACC, F-score, NMI, Kappa, iterasyon sayısı, süre (ön-işleme / kümeleme ayrı) |

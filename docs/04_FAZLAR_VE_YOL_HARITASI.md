@@ -34,15 +34,15 @@
 - [x] `docs/02_MAKALE_ANALIZI.md`'yi PDF ile karşılaştırarak doğrula (özellikle denklemler, parametreler)
 - [x] Problem/amaç/girdi-çıktı/deneysel yapı özeti → `docs/cp/CP1_paper_and_problem_analysis.md`
 - [x] **Literatür** (`references/README.md`: 23 makale-kaynakçası + 10 güncel, hepsi Crossref'te doğrulandı; 5 güncel çalışmanın abstract'ı okundu; Türkçe notlar `docs/11_LITERATUR_NOTLARI.md`; Related Work taslağı `report/drafts/related_work.md`). **Öğrenci:** [29] Wu 2023 CVIU'yu üniversite erişimiyle oku. Orijinal plan: makalenin kaynakçasından gerçek çalışmalar (BCFCM 2002, FGFCM 2007, FLICM 2010, FRFCM 2018, FSC_LNML 2022, SRFCM 2021, FCM_SICM 2020, DSFCM_N 2019 …) + **en az 5 ek güncel çalışma** (2022–2026) web araştırmasıyla bul. Her biri için: yazar/yıl/yayın/DOI doğrulanmış, 2–3 cümle yöntem, güçlü/zayıf yön
-- [ ] `references/README.md` (IEEE formatında doğrulanmış liste) + karşılaştırma tablosu (yöntem × spatial bilgi × non-local × sparse × adaptif × süre)
+- [x] `references/README.md` (IEEE formatında doğrulanmış liste) + karşılaştırma tablosu (yöntem × spatial bilgi × non-local × sparse × adaptif × süre)
 - **Çıktı:** CP1 notu; literatür tablosu; Related Work taslağı
 - **Biter:** her kaynağın DOI'si açılıp kontrol edildi (`docs/05_KURALLAR.md` §2)
 
 ## Faz 2 — Uygulama planı + altyapı (CP2)
-- [ ] MRR'yi netleştir (öneri bkz. `docs/06_KARARLAR.md` D-005)
-- [ ] `src/data/synthetic.py`: sy1, sy2, sy3 (≈256×256) üret; `noise.py`: Gaussian/S&P/multiplicative/karışık; `bsds500.py`: 8 görüntü + GT (indirme kaynağı README'de)
-- [ ] `src/eval/metrics.py` + `matching.py` + testler
-- [ ] Deney planı (`docs/07_DENEY_PLANI.md`) güncelle: görüntüler, gürültü, seed, K
+- [x] MRR: D-005 önerisi D-023 ile kabul (hoca teyidi D-017 hâlâ açık) → `docs/cp/CP2_implementation_plan.md`
+- [x] `src/data/synthetic.py` (sy1–3, Fig. 9'dan çıkarıldı, D-030); `noise.py` (D-027, makaleyle tutarlılık kontrolü yapıldı); `bsds500.py` (8 görüntü indirildi + GT, D-029)
+- [x] `src/eval/metrics.py` + `matching.py` + testler (27 test yeşil; sklearn ile çapraz kontrol)
+- [x] Deney planı (`docs/07_DENEY_PLANI.md`) güncellendi: görüntüler, gürültü, seed, K
 - **Çıktı:** veri+gürültü+metrik altyapısı, testler yeşil, CP2 planı
 - **Biter:** `pytest tests/test_metrics.py tests/test_noise.py` geçer
 
