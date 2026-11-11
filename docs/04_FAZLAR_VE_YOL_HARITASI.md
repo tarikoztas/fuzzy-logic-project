@@ -48,7 +48,7 @@
 
 ## Faz 3 — Baseline + yeniden gerçekleştirme (CP3) — 30 puan
 - [x] **3a** `baseline_fcm.py` (Eq.1–3) + 9 test; E1 (sy1–3 × %1/5/10/15 × 10 seed) → `results/tables/e1_fcm_vs_paper.csv`, `results/figures/e1_fcm_vs_paper.png`. Makaleyle fark (mutlak, ort./maks.): ACC 0.63/1.85, F 0.64/1.21, NMI 1.37/3.12, V_PC 0.46/0.90, V_PE 0.85/1.75, Kappa_paper 1.42/4.16, iterasyon 4.6/14.1 (bizde daha az). Kappa bulgusu: D-031
-- [ ] **3b** `local_info.py` (Algoritma 2) + Fig.1–3 örnek testi
+- [x] **3b** `local_info.py` (Algoritma 2) + 8 test (Fig. 1 ödül/ceza kümesi birebir; Fig. 2–3 sayıları denklemlerle tutarsız → D-032). %5 gürültüde yalnız ξ ile kâhin ACC: sy2 77.5→98.4, sy3 72.9→97.4
 - [ ] **3c** `nonlocal_wavelet.py` (DTCWT + Eq.10–11) + yeniden-oluşturma testi
 - [ ] **3d** `adaptive_params.py` (Eq.13–19)
 - [ ] **3e** `sparse_fcm.py` (Eq.20–29, Alg.3; boş-sütun politikası)
