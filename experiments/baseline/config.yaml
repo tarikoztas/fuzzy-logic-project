@@ -1,0 +1,14 @@
+# Experiment E1 — baseline FCM on the synthetic images (docs/07 §2).
+method: fcm
+images: [sy1, sy2, sy3]          # K is taken from src/data/synthetic.py (2, 3, 3)
+noise:
+  kind: mixed                    # D-027
+  levels_pct: [1, 5, 10, 15]
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]   # same seed -> same noise and same initial U
+fcm:
+  m: 2.0
+  T: 100
+  eps: 1.0e-6
+output:
+  runs_csv: results/tables/e1_fcm_runs.csv          # one row per (image, noise, seed)
+  summary_csv: results/tables/e1_fcm_vs_paper.csv   # mean +- std next to paper-reported FCM
