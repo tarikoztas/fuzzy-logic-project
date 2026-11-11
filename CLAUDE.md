@@ -52,7 +52,8 @@ PYTHONPATH=. .venv/Scripts/python.exe experiments/noise_check/check_noise_levels
 .venv/Scripts/python.exe -m src.data.bsds500  # BSDS500 8 görüntü kontrolü (veri: data/README.md)
 # Not: numpy<2 zorunlu (dtcwt 0.13 np.asfarray kullanıyor); tam sürümler requirements.lock.txt
 # Not: dtcwt 1 seviyede lowpass tam boyut (H×W), highpasses[0] (H/2×W/2×6) — Faz 3c'de dikkat
-python experiments/baseline/run_baseline.py --config experiments/baseline/config.yaml
+.venv/Scripts/python.exe experiments/baseline/run_baseline.py --config experiments/baseline/config.yaml   # E1, ~30 s
+.venv/Scripts/python.exe experiments/baseline/plot_baseline.py                                           # E1 figürü
 python experiments/proposed/run_proposed.py --config experiments/proposed/config.yaml
 ```
 

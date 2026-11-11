@@ -47,7 +47,7 @@
 - **Biter:** `pytest tests/test_metrics.py tests/test_noise.py` geçer
 
 ## Faz 3 — Baseline + yeniden gerçekleştirme (CP3) — 30 puan
-- [ ] **3a** `baseline_fcm.py` (Eq.1–3) + test; sy1–3 üzerinde gürültüsüz/gürültülü FCM → makale FCM sütunuyla (`results/tables/paper_reported_fcm_vs_ours.csv`) ilk karşılaştırma
+- [x] **3a** `baseline_fcm.py` (Eq.1–3) + 9 test; E1 (sy1–3 × %1/5/10/15 × 10 seed) → `results/tables/e1_fcm_vs_paper.csv`, `results/figures/e1_fcm_vs_paper.png`. Makaleyle fark (mutlak, ort./maks.): ACC 0.63/1.85, F 0.64/1.21, NMI 1.37/3.12, V_PC 0.46/0.90, V_PE 0.85/1.75, Kappa_paper 1.42/4.16, iterasyon 4.6/14.1 (bizde daha az). Kappa bulgusu: D-031
 - [ ] **3b** `local_info.py` (Algoritma 2) + Fig.1–3 örnek testi
 - [ ] **3c** `nonlocal_wavelet.py` (DTCWT + Eq.10–11) + yeniden-oluşturma testi
 - [ ] **3d** `adaptive_params.py` (Eq.13–19)
