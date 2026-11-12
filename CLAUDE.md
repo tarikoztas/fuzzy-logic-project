@@ -66,6 +66,8 @@ py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 
 ## 6. Durum takibi
 
+- **Durum (12.11.2026):** Faz 0–8 teknik olarak tamam (rapor, sunum, demo, son kontrol 33/33, temiz klon testi). Öğrenciye kalan: rapor/sunum okuma ve onay, DOI kontrolü, demo provası, `docs/13` çalışması, Classroom yüklemesi.
+
 - İlerleme: `docs/04_FAZLAR_VE_YOL_HARITASI.md` içindeki checkbox'lar (her faz sonunda işaretle).
 - Kararlar: `docs/06_KARARLAR.md` (yeni karar → yeni satır) **ve** herkese açık özeti `report/decisions.md`. Hocaya bağlı sorular kapatıldı (öğrenci hocaya sormayacak); yeni belirsizlikte en savunulabilir seçimi yap, gerekçesiyle iki dosyaya da yaz.
 - Bu dosyadaki "Tarihler" ve "Komutlar" bölümlerini değişiklik olunca güncelle.
