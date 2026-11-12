@@ -84,6 +84,14 @@ Found via Crossref keyword search and OpenAlex "works citing [1]" (search date: 
 | [32] | V-meta | H. Yu, Y. Wu, H. Zheng, Q. Luo, and L. Zhang, "Possibilistic c-means clustering approach based on a novel weighted-kernel distance for imbalanced images with minority targets in sparsely distribution," *Eng. Appl. Artif. Intell.*, vol. 154, Art. no. 110902, 2025, doi: 10.1016/j.engappai.2025.110902. | *(abstract not accessible)* | Cites [1]. |
 | [33] | V-meta | C. Huang, H. Lei, J. Peng, X. Qin, Y. Chen, and L. Zhou, "Adaptive interval type-2 fuzzy clustering noisy image segmentation algorithm with weighted local spatial information embedding non-local spatial information," *Int. J. Fuzzy Syst.*, vol. 28, no. 6, pp. 2108–2127, 2026, doi: 10.1007/s40815-025-02068-z. | *(abstract not accessible)* | Type-2 + local/non-local (title). |
 
+## F. Fuzzy inference foundations (added in Faz 4 for the proposed extension; Crossref responses in `verification/crossref_2026-11-12.jsonl`)
+
+[34] [V] L. A. Zadeh, "Fuzzy sets," *Inf. Control*, vol. 8, no. 3, pp. 338–353, 1965, doi: 10.1016/S0019-9958(65)90241-X.
+
+[35] [V] E. H. Mamdani and S. Assilian, "An experiment in linguistic synthesis with a fuzzy logic controller," *Int. J. Man-Mach. Stud.*, vol. 7, no. 1, pp. 1–13, 1975, doi: 10.1016/S0020-7373(75)80002-2.
+
+[36] [V] T. Takagi and M. Sugeno, "Fuzzy identification of systems and its applications to modeling and control," *IEEE Trans. Syst., Man, Cybern.*, vol. SMC-15, no. 1, pp. 116–132, 1985, doi: 10.1109/TSMC.1985.6313399.
+
 ## E. Comparison table
 
 Legend: ✓ = uses it (as described in [1] or in the work's abstract), — = not described. "Complexity" is copied from [1], Table 11 (paper-reported, symbolic and coarse).
