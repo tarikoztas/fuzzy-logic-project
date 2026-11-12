@@ -1,0 +1,23 @@
+# Experiment E3 — ablation of the three components (paper Table 1), 5 % mixed noise.
+# Table 1 does not name its image; its ACC/Kappa pairs imply K = 3 (D-031), i.e. sy2 or sy3.
+images: [sy1, sy2, sy3]
+noise:
+  kind: mixed
+  level_pct: 5
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+# (local, nonlocal, sparse); (0, 0, 0) is plain FCM through the same code path (D-037)
+combinations:
+  - [0, 0, 0]
+  - [1, 0, 0]
+  - [0, 1, 0]
+  - [0, 0, 1]
+  - [1, 1, 0]
+  - [1, 0, 1]
+  - [0, 1, 1]
+  - [1, 1, 1]
+method:
+  coeff_variant: signed
+  empty_col_policy: keep
+output:
+  runs_csv: results/tables/e3_ablation_runs.csv
+  summary_csv: results/tables/e3_ablation_vs_paper.csv

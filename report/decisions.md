@@ -42,6 +42,9 @@ Public log of the choices made where the reference paper (Wu et al., ESWA 256:12
 | D-037 | Ablation switches (Table 1): a disabled local or non-local term is removed together with its coefficient; with one corrected image active, α = 1/ΔG and its coefficient is ΔG; with none, α = 1. Disabling the sparse step means δ = 0 (no threshold, no ℓ0 term). With only the original term and δ = 0 the method reduces exactly to FCM (unit test). |
 | — | Image borders: symmetric (mirror) padding. Sort ties keep raster order. Flat windows (τ = 0): S = 1. |
 
+| D-040 | **Finding: the paper's Table 1 baseline row is inconsistent with Tables 2–8.** With all components off the method is plain FCM, yet the row reports V_PC 70.58, V_PE 51.85, ACC 75.10, F 81.09, 20 iterations, matching none of the paper's FCM entries at 5 % (e.g. V_PC 92.55 / 85.83 / 84.11 for sy1 / sy2 / sy3). Its ACC/Kappa pairs imply K = 3. We run the ablation on all three images and compare with the paper qualitatively. |
+| D-039 | Remaining reproduction gap at 10–15 % noise on sy2/sy3 is attributed to the weak local term under Eqs. 5–9 with σ = 0.3 (see D-032); σ is not tuned in the baseline, its effect is measured in E4/E5. |
+
 ## Process
 
 | ID | Decision |

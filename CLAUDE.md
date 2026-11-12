@@ -55,7 +55,9 @@ PYTHONPATH=. .venv/Scripts/python.exe experiments/noise_check/check_noise_levels
 # Not: dtcwt 1 seviyede lowpass tam boyut (H×W), highpasses[0] (H/2×W/2×6) — Faz 3c'de dikkat
 .venv/Scripts/python.exe experiments/baseline/run_baseline.py --config experiments/baseline/config.yaml   # E1, ~30 s
 .venv/Scripts/python.exe experiments/baseline/plot_baseline.py                                           # E1 figürü
-python experiments/proposed/run_proposed.py --config experiments/proposed/config.yaml
+.venv/Scripts/python.exe experiments/proposed/run_proposed.py --config experiments/proposed/config.yaml   # E2, ~3 dk
+.venv/Scripts/python.exe experiments/ablation/run_ablation.py --config experiments/ablation/config.yaml     # E3
+.venv/Scripts/python.exe experiments/plot_reproduction.py                                                  # E1–E3 figürleri
 ```
 
 (Betik adları `docs/03_MIMARI.md`'deki planla uyumlu; oluşturulunca burayı güncelle.)
