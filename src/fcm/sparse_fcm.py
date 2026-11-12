@@ -46,14 +46,16 @@ def sparse_fcm(y: np.ndarray, xi: np.ndarray | None, theta: np.ndarray | None,
     """
     if empty_col_policy not in ("keep", "argmax"):
         raise ValueError("empty_col_policy must be 'keep' or 'argmax'")
-    shape = np.shape(y)
-    terms = [(np.ravel(alpha), np.ravel(y))]
+    shape = np.shape(y)[:2]
+    n_pix = shape[0] * shape[1] if len(shape) == 2 else int(np.prod(shape))
+    flat = lambda a: np.reshape(a, (n_pix, -1))     # (N, C); C = 1 for gray images, 3 for colour (D-043)
+    terms = [(np.ravel(alpha), flat(y))]
     if xi is not None:
-        terms.append((np.ravel(beta), np.ravel(xi)))
+        terms.append((np.ravel(beta), flat(xi)))
     if theta is not None:
-        terms.append((np.ravel(gamma), np.ravel(theta)))
-    weight_sum = sum(w for w, _ in terms)          # alpha + beta + gamma
-    weighted_x = sum(w * x for w, x in terms)      # alpha*y + beta*xi + gamma*theta
+        terms.append((np.ravel(gamma), flat(theta)))
+    weight_sum = sum(w for w, _ in terms)                      # alpha + beta + gamma
+    weighted_x = sum(w[:, None] * x for w, x in terms)         # alpha*y + beta*xi + gamma*theta, (N, C)
     N = weight_sum.size
     U = init_membership(K, N, seed)
     thr = np.sqrt(delta)
@@ -64,8 +66,8 @@ def sparse_fcm(y: np.ndarray, xi: np.ndarray | None, theta: np.ndarray | None,
     while True:
         a += 1
         Um = U**m
-        c = (Um @ weighted_x) / (Um @ weight_sum)                        # Eq. 29
-        d = sum(w[None, :] * (x[None, :] - c[:, None]) ** 2 for w, x in terms)  # (K, N)
+        c = (Um @ weighted_x) / (Um @ weight_sum)[:, None]               # Eq. 29, (K, C)
+        d = sum(w[None, :] * ((x[None, :, :] - c[:, None, :]) ** 2).sum(axis=-1) for w, x in terms)  # (K, N)
         inv = np.maximum(d, _D_FLOOR) ** (-1.0 / (m - 1.0))
         eta = inv / inv.sum(axis=0, keepdims=True)                       # Eq. 28
         if delta > 0:
@@ -85,5 +87,6 @@ def sparse_fcm(y: np.ndarray, xi: np.ndarray | None, theta: np.ndarray | None,
         if (a > 1 and abs(J_hist[-1] - J_hist[-2]) <= eps) or a >= T:
             break
     elapsed = time.perf_counter() - t0
-    return FCMResult(U=U.reshape((K,) + tuple(shape)), centers=c, J_history=J_hist,
+    centers = c[:, 0] if c.shape[1] == 1 else c
+    return FCMResult(U=U.reshape((K,) + tuple(shape)), centers=centers, J_history=J_hist,
                      n_iter=a, time_s=elapsed)

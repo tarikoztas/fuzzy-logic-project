@@ -34,22 +34,27 @@ KEY = ["image", "noise_kind", "noise_pct", "seed"]
 
 
 def expand_images(images: list[str]) -> list[str]:
+    """"bsds" / "bsdsrgb" expand to the 8 paper images (gray / colour, D-043)."""
     from src.data import bsds500
 
     out = []
     for name in images:
-        out.extend(f"bsds:{pid}" for pid in bsds500.PAPER_IDS) if name == "bsds" else out.append(name)
+        if name in ("bsds", "bsdsrgb"):
+            out.extend(f"{name}:{pid}" for pid in bsds500.PAPER_IDS)
+        else:
+            out.append(name)
     return out
 
 
 def load_image(name: str):
     """(clean or original gray image in [0, 1], ground-truth labels, K)."""
-    if name.startswith("bsds:"):
+    if name.startswith(("bsds:", "bsdsrgb:")):
         from src.data import bsds500
 
-        pid = name.split(":", 1)[1]
+        kind, pid = name.split(":", 1)
         gt, K = bsds500.paper_ground_truth(pid)
-        return bsds500.load(pid).gray, gt, K
+        im = bsds500.load(pid)
+        return (im.gray if kind == "bsds" else im.rgb / 255.0), gt, K
     from src.data import synthetic
 
     s = synthetic.load(name)

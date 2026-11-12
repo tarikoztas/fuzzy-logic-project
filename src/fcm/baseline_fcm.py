@@ -49,9 +49,10 @@ def init_membership(K: int, N: int, seed: int) -> np.ndarray:
 
 
 def update_centers(U: np.ndarray, y: np.ndarray, m: float) -> np.ndarray:
-    """Eq. (3): membership-weighted mean of the pixel values."""
+    """Eq. (3): membership-weighted mean of the pixel values (y: (N,) or (N, C))."""
     Um = U**m
-    return (Um @ y) / Um.sum(axis=1)
+    s = Um.sum(axis=1)
+    return (Um @ y) / (s[:, None] if y.ndim == 2 else s)
 
 
 def update_memberships(d2: np.ndarray, m: float) -> np.ndarray:
@@ -71,12 +72,14 @@ def objective(U: np.ndarray, d2: np.ndarray, m: float) -> float:
 
 def fcm(img: np.ndarray, K: int, m: float = 2.0, T: int = 100, eps: float = 1e-6,
         seed: int = 0) -> FCMResult:
-    """Run FCM on a gray image scaled to [0, 1]. Returns U with the image's shape (K, H, W)."""
+    """Run FCM on an image scaled to [0, 1]: gray (H, W) or colour (H, W, C), Euclidean distance.
+    Returns U with shape (K, H, W)."""
     if m <= 1.0:
         raise ValueError("fuzzifier m must be > 1")
     img = np.asarray(img, dtype=np.float64)
-    y = img.ravel()
-    U = init_membership(K, y.size, seed)
+    spatial = img.shape[:2]
+    y = img.reshape(spatial[0] * spatial[1], -1) if img.ndim == 3 else img.ravel()
+    U = init_membership(K, y.shape[0], seed)
 
     t0 = time.perf_counter()
     J_hist: list[float] = []
@@ -84,11 +87,14 @@ def fcm(img: np.ndarray, K: int, m: float = 2.0, T: int = 100, eps: float = 1e-6
     while True:
         a += 1
         c = update_centers(U, y, m)                 # Eq. 3
-        d2 = (y[None, :] - c[:, None]) ** 2         # (K, N) squared distances
+        if y.ndim == 2:                             # colour: squared Euclidean distance
+            d2 = ((y[None, :, :] - c[:, None, :]) ** 2).sum(axis=-1)
+        else:
+            d2 = (y[None, :] - c[:, None]) ** 2     # (K, N) squared distances
         U = update_memberships(d2, m)               # Eq. 2
         J_hist.append(objective(U, d2, m))          # Eq. 1
         if (a > 1 and abs(J_hist[-1] - J_hist[-2]) <= eps) or a >= T:
             break
     elapsed = time.perf_counter() - t0
-    return FCMResult(U=U.reshape((K,) + img.shape), centers=c, J_history=J_hist,
+    return FCMResult(U=U.reshape((K,) + spatial), centers=c, J_history=J_hist,
                      n_iter=a, time_s=elapsed)

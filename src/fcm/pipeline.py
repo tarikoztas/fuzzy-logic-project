@@ -63,12 +63,22 @@ def _cached(fn, img: np.ndarray, tag: str, use_cache: bool, **params) -> tuple[n
     return arr, sec
 
 
+def _per_channel(fn, img, *args):
+    """Gray: fn(img). Colour (H, W, C): fn on every channel separately, stacked (D-043)."""
+    if np.ndim(img) == 2:
+        return fn(img, *args)
+    outs = [fn(np.ascontiguousarray(img[..., c]), *args) for c in range(img.shape[-1])]
+    return np.stack([o[0] for o in outs], axis=-1), sum(o[1] for o in outs)
+
+
 def compute_xi(img, w, sigma, ratio, rounding, use_cache=True):
-    return _cached(local_spatial_info, img, "xi", use_cache, w=w, sigma=sigma, ratio=ratio, rounding=rounding)
+    return _per_channel(lambda im: _cached(local_spatial_info, im, "xi", use_cache, w=w, sigma=sigma, ratio=ratio,
+                                           rounding=rounding), img)
 
 
 def compute_theta(img, S, w, upsilon, g, scale=1.0, use_cache=True):
-    return _cached(nonlocal_wavelet_info, img, "theta", use_cache, S=S, w=w, upsilon=upsilon, g=g, scale=scale)
+    return _per_channel(lambda im: _cached(nonlocal_wavelet_info, im, "theta", use_cache, S=S, w=w, upsilon=upsilon,
+                                           g=g, scale=scale), img)
 
 
 def coefficients(y, xi, theta, method: str, k: float, variant: str, fis=None):
@@ -80,7 +90,7 @@ def coefficients(y, xi, theta, method: str, k: float, variant: str, fis=None):
     if method != "paper":
         raise ValueError("method must be 'paper' or 'fis'")
     if xi is None and theta is None:
-        return np.ones_like(y), None, None
+        return np.ones(np.shape(y)[:2]), None, None
     ref1 = xi if xi is not None else theta
     ref2 = theta if theta is not None else xi
     alpha, dG1, dG2 = paper_coefficients(y, ref1, ref2, k=k, variant=variant)

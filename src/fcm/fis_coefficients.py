@@ -79,7 +79,11 @@ def build_fis(shape: str = "tri", defuzz: str = "centroid", kind: str = "mamdani
 
 
 def fis_inputs(y: np.ndarray, xi: np.ndarray, theta: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    return np.abs(y - 0.5 * (xi + theta)), np.abs(xi - theta)
+    """Dev and Dis; for colour images (H, W, C) the root-mean-square over the channels (D-043)."""
+    dev, dis = y - 0.5 * (xi + theta), xi - theta
+    if np.ndim(dev) == 3:
+        return np.sqrt((dev**2).mean(axis=-1)), np.sqrt((dis**2).mean(axis=-1))
+    return np.abs(dev), np.abs(dis)
 
 
 class FuzzyCoefficients:
@@ -99,7 +103,7 @@ class FuzzyCoefficients:
             raise ValueError("the fuzzy coefficient system needs both xi and theta")
         dev, dis = fis_inputs(y, xi, theta)
         out = self.fis.evaluate(Dev=dev, Dis=dis)
-        a, b, g = (out[k].reshape(np.shape(y)) for k in ("alpha", "beta", "gamma"))
+        a, b, g = (out[k].reshape(np.shape(dev)) for k in ("alpha", "beta", "gamma"))
         if self.mode == "split":
             from .adaptive_params import paper_coefficients
             ap, bp, gp = paper_coefficients(y, xi, theta, k=self.k, variant=self.variant)

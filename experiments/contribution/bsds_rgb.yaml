@@ -1,0 +1,11 @@
+# E6c: the 8 BSDS500 images in colour (D-042, D-043), 5 % mixed noise added to each channel.
+name: e6c_bsds_rgb
+images: [bsdsrgb]
+noise: {kinds: [mixed], levels_pct: [5]}
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+methods:
+  - {label: FCM, base: FCM}
+  - {label: ASRFCM-paper, base: paper}
+  - {label: FIS-full, base: "FIS-full (pre-registered)"}
+  - {label: FIS-split, base: "FIS-split (post-hoc)"}
+output: results/tables/e6c_bsds_rgb_runs.csv

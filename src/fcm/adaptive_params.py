@@ -41,6 +41,8 @@ def paper_coefficients(y: np.ndarray, xi: np.ndarray, theta: np.ndarray, k: floa
     d2 = y - theta
     if variant == "abs":
         d1, d2 = np.abs(d1), np.abs(d2)
+    if np.ndim(d1) == 3:  # colour (H, W, C): one coefficient per pixel from the channel mean (D-043)
+        d1, d2 = d1.mean(axis=-1), d2.mean(axis=-1)
     dG1 = k * np.exp(d1) + eps  # Eq. 15
     dG2 = k * np.exp(d2) + eps  # Eq. 16
     alpha = 1.0 / (dG1 + dG2)   # Eq. 17

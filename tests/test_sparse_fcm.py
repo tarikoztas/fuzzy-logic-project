@@ -65,3 +65,23 @@ def test_unknown_parameter_rejected():
     s, y = noisy("sy1")
     with pytest.raises(ValueError):
         run_asrfcm(y, s.K, wrong=1)
+
+
+def test_colour_with_one_channel_equals_gray():
+    # D-043: the multichannel code path must give exactly the gray result for C = 1
+    s, y = noisy("sy3")
+    a = run_asrfcm(y, s.K, seed=2, use_cache=False).result
+    b = run_asrfcm(y[..., None], s.K, seed=2, use_cache=False).result
+    assert np.allclose(a.U, b.U) and a.n_iter == b.n_iter
+    assert np.allclose(fcm(y, s.K, seed=2).U, fcm(y[..., None], s.K, seed=2).U)
+
+
+def test_colour_image_runs_with_paper_and_fis_coefficients():
+    from src.fcm.fis_coefficients import FuzzyCoefficients
+    s = synthetic.load("sy3")
+    rgb = np.stack([s.image, s.image[::-1], s.image], axis=-1)        # 3 different channels
+    y = noise.add_noise(rgb, "mixed", 0.05, seed=0)
+    for kw in ({}, {"coeff_method": "fis", "fis": FuzzyCoefficients(mode="split")}):
+        r = run_asrfcm(y, 3, use_cache=False, **kw).result
+        assert r.U.shape == (3, 256, 256) and np.allclose(r.U.sum(axis=0), 1.0)
+        assert r.centers.shape == (3, 3)

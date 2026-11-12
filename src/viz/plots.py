@@ -56,7 +56,7 @@ def method_lines(summary: pd.DataFrame, x: str, metric: str, row: str | None, co
                 ax.set_xlabel(xlabel, color=INK, fontsize=9)
     handles, labels = axes[0][0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper center", ncol=min(5, len(methods)), frameon=False, fontsize=9)
-    fig.tight_layout(rect=(0, 0, 1, 1 - 0.55 / (2.6 * len(rows))))  # leave room for the legend
+    fig.tight_layout(rect=(0, 0, 1, 1 - 0.33 / (2.6 * len(rows))))  # leave room for the legend
     for ext in ("png", "pdf"):
         fig.savefig(f"{path_stem}.{ext}", dpi=200)
     plt.close(fig)
