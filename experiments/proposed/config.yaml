@@ -1,0 +1,15 @@
+# Experiment E2 — the paper's method (ASRFCM-CSI) on the synthetic images, reproduction of Tables 2-8.
+images: [sy1, sy2, sy3]          # K from src/data/synthetic.py (2, 3, 3)
+noise:
+  kind: mixed                    # D-027
+  levels_pct: [1, 5, 10, 15]
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]   # same seeds as E1 -> same noise and same initial U as FCM
+method:
+  coeff_method: paper            # Eqs. 13-19 ("fis" = fuzzy-rule extension, D-033)
+  coeff_variant: signed          # D-013
+  empty_col_policy: keep         # D-011 (revised)
+params: {}                       # empty = paper defaults (src/fcm/pipeline.py DEFAULTS)
+output:
+  runs_csv: results/tables/e2_asrfcm_runs.csv
+  summary_csv: results/tables/e2_asrfcm_vs_paper.csv
+  combined_csv: results/tables/e1e2_fcm_asrfcm_ours_vs_paper.csv
