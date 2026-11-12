@@ -1,0 +1,10 @@
+rule,Dev,Dis,alpha,beta,gamma
+R1,Small,Small,High,Medium,Medium
+R2,Small,Medium,High,Medium,Low
+R3,Small,Large,High,Medium,Low
+R4,Medium,Small,Medium,Medium,High
+R5,Medium,Medium,Medium,High,Medium
+R6,Medium,Large,Medium,High,Low
+R7,Large,Small,Low,High,High
+R8,Large,Medium,Low,High,Medium
+R9,Large,Large,Low,High,Low
