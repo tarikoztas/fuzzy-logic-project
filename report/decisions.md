@@ -34,6 +34,7 @@ Public log of the choices made where the reference paper (Wu et al., ESWA 256:12
 | D-032 | **Local information ξ is implemented as written in Eqs. 5–9 (σ = 0.3, N_R = w²).** The similarity values printed in the paper's Figs. 2–3 reproduce its ξ values (166, 175) but are inconsistent with Eqs. 5–6: their reward/penalty weight ratio is ≈19 (σ ≈ 0.9) and they vary with the neighbour's gray value rather than with its similarity to the centre. Our ξ for the two examples: 167.9 and 197.7. |
 | D-012 | Eq. 10 is implemented with y_q (the text has y_j, which makes the weighted sum degenerate). |
 | D-010 | Non-local means on the complex DTCWT sub-bands: weights from the magnitude, the same weights applied to the real and imaginary parts; one decomposition level. |
+| D-035 | Non-local means scale: intensities in 0–255 units (image × 255 before the DTCWT), Gaussian patch kernel (std υ) normalised to sum 1, filtering parameter h² = g·w² (= 250), i.e. the classic NLM form. Evidence (sy1–sy3, 5 % noise, seed 0): nearest-level ACC of ϑ 99.91 / 97.72 / 97.59 with this scale vs 99.08 / 95.37 / 95.90 with intensities in [0, 1]. Odd image sizes are mirror-padded by one row/column for the DTCWT and cropped back. |
 | D-013 | Eqs. 15–16 are implemented as printed, k·exp(y − ξ) (signed); the variant k·exp(|y − ξ|) is evaluated in the ablation. |
 | D-011 | If hard thresholding zeroes a whole column of η, its largest element is kept (set to 1 after normalisation). |
 | — | Image borders: symmetric (mirror) padding. Sort ties keep raster order. Flat windows (τ = 0): S = 1. |
