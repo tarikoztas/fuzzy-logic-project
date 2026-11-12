@@ -47,7 +47,7 @@ def renumber_citations(html: str) -> str:
 
 
 def extra(V: dict, readme: dict, html_table) -> None:
-    V["cpu_note"] = f"{platform.processor() or platform.machine()}; Python {platform.python_version()}"
+    V["cpu_note"] = f"{platform.system()} {platform.release()}, {platform.machine()} CPU, one core, Python {platform.python_version()}"
 
     rows = [
         ["Synthetic images", "sy1–sy3 extracted from Fig. 9 of [1], 256×256"],
@@ -76,9 +76,9 @@ def extra(V: dict, readme: dict, html_table) -> None:
     names = {"paper": "paper settings", "ratio=0.5": "ρ = 0.5", "ratio=0.7": "ρ = 0.7", "ratio=0.8": "ρ = 0.8",
              "rounding=ceil": "⌈·⌉ reward size", "sigma=0.6": "σ = 0.6", "sigma=0.9": "σ = 0.9",
              "dG=abs": "|y−ξ| in Eqs. 15–16", "empty=argmax": "empty column: argmax", "nlm_scale=255": "NLM on 0–255"}
-    tab = pv.loc[order].round(2)
+    tab = pv.loc[order].map(lambda v: f"{v:.2f}")
     tab.columns = [f"{i} {p}%" for i, p in tab.columns]
-    tab["Iter. 15%"] = it.loc[order, 15].round(1)
+    tab["Iter. 15%"] = it.loc[order, 15].map(lambda v: f"{v:.1f}")
     tab = tab.reset_index().rename(columns={"method": "Variant"})
     tab["Variant"] = tab["Variant"].map(names)
     V["TABLE_c2"] = html_table(tab.astype(str), "Table V. Single-factor ablation, ACC (%) mean of 10 seeds, mixed noise", wide=True)

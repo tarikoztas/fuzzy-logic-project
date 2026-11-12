@@ -63,7 +63,7 @@ def guideline_table(df: pd.DataFrame, baseline: str, improved: list[str], timing
             row[f"Change ({imp})"] = f"{v.mean() - b.mean():+.2f}"
         rows.append(row)
     if timing is not None and not timing.empty:
-        t = timing.groupby("method")["total_s"].mean()
+        t = timing[timing["image"].str.contains("256")].groupby("method")["total_s"].mean()
         row = {"Metric": "Time per 256x256 image (s, E7)", f"Baseline ({baseline})": f"{t.get(baseline, np.nan):.2f}"}
         for imp in improved:
             row[f"Improved ({imp})"] = f"{t.get(imp, np.nan):.2f}"
@@ -112,6 +112,15 @@ def main() -> None:
         means = df.groupby("method")[["ACC", "F", "NMI", "Kappa", "VPC", "VPE", "Iterations"]].mean().round(2)
         save(means.reset_index(), "results/tables/e6_bsds_mean_over_images.csv")
         save(guideline_table(df, "ASRFCM-paper", ["FIS-full", "FIS-split"], None), "results/tables/e6_bsds_baseline_vs_improved.csv")
+
+    # ---- E6c BSDS colour (D-042, D-043) ----
+    df = load("e6c_bsds_rgb_runs.csv")
+    if df is not None:
+        df["image"] = df["image"].str.replace("bsdsrgb:", "", regex=False)
+        save(summarize(df, ["image"]), "results/tables/e6c_bsds_rgb_summary.csv")
+        save(paired_tests(df, ["image"], "ASRFCM-paper", ["FIS-full", "FIS-split"]), "results/tables/e6c_bsds_rgb_wilcoxon.csv")
+        means = df.groupby("method")[["ACC", "F", "NMI", "Kappa", "VPC", "VPE", "Iterations"]].mean().round(2)
+        save(means.reset_index(), "results/tables/e6c_bsds_rgb_mean_over_images.csv")
 
     # ---- E5 FIS variants (H3, H4) ----
     df = load("e5_fis_variants_runs.csv")

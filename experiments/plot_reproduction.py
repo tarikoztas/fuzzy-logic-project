@@ -26,6 +26,10 @@ def main() -> None:
             ours_vs_paper_grid(pd.read_csv(TABLES / csv), ["ACC", "NMI", "VPC", "Iterations"], images,
                                label, str(FIGURES / stem))
             print(f"saved results/figures/{stem}.png/.pdf")
+    if (TABLES / "e2_asrfcm_vs_paper.csv").exists():  # compact version for the report
+        ours_vs_paper_grid(pd.read_csv(TABLES / "e2_asrfcm_vs_paper.csv"), ["ACC", "Iterations"], images, "ASRFCM",
+                           str(FIGURES / "e2_asrfcm_vs_paper_compact"))
+        print("saved results/figures/e2_asrfcm_vs_paper_compact.png/.pdf")
     if (TABLES / "e3_ablation_vs_paper.csv").exists():
         ablation_dots(pd.read_csv(TABLES / "e3_ablation_vs_paper.csv"), ["ACC", "VPC", "Iterations"],
                       str(FIGURES / "e3_ablation"))

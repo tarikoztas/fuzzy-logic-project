@@ -120,7 +120,24 @@ Results go to `results/tables/*.csv` and `results/figures/*`. `run_grid.py` uses
 | E6 | Table 9 | 8 BSDS500 images, 5 % noise | `e6_bsds_summary.csv`, `panel_bsds.png` |
 
 <!-- BEGIN:reproduction -->
-*(filled from the CSV files by `report/build_report.py`)*
+**E1/E2 — ACC (%) on the synthetic images, ours (mean of 10 seeds) vs paper-reported:**
+
+| Image | Noise % | FCM ours | FCM paper | ASRFCM ours | ASRFCM paper |
+|---|---|---|---|---|---|
+| sy1 | 1 | 99.50 | 99.49 | 99.99 | 99.89 |
+| sy1 | 5 | 95.24 | 95.20 | 99.91 | 99.86 |
+| sy1 | 10 | 85.95 | 86.18 | 99.72 | 99.75 |
+| sy1 | 15 | 77.56 | 77.97 | 99.34 | 99.56 |
+| sy2 | 1 | 97.52 | 97.82 | 99.58 | 99.43 |
+| sy2 | 5 | 77.14 | 77.16 | 99.24 | 99.22 |
+| sy2 | 10 | 67.22 | 67.75 | 97.82 | 99.04 |
+| sy2 | 15 | 61.89 | 62.68 | 92.38 | 98.53 |
+| sy3 | 1 | 96.22 | 95.87 | 99.95 | 99.84 |
+| sy3 | 5 | 72.90 | 74.75 | 99.22 | 99.43 |
+| sy3 | 10 | 61.42 | 62.61 | 96.62 | 98.91 |
+| sy3 | 15 | 55.66 | 57.45 | 89.13 | 97.36 |
+
+Mean |ours − paper| ACC: FCM 0.63 points; ASRFCM 0.11 points up to 5 % noise and 3.02 points at 10–15 %. Figures: `results/figures/e1_fcm_vs_paper.png`, `e2_asrfcm_vs_paper.png`.
 <!-- END:reproduction -->
 
 ## Proposed Extension
@@ -134,7 +151,52 @@ Results go to `results/tables/*.csv` and `results/figures/*`. `run_grid.py` uses
 ## Experimental Results
 
 <!-- BEGIN:results -->
-*(filled from the CSV files by `report/build_report.py`)*
+**Extension (E5, synthetic images): ACC (%) mean ± std over 10 seeds; Δ vs ASRFCM with the paper's coefficients, * = paired Wilcoxon p < 0.05.**
+
+| Image | Noise % | FCM | ASRFCM (paper coeff.) | +FIS full | +FIS split | Δ full | Δ split |
+|---|---|---|---|---|---|---|---|
+| sy1 | 1 | 99.50 ± 0.03 | 99.99 ± 0.00 | 99.99 ± 0.00 | 99.99 ± 0.00 | +0.00 | +0.00 |
+| sy1 | 5 | 95.24 ± 0.09 | 99.91 ± 0.02 | 99.88 ± 0.02 | 99.91 ± 0.02 | -0.03* | +0.00 |
+| sy1 | 10 | 85.95 ± 0.17 | 99.72 ± 0.03 | 99.43 ± 0.03 | 99.66 ± 0.03 | -0.28* | -0.05* |
+| sy1 | 15 | 77.56 ± 0.17 | 99.34 ± 0.04 | 97.57 ± 0.11 | 98.76 ± 0.07 | -1.77* | -0.58* |
+| sy2 | 1 | 97.52 ± 0.06 | 99.58 ± 0.02 | 99.92 ± 0.01 | 99.90 ± 0.01 | +0.35* | +0.32* |
+| sy2 | 5 | 77.14 ± 0.21 | 99.24 ± 0.04 | 98.29 ± 0.06 | 99.38 ± 0.04 | -0.95* | +0.15* |
+| sy2 | 10 | 67.22 ± 0.22 | 97.82 ± 0.09 | 87.59 ± 0.37 | 96.25 ± 0.10 | -10.23* | -1.57* |
+| sy2 | 15 | 61.89 ± 0.18 | 92.38 ± 0.19 | 76.37 ± 0.25 | 88.63 ± 0.23 | -16.01* | -3.75* |
+| sy3 | 1 | 96.22 ± 0.06 | 99.95 ± 0.01 | 99.90 ± 0.01 | 99.96 ± 0.01 | -0.05* | +0.00 |
+| sy3 | 5 | 72.90 ± 0.17 | 99.22 ± 0.04 | 97.41 ± 0.05 | 99.11 ± 0.05 | -1.81* | -0.11* |
+| sy3 | 10 | 61.42 ± 0.23 | 96.62 ± 0.12 | 86.24 ± 0.34 | 94.13 ± 0.17 | -10.37* | -2.48* |
+| sy3 | 15 | 55.66 ± 0.21 | 89.13 ± 0.35 | 73.59 ± 0.45 | 83.94 ± 0.39 | -15.54* | -5.19* |
+
+**Guideline-format table (all synthetic settings):**
+
+| Metric | Baseline (ASRFCM-paper) | Improved (FIS-full) | Change (FIS-full) | Improved (FIS-split) | Change (FIS-split) |
+|---|---|---|---|---|---|
+| ACC | 97.74 ± 3.33 | 93.02 ± 9.27 | -4.73 | 96.64 ± 5.02 | -1.11 |
+| F | 97.40 ± 3.76 | 92.05 ± 10.55 | -5.35 | 96.00 ± 5.94 | -1.40 |
+| NMI | 90.32 ± 11.35 | 79.45 ± 22.06 | -10.87 | 87.29 ± 15.29 | -3.03 |
+| Kappa (Cohen) | 95.98 ± 5.72 | 87.95 ± 15.69 | -8.03 | 94.05 ± 8.61 | -1.93 |
+| Kappa (paper's definition) | 94.94 ± 7.51 | 84.35 ± 20.88 | -10.59 | 92.46 ± 11.32 | -2.48 |
+| V_PC | 97.75 ± 3.06 | 94.85 ± 5.55 | -2.90 | 97.83 ± 2.77 | +0.08 |
+| V_PE | 3.61 ± 4.96 | 8.30 ± 9.05 | +4.69 | 3.46 ± 4.46 | -0.15 |
+| Iterations | 16.38 ± 9.76 | 22.13 ± 15.73 | +5.76 | 17.51 ± 11.29 | +1.13 |
+| Time per 256x256 image (s, E7) | 1.20 | 2.95 | +1.75 | 2.67 | +1.47 |
+
+**Real images (E6): BSDS500, 5 % mixed noise, ACC (%) mean of 10 seeds, gray and colour (RGB) protocols; paper values from its Table 9:**
+
+| Image | K | FCM | ASRFCM | +FIS full | +FIS split | FCM (RGB) | ASRFCM (RGB) | +FIS full (RGB) | +FIS split (RGB) | FCM paper | ASRFCM paper |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 100007 | 2 | 57.82 | 79.86 | 77.98 | 79.71 | 65.92 | 80.69 | 81.11 | 80.88 | 65.96 | 80.83 |
+| 118035 | 3 | 54.77 | 84.70 | 72.30 | 83.24 | 72.09 | 93.92 | 92.56 | 93.72 | 73.08 | 96.24 |
+| 167062 | 3 | 77.14 | 98.02 | 80.07 | 93.61 | 79.18 | 95.09 | 75.61 | 92.34 | 78.86 | 98.87 |
+| 201080 | 3 | 42.27 | 54.06 | 49.18 | 54.49 | 62.07 | 83.74 | 82.85 | 83.65 | 62.72 | 85.12 |
+| 241004 | 4 | 44.80 | 72.82 | 63.96 | 72.12 | 59.82 | 73.32 | 76.67 | 73.43 | 60.36 | 73.16 |
+| 42049 | 2 | 67.96 | 90.49 | 89.18 | 90.27 | 77.71 | 91.62 | 91.25 | 91.58 | 81.67 | 96.36 |
+| 67079 | 2 | 60.52 | 80.81 | 76.15 | 79.83 | 68.02 | 82.94 | 80.78 | 82.59 | 68.67 | 85.06 |
+| 86016 | 2 | 57.64 | 78.06 | 67.51 | 76.34 | 62.21 | 80.99 | 77.14 | 80.54 | 62.89 | 83.26 |
+| mean |  | 57.87 | 79.85 | 72.04 | 78.70 | 68.38 | 85.29 | 82.25 | 84.84 | 69.28 | 87.36 |
+
+More results: robustness per noise type `results/figures/e5_robustness_acc.png`, single-factor ablation `results/tables/e5_ablation_c2_summary.csv`, FIS variants `results/tables/e5_fis_variants_summary.csv`, sensitivity `results/figures/e4_sensitivity_acc.png`, run time `results/tables/e7_timing_summary.csv`, segmentations `results/figures/panel_synthetic.png`, `results/figures/panel_bsds.png`. Full discussion: [`report/report.pdf`](report/report.pdf).
 <!-- END:results -->
 
 ## Limitations

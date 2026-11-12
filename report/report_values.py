@@ -37,10 +37,14 @@ def md_table(df: pd.DataFrame) -> str:
 def count_tests() -> int:
     out = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q"], cwd=ROOT,
                          capture_output=True, text=True).stdout
-    for line in out.splitlines()[::-1]:
-        if "test" in line and ("collected" in line or "tests" in line):
-            return int(line.split()[0])
-    return 0
+    import re
+    per_file = re.findall(r"^tests/\S+\.py: (\d+)$", out, re.M)   # pytest.ini adds -q -> "-qq" summary per file
+    if per_file:
+        return sum(map(int, per_file))
+    m = re.search(r"(\d+) tests? collected", out)
+    if not m:
+        raise RuntimeError("could not count the unit tests")
+    return int(m.group(1))
 
 
 def compute() -> tuple[dict, dict]:
@@ -73,24 +77,24 @@ def compute() -> tuple[dict, dict]:
             a1, a2 = e1a.loc[(img, p)], acc.loc[(img, p)]
             rows.append([img, p, f2s(a1.ours_mean), f2s(a1.paper_reported), f2s(a2.ours_mean), f2s(a2.paper_reported)])
     t = pd.DataFrame(rows, columns=["Image", "Noise %", "FCM ours", "FCM paper", "ASRFCM ours", "ASRFCM paper"])
-    V["TABLE_e2"] = html_table(t, "Table III. ACC (%) on the synthetic images: ours (mean of 10 seeds) vs paper-reported (Tables 4 of [1])", left_cols=1)
+    V["TABLE_e2"] = html_table(t, "Table III. ACC (%) on the synthetic images: ours (mean of 10 seeds) vs paper-reported (Table 4 of [1])", left_cols=1)
     readme["reproduction"] = ("**E1/E2 — ACC (%) on the synthetic images, ours (mean of 10 seeds) vs paper-reported:**\n\n" + md_table(t)
                               + f"\n\nMean |ours − paper| ACC: FCM {V['E1_acc_mad']} points; ASRFCM {V['E2_acc_mad_low']} points up to 5 % noise and "
                               f"{V['E2_acc_mad_high']} points at 10–15 %. Figures: `results/figures/e1_fcm_vs_paper.png`, `e2_asrfcm_vs_paper.png`.")
 
     # ---------- E3 ----------
     e3 = csv("e3_ablation_vs_paper.csv")
-    lab = lambda r: "+".join(n for n, on in zip(("L", "NL", "S"), (r.local, r["nonlocal"], r.sparse)) if on) or "none (FCM)"
+    lab = lambda r: "+".join(n for n, on in zip(("L", "NL", "S"), (r["local"], r["nonlocal"], r["sparse"])) if on) or "none (FCM)"
     rows = []
     for _, r in e3[e3.image == "sy3"].iterrows():
         rows.append([lab(r), f2s(r.ACC_mean), f2s(r.ACC_paper), f2s(r.VPC_mean), f2s(r.VPC_paper), f"{r.Iterations_mean:.1f}", f"{r.Iterations_paper:.0f}"])
     t3 = pd.DataFrame(rows, columns=["Components", "ACC ours", "ACC paper", "V_PC ours", "V_PC paper", "Iter. ours", "Iter. paper"])
     V["TABLE_e3"] = html_table(t3, "Table IV. Ablation on sy3, 5 % noise (L local, NL non-local, S sparse); paper values from its Table 1 (image not named)")
-    full = e3[(e3.local == 1) & (e3["nonlocal"] == 1) & (e3.sparse == 1)].set_index("image")
+    full = e3[(e3.local == 1) & (e3["nonlocal"] == 1) & (e3["sparse"] == 1)].set_index("image")
     V["E3_full_acc"] = " / ".join(f2s(full.loc[i, "ACC_mean"]) for i in SY)
-    lo = e3[(e3.local == 1) & (e3["nonlocal"] == 0) & (e3.sparse == 0)].set_index("image")
+    lo = e3[(e3.local == 1) & (e3["nonlocal"] == 0) & (e3["sparse"] == 0)].set_index("image")
     V["E3_local_only"] = f"{lo.ACC_mean.min():.1f}–{lo.ACC_mean.max():.1f}"
-    nl = e3[(e3.local == 0) & (e3["nonlocal"] == 1) & (e3.sparse == 0)].set_index("image")
+    nl = e3[(e3.local == 0) & (e3["nonlocal"] == 1) & (e3["sparse"] == 0)].set_index("image")
     V["E3_nl_only"] = f"{nl.ACC_mean.min():.1f}–{nl.ACC_mean.max():.1f}"
 
     # ---------- E5 main ----------
@@ -116,7 +120,8 @@ def compute() -> tuple[dict, dict]:
     t5 = pd.DataFrame(rows, columns=["Image", "Noise %", "FCM", "ASRFCM (paper coeff.)", "+FIS full", "+FIS split",
                                      "Δ full", "Δ split"])
     V["TABLE_e5"] = html_table(t5, "Table VI. ACC (%) of the extension, mean ± std over 10 seeds; Δ = difference to ASRFCM with the paper's coefficients; * paired Wilcoxon p < 0.05", wide=True)
-    gl = csv("e5_baseline_vs_improved.csv")
+    gl = pd.read_csv(TABLES / "e5_baseline_vs_improved.csv", dtype=str)
+    gl["Metric"] = gl["Metric"].replace({"Kappa": "Kappa (Cohen)", "Kappa_paper": "Kappa (paper's definition)", "VPC": "V_PC", "VPE": "V_PE"})
     V["TABLE_guideline"] = html_table(gl, "Table VII. Baseline vs improved over all synthetic settings (12 settings × 10 seeds; guideline format)", wide=True)
     sig_pos = w5[(w5.mean_diff > 0) & w5["significant_0.05"]]
     V["E5_sig_gains"] = "; ".join(f"{r.method} on {r.image} at {r.noise_pct} % ({r.mean_diff:+.2f})" for _, r in sig_pos.iterrows()) or "none"
@@ -125,13 +130,13 @@ def compute() -> tuple[dict, dict]:
 
     # ---------- FIS variants ----------
     fv = csv("e5_fis_variants_runs.csv")
-    pv = fv.pivot_table(index="method", columns=["image", "noise_pct"], values="ACC").round(2)
+    pv = fv.pivot_table(index="method", columns=["image", "noise_pct"], values="ACC")
     order = ["ASRFCM-paper", "full tri centroid", "full gauss centroid", "full tri bisector", "full tri mom", "full tri sugeno",
              "full unnormalised", "split tri centroid", "split gauss centroid", "split tri bisector", "split tri mom", "split tri sugeno"]
     pv = pv.loc[[o for o in order if o in pv.index]]
     pv.columns = [f"{i} {p}%" for i, p in pv.columns]
     tv = pv.reset_index().rename(columns={"method": "Variant"})
-    V["TABLE_fis_variants"] = html_table(tv.astype(str), "Table VIII. FIS variants, ACC (%) mean of 10 seeds")
+    V["TABLE_fis_variants"] = html_table(tv.map(lambda v: f"{v:.2f}" if isinstance(v, float) else str(v)), "Table VIII. FIS variants, ACC (%) mean of 10 seeds")
     def rng(ref, fam):
         cols = pv.columns
         diffs = [abs(pv.loc[f, c] - pv.loc[ref, c]) for f in fam if f in pv.index for c in cols]
@@ -146,31 +151,64 @@ def compute() -> tuple[dict, dict]:
     b["image"] = b.image.str.replace("bsds:", "", regex=False)
     paper = csv("paper_reported_bsds.csv").astype({"image": str})
     pp = paper.pivot_table(index="image", columns="method", values="ACC")
+    rgb_path = TABLES / "e6c_bsds_rgb_runs.csv"
+    c = pd.read_csv(rgb_path) if rgb_path.exists() else None
+    if c is not None:
+        c["image"] = c.image.str.replace("bsdsrgb:", "", regex=False)
     rows = []
-    for img in sorted(b.image.unique(), key=lambda s: int(s)):
+    M = ("FCM", "ASRFCM-paper", "FIS-full", "FIS-split")
+    from src.data.bsds500 import PAPER_IDS
+    for img in PAPER_IDS:
         g = b[b.image == img]
-        r = [img, int(g.K.iloc[0])]
-        for mth in ("FCM", "ASRFCM-paper", "FIS-full", "FIS-split"):
-            r.append(f2s(g[g.method == mth].ACC.mean()))
+        r = [img, int(g.K.iloc[0])] + [f2s(g[g.method == m].ACC.mean()) for m in M]
+        if c is not None:
+            h = c[c.image == img]
+            r += [f2s(h[h.method == m].ACC.mean()) for m in M]
         r += [f2s(pp.loc[img, "FCM"]), f2s(pp.loc[img, "Ours"])]
         rows.append(r)
-    tb = pd.DataFrame(rows, columns=["Image", "K", "FCM", "ASRFCM", "+FIS full", "+FIS split", "FCM paper", "ASRFCM paper"])
     means = b.groupby("method").ACC.mean()
-    tb.loc[len(tb)] = ["mean", "", f2s(means["FCM"]), f2s(means["ASRFCM-paper"]), f2s(means["FIS-full"]), f2s(means["FIS-split"]),
-                       f2s(pp["FCM"].mean()), f2s(pp["Ours"].mean())]
+    last = ["mean", ""] + [f2s(means[m]) for m in M]
+    if c is not None:
+        cm = c.groupby("method").ACC.mean()
+        last += [f2s(cm[m]) for m in M]
+        V["E6c_fcm_mean"], V["E6c_asr_mean"] = f2s(cm["FCM"]), f2s(cm["ASRFCM-paper"])
+        V["E6c_full_mean"], V["E6c_split_mean"] = f2s(cm["FIS-full"]), f2s(cm["FIS-split"])
+        fc = c[c.method == "FCM"].groupby("image").ACC.mean()
+        V["E6c_fcm_close"] = str(int(((fc - pp["FCM"]).abs() <= 2.0).sum()))
+    last += [f2s(pp["FCM"].mean()), f2s(pp["Ours"].mean())]
+    rows.append(last)
+    cols = ["Image", "K", "FCM", "ASRFCM", "+FIS full", "+FIS split"]
+    if c is not None:
+        cols += ["FCM (RGB)", "ASRFCM (RGB)", "+FIS full (RGB)", "+FIS split (RGB)"]
+    cols += ["FCM paper", "ASRFCM paper"]
+    tb = pd.DataFrame(rows, columns=cols)
     V["E6_fcm_mean"], V["E6_asr_mean"] = f2s(means["FCM"]), f2s(means["ASRFCM-paper"])
     V["E6_full_mean"], V["E6_split_mean"] = f2s(means["FIS-full"]), f2s(means["FIS-split"])
     V["E6_paper_fcm_mean"], V["E6_paper_ours_mean"] = f2s(pp["FCM"].mean()), f2s(pp["Ours"].mean())
-    V["TABLE_bsds"] = html_table(tb.astype(str), "Table IX. BSDS500, 5 % mixed noise, gray-level protocol: ACC (%), mean of 10 seeds; paper-reported values from Table 9 of [1]", wide=True)
+    readme["results"] = readme.get("results", "") + (
+        "\n\n**Real images (E6): BSDS500, 5 % mixed noise, ACC (%) mean of 10 seeds, gray and colour (RGB) protocols; paper values from its Table 9:**\n\n"
+        + md_table(tb.astype(str))
+        + "\n\nMore results: robustness per noise type `results/figures/e5_robustness_acc.png`, single-factor ablation `results/tables/e5_ablation_c2_summary.csv`, "
+          "FIS variants `results/tables/e5_fis_variants_summary.csv`, sensitivity `results/figures/e4_sensitivity_acc.png`, run time `results/tables/e7_timing_summary.csv`, "
+          "segmentations `results/figures/panel_synthetic.png`, `results/figures/panel_bsds.png`. Full discussion: [`report/report.pdf`](report/report.pdf).")
+    V["TABLE_bsds"] = html_table(tb.astype(str), "Table IX. BSDS500, 5 % mixed noise: ACC (%), mean of 10 seeds, on gray images and on colour images (RGB); paper-reported values from Table 9 of [1]", wide=True)
     V["E6_text"] = (
         f"On the eight BSDS500 images (gray-level protocol, Table&nbsp;IX) the reproduced method raises the mean ACC of FCM from {V['E6_fcm_mean']} to "
         f"{V['E6_asr_mean']}&nbsp;% (paper-reported: {V['E6_paper_fcm_mean']} → {V['E6_paper_ours_mean']}&nbsp;%). Our FCM is lower than the paper's because "
         f"the paper clustered the color images (Section&nbsp;IX). <b>H2 is rejected:</b> the fuzzy-rule variants do not raise the mean ACC "
-        f"(full {V['E6_full_mean']}&nbsp;%, split {V['E6_split_mean']}&nbsp;%).")
+        f"(full {V['E6_full_mean']}&nbsp;%, split {V['E6_split_mean']}&nbsp;%)."
+        + (f" For the colour re-run we use the minimal multichannel generalization of D-043 (ξ and ϑ per channel, Euclidean distances in RGB, "
+           f"one α, β, γ per pixel from channel-averaged differences; noise added to each channel). On the colour images, our FCM matches the paper-reported FCM within two points on {V['E6c_fcm_close']} of 8 images "
+           f"(mean {V['E6c_fcm_mean']} vs {V['E6_paper_fcm_mean']}&nbsp;%), and the reproduced method reaches {V['E6c_asr_mean']}&nbsp;% "
+           f"(paper-reported {V['E6_paper_ours_mean']}&nbsp;%); the FIS variants give {V['E6c_full_mean']} (full) and {V['E6c_split_mean']}&nbsp;% (split)."
+           if "E6c_asr_mean" in V else ""))
 
     # ---------- E7 timing ----------
     tm = csv("e7_timing_summary.csv")
-    tt = tm.copy()
+    order_m = {"FCM": 0, "ASRFCM-paper": 1, "FIS-full": 2, "FIS-split": 3}
+    tt = tm.assign(_o=tm.method.map(order_m)).sort_values(["pixels", "_o"]).drop(columns="_o")
+    tt["image"] = tt.image.str.replace(" (42049)", "", regex=False).str.replace("x", "×", regex=False)
+    tt["method"] = tt.method.str.replace("ASRFCM-paper", "ASRFCM", regex=False)
     tt["preprocess_s"] = tt.preprocess_s.map(f2s)
     tt["cluster_s"] = tt.cluster_s.map(f2s)
     tt["total_s"] = tt.total_s.map(f2s)
