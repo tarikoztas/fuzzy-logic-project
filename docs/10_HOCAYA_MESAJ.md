@@ -29,11 +29,11 @@ Bu eşleme "fuzzy sistemin gerçekleştirilmesi" ölçütü için yeterli midir,
 
 Bu kapsam uygun mudur?
 
-**3. Veri ile ilgili not.** Makalenin sentetik görüntüleri ve karışık gürültünün tam tanımı (varyans/oran) paylaşılmamış. Görüntüleri makaledeki şekillere benzer biçimde yeniden üretip gürültü tanımını raporda açıkça belirteceğim; bu nedenle sayısal sonuçlar makaledekilerle birebir aynı çıkmayabilir. Bu yaklaşım kabul edilebilir mi?
+**3. Veri ile ilgili not.** Makalenin sentetik görüntüleri ve karışık gürültünün tam tanımı paylaşılmamış. Görüntüleri makaledeki şekilden (Fig. 9) yeniden oluşturdum; gürültüyü "Gaussian + çarpımsal + tuz-biber, üçü de aynı p parametresiyle" olarak tanımladım. Bu tanımla klasik FCM'de makaledeki FCM sonuçlarına oldukça yakın değerler elde ettim (ör. ACC farkı ortalama 0,6 puan). Yine de sonuçlar birebir aynı olmayacağı için farkları raporda açıkça tartışacağım. Bu yaklaşım kabul edilebilir mi?
 
 **4. Özgün katkı planı.** (a) Gürültü türüne göre (Gaussian, tuz-biber, çarpımsal ayrı ayrı ve karışık; %0–20) dayanıklılık analizi — makalede yalnızca karışık gürültü var; (b) ablasyon ve parametre analizi: altın oran (0.618) ödül oranının ve diğer parametrelerin etkisi, makaledeki belirsiz noktalar için alternatif seçenekler. Bu kapsam "özgün katkı" için yeterli midir, yoksa yönteme yeni bir bileşen eklememi mi beklersiniz?
 
-**5. Checkpoint'ler ve takvim.** CP1–CP5'in tarihleri ve her birinde Classroom'a ne yüklenmesi gerektiği nedir? Ayrıca son teslim (27.10.2026) ve sunum (03.11.2026) tarihlerinde bir değişiklik var mı?
+**5. Checkpoint'ler ve takvim.** Yönergede son teslim 27.10.2026, sunumlar 03.11.2026 olarak görünüyor. Güncel son teslim ve sunum tarihleri nedir? Checkpoint'ler (CP1–CP5) için ayrıca bir yükleme bekleniyor mu, bekleniyorsa ne zaman ve hangi biçimde?
 
 **6. Rapor.** Rapor Türkçe mi İngilizce mi olmalı? IEEE konferans şablonu (iki sütun) uygun mu; 8–12 sayfa sınırı bu şablon için mi geçerli?
 
