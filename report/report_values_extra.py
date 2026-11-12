@@ -121,15 +121,19 @@ def extra(V: dict, readme: dict, html_table) -> None:
     r = rob.groupby(["noise_kind", "noise_pct", "method"]).ACC.mean().unstack("method")
     at = lambda kind, p, m: f"{r.loc[(kind, p), m]:.1f}"
     V["C1_text"] = (
-        f"Fig.&nbsp;6 separates the three components of the mixed noise (values: mean over sy1–sy3 at 20&nbsp;%, FCM → reproduced method). "
-        f"Salt-and-pepper noise is handled best ({at('salt_pepper', 20, 'FCM')} → {at('salt_pepper', 20, 'ASRFCM-paper')}&nbsp;%): impulses sit at the ends of "
-        f"the sorted neighbourhood, fall into the penalty set and are averaged out. Gaussian noise of the same parameter is the hardest "
-        f"({at('gaussian', 20, 'FCM')} → {at('gaussian', 20, 'ASRFCM-paper')}&nbsp;%), speckle is mild because it leaves black regions untouched "
-        f"({at('speckle', 20, 'FCM')} → {at('speckle', 20, 'ASRFCM-paper')}&nbsp;%), and the mixed noise lies in between "
-        f"({at('mixed', 20, 'FCM')} → {at('mixed', 20, 'ASRFCM-paper')}&nbsp;%). The fuzzy-rule variants keep this ordering; “split” stays close to the paper's "
-        f"coefficients for impulse and speckle noise ({at('salt_pepper', 20, 'FIS-split')} and {at('speckle', 20, 'FIS-split')}&nbsp;% at 20&nbsp;%) and falls behind "
-        f"for Gaussian noise ({at('gaussian', 20, 'FIS-split')}&nbsp;%), while “full” is behind for every type at high density "
-        f"(Gaussian {at('gaussian', 20, 'FIS-full')}&nbsp;%).")
+        f"Fig.&nbsp;6 separates the components of the mixed noise (values: mean over sy1–sy3, FCM → reproduced method at 20&nbsp;%). "
+        f"Salt-and-pepper ({at('salt_pepper', 20, 'FCM')} → {at('salt_pepper', 20, 'ASRFCM-paper')}&nbsp;%) and speckle noise "
+        f"({at('speckle', 20, 'FCM')} → {at('speckle', 20, 'ASRFCM-paper')}&nbsp;%) are almost completely removed: impulses sit at the ends of the sorted "
+        f"neighbourhood and fall into the penalty set, and speckle leaves dark regions untouched. Gaussian noise is harder "
+        f"({at('gaussian', 20, 'FCM')} → {at('gaussian', 20, 'ASRFCM-paper')}&nbsp;%), and the combination is clearly the hardest case "
+        f"({at('mixed', 20, 'FCM')} → {at('mixed', 20, 'ASRFCM-paper')}&nbsp;%): the method copes well with each component alone but not with their sum at the "
+        f"same parameter. On noise-free images the method is slightly below FCM ({at('mixed', 0, 'ASRFCM-paper')} vs {at('mixed', 0, 'FCM')}&nbsp;%) because the "
+        f"spatial terms smooth thin structures; the pre-registered FIS, which trusts consistent pixels, keeps {at('mixed', 0, 'FIS-full')}&nbsp;% there and is "
+        f"also better at 1&nbsp;% noise (e.g. Gaussian: {at('gaussian', 1, 'FIS-full')} vs {at('gaussian', 1, 'ASRFCM-paper')}&nbsp;%). This is the regime the rule "
+        f"base was designed for; with more noise its trust in the pixel becomes a liability (Gaussian 20&nbsp;%: {at('gaussian', 20, 'FIS-full')}&nbsp;%). The split "
+        f"variant is equal to or slightly better than the paper's coefficients for impulse and speckle noise up to 10&nbsp;% "
+        f"(salt-and-pepper 10&nbsp;%: {at('salt_pepper', 10, 'FIS-split')} vs {at('salt_pepper', 10, 'ASRFCM-paper')}&nbsp;%) and falls behind for Gaussian and mixed "
+        f"noise at high density.")
     V["C1_table_values"] = r
 
     # ---- E7 timing ----

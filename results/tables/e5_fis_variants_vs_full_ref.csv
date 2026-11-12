@@ -1,0 +1,21 @@
+image,noise_pct,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+sy2,5,full gauss centroid,full tri centroid,ACC,-0.039,10,0.002,True
+sy2,5,full tri bisector,full tri centroid,ACC,0.076,10,0.002,True
+sy2,5,full tri mom,full tri centroid,ACC,0.338,10,0.002,True
+sy2,5,full tri sugeno,full tri centroid,ACC,0.141,10,0.002,True
+sy2,5,full unnormalised,full tri centroid,ACC,0.002,10,0.0913,False
+sy2,15,full gauss centroid,full tri centroid,ACC,0.007,10,0.8457,False
+sy2,15,full tri bisector,full tri centroid,ACC,0.311,10,0.002,True
+sy2,15,full tri mom,full tri centroid,ACC,2.726,10,0.002,True
+sy2,15,full tri sugeno,full tri centroid,ACC,0.132,10,0.002,True
+sy2,15,full unnormalised,full tri centroid,ACC,0.0,10,0.8457,False
+sy3,5,full gauss centroid,full tri centroid,ACC,-0.059,10,0.002,True
+sy3,5,full tri bisector,full tri centroid,ACC,0.122,10,0.002,True
+sy3,5,full tri mom,full tri centroid,ACC,0.493,10,0.002,True
+sy3,5,full tri sugeno,full tri centroid,ACC,0.155,10,0.002,True
+sy3,5,full unnormalised,full tri centroid,ACC,-0.001,10,0.4316,False
+sy3,15,full gauss centroid,full tri centroid,ACC,-0.188,10,0.002,True
+sy3,15,full tri bisector,full tri centroid,ACC,0.545,10,0.002,True
+sy3,15,full tri mom,full tri centroid,ACC,2.944,10,0.002,True
+sy3,15,full tri sugeno,full tri centroid,ACC,0.374,10,0.002,True
+sy3,15,full unnormalised,full tri centroid,ACC,-0.011,10,0.1309,False

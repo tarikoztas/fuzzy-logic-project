@@ -1,0 +1,17 @@
+image,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+100007,FIS-full,ASRFCM-paper,ACC,-1.881,10,0.002,True
+100007,FIS-split,ASRFCM-paper,ACC,-0.149,10,0.002,True
+118035,FIS-full,ASRFCM-paper,ACC,-12.398,10,0.002,True
+118035,FIS-split,ASRFCM-paper,ACC,-1.455,10,0.002,True
+167062,FIS-full,ASRFCM-paper,ACC,-17.948,10,0.002,True
+167062,FIS-split,ASRFCM-paper,ACC,-4.407,10,0.002,True
+201080,FIS-full,ASRFCM-paper,ACC,-4.883,10,0.002,True
+201080,FIS-split,ASRFCM-paper,ACC,0.431,10,0.002,True
+241004,FIS-full,ASRFCM-paper,ACC,-8.863,10,0.002,True
+241004,FIS-split,ASRFCM-paper,ACC,-0.702,10,0.002,True
+42049,FIS-full,ASRFCM-paper,ACC,-1.31,10,0.002,True
+42049,FIS-split,ASRFCM-paper,ACC,-0.218,10,0.002,True
+67079,FIS-full,ASRFCM-paper,ACC,-4.657,10,0.002,True
+67079,FIS-split,ASRFCM-paper,ACC,-0.979,10,0.002,True
+86016,FIS-full,ASRFCM-paper,ACC,-10.549,10,0.002,True
+86016,FIS-split,ASRFCM-paper,ACC,-1.721,10,0.002,True

@@ -1,0 +1,45 @@
+image,noise_pct,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+sy2,5,full gauss centroid,ASRFCM-paper,ACC,-0.988,10,0.002,True
+sy2,5,full tri bisector,ASRFCM-paper,ACC,-0.874,10,0.002,True
+sy2,5,full tri centroid,ASRFCM-paper,ACC,-0.95,10,0.002,True
+sy2,5,full tri mom,ASRFCM-paper,ACC,-0.611,10,0.002,True
+sy2,5,full tri sugeno,ASRFCM-paper,ACC,-0.808,10,0.002,True
+sy2,5,full unnormalised,ASRFCM-paper,ACC,-0.948,10,0.002,True
+sy2,5,split gauss centroid,ASRFCM-paper,ACC,0.145,10,0.002,True
+sy2,5,split tri bisector,ASRFCM-paper,ACC,0.15,10,0.002,True
+sy2,5,split tri centroid,ASRFCM-paper,ACC,0.146,10,0.002,True
+sy2,5,split tri mom,ASRFCM-paper,ACC,0.134,10,0.002,True
+sy2,5,split tri sugeno,ASRFCM-paper,ACC,0.147,10,0.002,True
+sy2,15,full gauss centroid,ASRFCM-paper,ACC,-16.006,10,0.002,True
+sy2,15,full tri bisector,ASRFCM-paper,ACC,-15.702,10,0.002,True
+sy2,15,full tri centroid,ASRFCM-paper,ACC,-16.013,10,0.002,True
+sy2,15,full tri mom,ASRFCM-paper,ACC,-13.287,10,0.002,True
+sy2,15,full tri sugeno,ASRFCM-paper,ACC,-15.88,10,0.002,True
+sy2,15,full unnormalised,ASRFCM-paper,ACC,-16.012,10,0.002,True
+sy2,15,split gauss centroid,ASRFCM-paper,ACC,-3.646,10,0.002,True
+sy2,15,split tri bisector,ASRFCM-paper,ACC,-3.769,10,0.002,True
+sy2,15,split tri centroid,ASRFCM-paper,ACC,-3.754,10,0.002,True
+sy2,15,split tri mom,ASRFCM-paper,ACC,-4.218,10,0.002,True
+sy2,15,split tri sugeno,ASRFCM-paper,ACC,-4.004,10,0.002,True
+sy3,5,full gauss centroid,ASRFCM-paper,ACC,-1.868,10,0.002,True
+sy3,5,full tri bisector,ASRFCM-paper,ACC,-1.687,10,0.002,True
+sy3,5,full tri centroid,ASRFCM-paper,ACC,-1.808,10,0.002,True
+sy3,5,full tri mom,ASRFCM-paper,ACC,-1.315,10,0.002,True
+sy3,5,full tri sugeno,ASRFCM-paper,ACC,-1.653,10,0.002,True
+sy3,5,full unnormalised,ASRFCM-paper,ACC,-1.81,10,0.002,True
+sy3,5,split gauss centroid,ASRFCM-paper,ACC,-0.104,10,0.002,True
+sy3,5,split tri bisector,ASRFCM-paper,ACC,-0.102,10,0.002,True
+sy3,5,split tri centroid,ASRFCM-paper,ACC,-0.107,10,0.002,True
+sy3,5,split tri mom,ASRFCM-paper,ACC,-0.133,10,0.002,True
+sy3,5,split tri sugeno,ASRFCM-paper,ACC,-0.122,10,0.002,True
+sy3,15,full gauss centroid,ASRFCM-paper,ACC,-15.733,10,0.002,True
+sy3,15,full tri bisector,ASRFCM-paper,ACC,-15.0,10,0.002,True
+sy3,15,full tri centroid,ASRFCM-paper,ACC,-15.545,10,0.002,True
+sy3,15,full tri mom,ASRFCM-paper,ACC,-12.601,10,0.002,True
+sy3,15,full tri sugeno,ASRFCM-paper,ACC,-15.171,10,0.002,True
+sy3,15,full unnormalised,ASRFCM-paper,ACC,-15.556,10,0.002,True
+sy3,15,split gauss centroid,ASRFCM-paper,ACC,-5.046,10,0.002,True
+sy3,15,split tri bisector,ASRFCM-paper,ACC,-5.278,10,0.002,True
+sy3,15,split tri centroid,ASRFCM-paper,ACC,-5.189,10,0.002,True
+sy3,15,split tri mom,ASRFCM-paper,ACC,-6.263,10,0.002,True
+sy3,15,split tri sugeno,ASRFCM-paper,ACC,-5.622,10,0.002,True

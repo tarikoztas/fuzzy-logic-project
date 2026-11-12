@@ -1,0 +1,17 @@
+image,noise_pct,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+sy2,5,split gauss centroid,split tri centroid,ACC,-0.002,10,0.3071,False
+sy2,5,split tri bisector,split tri centroid,ACC,0.004,10,0.059,False
+sy2,5,split tri mom,split tri centroid,ACC,-0.013,10,0.0273,True
+sy2,5,split tri sugeno,split tri centroid,ACC,0.001,10,0.4434,False
+sy2,15,split gauss centroid,split tri centroid,ACC,0.108,10,0.002,True
+sy2,15,split tri bisector,split tri centroid,ACC,-0.015,10,0.0273,True
+sy2,15,split tri mom,split tri centroid,ACC,-0.464,10,0.002,True
+sy2,15,split tri sugeno,split tri centroid,ACC,-0.25,10,0.002,True
+sy3,5,split gauss centroid,split tri centroid,ACC,0.003,10,0.0243,True
+sy3,5,split tri bisector,split tri centroid,ACC,0.005,10,0.0371,True
+sy3,5,split tri mom,split tri centroid,ACC,-0.026,10,0.0059,True
+sy3,5,split tri sugeno,split tri centroid,ACC,-0.015,10,0.002,True
+sy3,15,split gauss centroid,split tri centroid,ACC,0.143,10,0.002,True
+sy3,15,split tri bisector,split tri centroid,ACC,-0.088,10,0.002,True
+sy3,15,split tri mom,split tri centroid,ACC,-1.074,10,0.002,True
+sy3,15,split tri sugeno,split tri centroid,ACC,-0.433,10,0.002,True
