@@ -45,6 +45,8 @@ Public log of the choices made where the reference paper (Wu et al., ESWA 256:12
 | D-040 | **Finding: the paper's Table 1 baseline row is inconsistent with Tables 2–8.** With all components off the method is plain FCM, yet the row reports V_PC 70.58, V_PE 51.85, ACC 75.10, F 81.09, 20 iterations, matching none of the paper's FCM entries at 5 % (e.g. V_PC 92.55 / 85.83 / 84.11 for sy1 / sy2 / sy3). Its ACC/Kappa pairs imply K = 3. We run the ablation on all three images and compare with the paper qualitatively. |
 | D-039 | Remaining reproduction gap at 10–15 % noise on sy2/sy3 is attributed to the weak local term under Eqs. 5–9 with σ = 0.3 (see D-032); σ is not tuned in the baseline, its effect is measured in E4/E5. |
 
+| D-041 | **Post-hoc FIS variant (exploratory).** First runs of the pre-registered FIS (CP4) showed that it gives the noisy original pixel a share of about 30 % of the total trust, against about 0.1 % with the paper's formula (sy2, 15 % noise), so noise leaks into the clustering. One exploratory variant was added and labelled as such: `split` keeps the paper's α and the paper's total trust β + γ and uses the FIS only to divide that trust between ξ and ϑ. No further variants are tuned on the results; both FIS modes are evaluated on the full grid, on other noise types and on BSDS500. |
+
 ## Process
 
 | ID | Decision |
