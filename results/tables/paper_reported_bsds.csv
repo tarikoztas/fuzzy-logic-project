@@ -1,0 +1,17 @@
+source,table,image,method,VPC,ACC,Kappa
+paper,Table9,100007,FCM,67.27,65.96,9.83
+paper,Table9,100007,Ours,96.86,80.83,20.53
+paper,Table9,118035,FCM,54.77,73.08,39.42
+paper,Table9,118035,Ours,96.57,96.24,91.54
+paper,Table9,167062,FCM,68.03,78.86,52.43
+paper,Table9,167062,Ours,99.31,98.87,97.45
+paper,Table9,201080,FCM,52.57,62.72,16.12
+paper,Table9,201080,Ours,97.61,85.12,66.52
+paper,Table9,241004,FCM,47.63,60.36,5.40
+paper,Table9,241004,Ours,93.22,73.16,28.42
+paper,Table9,42049,FCM,68.04,81.67,53.97
+paper,Table9,42049,Ours,97.21,96.36,88.22
+paper,Table9,67079,FCM,65.91,68.67,37.92
+paper,Table9,67079,Ours,94.93,85.06,69.03
+paper,Table9,86016,FCM,65.01,62.89,23.03
+paper,Table9,86016,Ours,97.50,83.26,56.39

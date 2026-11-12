@@ -15,7 +15,51 @@ PAPER = dict(color="#eb6834", linestyle="--", marker="s", markersize=5, linewidt
 INK, MUTED, GRID = "#1f1f1e", "#6b6a63", "#e4e3dd"
 
 
-SERIES = ["#2a78d6", "#eb6834", "#1baf7a"]  # categorical slots 1-3 (one per image)
+SERIES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4"]  # categorical slots 1-5, fixed order
+LINESTYLES = ["-", "--", "-.", ":", (0, (5, 1))]
+
+
+def method_lines(summary: pd.DataFrame, x: str, metric: str, row: str | None, col: str,
+                 methods: list[str], path_stem: str, xlabel: str, row_order=None, col_order=None,
+                 ylabel: str | None = None, sharex: bool = True) -> None:
+    """Small multiples of mean +- std lines, one line per method (fixed colour + line style + marker).
+
+    `summary` needs columns: method, x, `metric`_mean, `metric`_std, col (and row if given).
+    """
+    rows = row_order or (sorted(summary[row].unique()) if row else [None])
+    cols = col_order or sorted(summary[col].unique())
+    fig, axes = plt.subplots(len(rows), len(cols), figsize=(3.3 * len(cols), 2.6 * len(rows)),
+                             sharex=sharex, sharey="row", squeeze=False)
+    for i, rv in enumerate(rows):
+        for j, cv in enumerate(cols):
+            ax = axes[i][j]
+            d = summary[summary[col] == cv]
+            if row:
+                d = d[d[row] == rv]
+            for k, m in enumerate(methods):
+                dm = d[d.method == m].sort_values(x)
+                if dm.empty:
+                    continue
+                ax.errorbar(dm[x], dm[f"{metric}_mean"], yerr=dm[f"{metric}_std"], color=SERIES[k % len(SERIES)],
+                            linestyle=LINESTYLES[k % len(LINESTYLES)], marker=MARKERS[k % len(MARKERS)] if k < 3 else "D",
+                            markersize=4, linewidth=1.8, capsize=2, label=m)
+            ax.grid(True, color=GRID, linewidth=0.8)
+            ax.set_axisbelow(True)
+            for side in ("top", "right"):
+                ax.spines[side].set_visible(False)
+            ax.tick_params(colors=MUTED, labelsize=8)
+            title = f"{cv}" if not row else f"{rv} | {cv}"
+            ax.set_title(title, fontsize=9, color=INK)
+            if j == 0:
+                ax.set_ylabel(ylabel or (metric if metric == "Iterations" else f"{metric} (%)"), color=INK, fontsize=9)
+            if i == len(rows) - 1:
+                ax.set_xlabel(xlabel, color=INK, fontsize=9)
+    handles, labels = axes[0][0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", ncol=min(5, len(methods)), frameon=False, fontsize=9)
+    fig.tight_layout(rect=(0, 0, 1, 1 - 0.55 / (2.6 * len(rows))))  # leave room for the legend
+    for ext in ("png", "pdf"):
+        fig.savefig(f"{path_stem}.{ext}", dpi=200)
+    plt.close(fig)
 MARKERS = ["o", "s", "^"]
 
 

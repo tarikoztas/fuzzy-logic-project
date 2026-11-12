@@ -1,0 +1,11 @@
+# E5-robustness (C1): each noise type alone and mixed, densities 0-20 %.
+name: e5_robustness
+images: [sy1, sy2, sy3]
+noise: {kinds: [gaussian, speckle, salt_pepper, mixed], levels_pct: [0, 1, 5, 10, 15, 20]}
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+methods:
+  - {label: FCM, base: FCM}
+  - {label: ASRFCM-paper, base: paper}
+  - {label: FIS-full, base: "FIS-full (pre-registered)"}
+  - {label: FIS-split, base: "FIS-split (post-hoc)"}
+output: results/tables/e5_robustness_runs.csv

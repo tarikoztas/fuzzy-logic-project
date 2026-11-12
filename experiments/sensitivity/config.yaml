@@ -1,0 +1,150 @@
+# E4: parameter sensitivity (paper Figs. 10-13), one parameter changed at a time, 5 % mixed noise.
+name: e4_sensitivity
+images:
+- sy1
+- sy2
+- sy3
+noise:
+  kinds:
+  - mixed
+  levels_pct:
+  - 5
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+methods:
+- label: paper
+  base: paper
+- label: sigma=0.05
+  base: paper
+  params:
+    sigma: 0.05
+- label: sigma=0.1
+  base: paper
+  params:
+    sigma: 0.1
+- label: sigma=0.2
+  base: paper
+  params:
+    sigma: 0.2
+- label: sigma=0.3
+  base: paper
+  params:
+    sigma: 0.3
+- label: sigma=0.4
+  base: paper
+  params:
+    sigma: 0.4
+- label: sigma=0.5
+  base: paper
+  params:
+    sigma: 0.5
+- label: sigma=0.6
+  base: paper
+  params:
+    sigma: 0.6
+- label: sigma=0.7
+  base: paper
+  params:
+    sigma: 0.7
+- label: sigma=0.8
+  base: paper
+  params:
+    sigma: 0.8
+- label: sigma=0.9
+  base: paper
+  params:
+    sigma: 0.9
+- label: w=3
+  base: paper
+  params:
+    w: 3
+- label: w=5
+  base: paper
+  params:
+    w: 5
+- label: w=7
+  base: paper
+  params:
+    w: 7
+- label: w=9
+  base: paper
+  params:
+    w: 9
+- label: k=1
+  base: paper
+  params:
+    k: 1.0
+- label: k=5
+  base: paper
+  params:
+    k: 5.0
+- label: k=10
+  base: paper
+  params:
+    k: 10.0
+- label: k=15
+  base: paper
+  params:
+    k: 15.0
+- label: k=20
+  base: paper
+  params:
+    k: 20.0
+- label: k=25
+  base: paper
+  params:
+    k: 25.0
+- label: k=30
+  base: paper
+  params:
+    k: 30.0
+- label: delta=0
+  base: paper
+  params:
+    delta: 0
+- label: delta=0.02
+  base: paper
+  params:
+    delta: 0.02
+- label: delta=0.04
+  base: paper
+  params:
+    delta: 0.04
+- label: delta=0.06
+  base: paper
+  params:
+    delta: 0.06
+- label: delta=0.08
+  base: paper
+  params:
+    delta: 0.08
+- label: delta=0.1
+  base: paper
+  params:
+    delta: 0.1
+- label: delta=0.2
+  base: paper
+  params:
+    delta: 0.2
+- label: delta=0.4
+  base: paper
+  params:
+    delta: 0.4
+- label: delta=0.6
+  base: paper
+  params:
+    delta: 0.6
+- label: delta=0.8
+  base: paper
+  params:
+    delta: 0.8
+output: results/tables/e4_sensitivity_runs.csv
