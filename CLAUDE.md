@@ -1,16 +1,16 @@
 # CLAUDE.md — Bulanık Mantık Dönem Projesi
 
 > Bu dosya Claude Code'un **her oturum başında** okuması gereken ana bağlam dosyasıdır.
-> Ayrıntılar `docs/` altındadır. Bu dosyayı kısa ve güncel tut.
+> Ayrıntılar `docs/` altındadır (**yerel, git'e girmez — D-034**). Herkese açık kayıt: `report/decisions.md` (İngilizce karar/sapma listesi) ve `report/checkpoints/` (CP notları). Bu dosyayı kısa ve güncel tut.
 
 ## 1. Proje özeti
 
 - **Ders:** Bulanık Mantık — Dönem Projesi (İstanbul Üniversitesi-Cerrahpaşa, Bilgisayar Mühendisliği)
 - **Öğrenci:** Tarık Öztaş, 1306230040 (README'ye işlendi)
-- **Git:** commit'lere Claude co-author/trailer EKLENMEZ; yalnız öğrencinin hesabı (`tarikoztas`) — bkz. `docs/05_KURALLAR.md` §6
+- **Git:** commit'lere Claude co-author/trailer EKLENMEZ; yalnız öğrencinin hesabı (`tarikoztas`) — bkz. `docs/05_KURALLAR.md` §6. Öğrenci commit + `git push origin main` yetkisi verdi (12.11.2026); force push / history rewrite yok
 - **Referans makale:** J. Wu, X. Wang, Y. Liu, C. Fang, *"Adaptive sparse regularized fuzzy clustering noise image segmentation algorithm based on complementary spatial information"*, Expert Systems With Applications 256 (2024) 124943. DOI: 10.1016/j.eswa.2024.124943
 - **Proje akışı:** İNCELE → ANLA → UYGULA → GELİŞTİR → DENEY YAP → KARŞILAŞTIR → ANALİZ ET → SUN → RAPORLA
-- **Tarihler:** Bugün (plan başlangıcı) 18.10.2026 · **Son teslim 27.10.2026** (Classroom) · **Sunumlar 03.11.2026**
+- **Tarihler:** Yönergede son teslim 27.10.2026, sunum 03.11.2026; hocaya sorulmayacak (D-026) → proje en kısa sürede eksiksiz tamamlanır
 - **Puan:** Sunum+Savunma 20 · Uygulama/Yeniden Gerçekleştirme 30 · Özgün Katkı 30 · Rapor+GitHub 20 (toplam 100)
 
 ## 2. Oturum başında okunacaklar (sırayla)
@@ -30,7 +30,7 @@ Orijinal PDF'ler: `references/papers/` (yönerge ve makale). Çelişki olursa **
 4. **Gizli bilgi yok:** API anahtarı, parola, token repoya girmez.
 5. **Kaynak ayrımı:** Dışarıdan alınan kod `src/third_party/` veya dosya başında açık atıfla; öğrencinin kodundan ayırt edilir. Makale yazarlarının resmi kodu kullanılırsa rapor + README'de belirtilir.
 6. **Tekrar üretilebilirlik:** Sabit seed, `requirements.txt` sürümleri, tek komutla deney çalıştırma.
-7. **GenAI şeffaflığı:** Claude'un katkısını `docs/genai_usage_log.md` içine işle (rapordaki "Generative AI Usage Disclosure" bölümü buradan beslenir).
+7. **GenAI şeffaflığı:** Claude'un katkısını `docs/genai_usage_log.md` içine işle (rapordaki "Generative AI Usage Disclosure" bölümü buradan beslenir; docs yerel olduğu için açıklama raporda yer almalı).
 8. **Dürüst raporlama:** Katkı baseline'dan kötü çıkarsa olduğu gibi raporla ve nedenini tartış (yönerge bunu açıkça kabul ediyor).
 9. **Yönerge öncelikli:** Şüphede `docs/01_YONERGE.md` puan tablolarına bak; puan getirmeyen işe zaman harcama.
 
@@ -38,6 +38,7 @@ Orijinal PDF'ler: `references/papers/` (yönerge ve makale). Çelişki olursa **
 
 - **Dil/ortam:** Python 3.10+ (numpy, scipy, scikit-image, opencv, matplotlib, pandas, dtcwt, numba). Bkz. `requirements.txt`.
 - **Makalenin çekirdeği:** FCM + (a) ödül/ceza kümeli yerel uzamsal bilgi ξ (altın oran 0.618), (b) DTCWT alanında yerel-olmayan bilgi ϑ, (c) adaptif katsayılar α,β,γ, (d) ℓ0 seyrek düzenlileştirme (hard threshold √δ + normalize).
+- **Katkı (kesin, D-006-final / D-033):** α,β,γ için açık Mamdani bulanık çıkarım sistemi (üyelik fonksiyonları, IF–THEN kural tabanı, min/max çıkarım, durulaştırma) + üyelik fonksiyonu / durulaştırma / Mamdani–Sugeno karşılaştırmaları; destekleyici: C1 gürültü türü robustness, C2 ablasyon.
 - **Makale parametreleri:** w=5, S=15, υ=4, g=10, σ=0.3, k=15, δ=0.4, m=2, ε=1e-6, T=100.
 - **Metrikler:** V_PC, V_PE, ACC, F-score, NMI, Kappa (+ iterasyon sayısı, süre).
 - **Bilinen makale belirsizlikleri / tuzakları:** `docs/02_MAKALE_ANALIZI.md` §9 — kodlamadan ÖNCE oku (ör. hard threshold sonrası sıfırlanan sütunlar, Eq. 10'daki y_j/y_q, Eq. 15-16 işaret belirsizliği).
@@ -62,12 +63,12 @@ python experiments/proposed/run_proposed.py --config experiments/proposed/config
 ## 6. Durum takibi
 
 - İlerleme: `docs/04_FAZLAR_VE_YOL_HARITASI.md` içindeki checkbox'lar (her faz sonunda işaretle).
-- Kararlar: `docs/06_KARARLAR.md` (yeni karar → yeni satır; bekleyen kararları öğrenciye sor, kendin varsayma).
+- Kararlar: `docs/06_KARARLAR.md` (yeni karar → yeni satır) **ve** herkese açık özeti `report/decisions.md`. Hocaya bağlı sorular kapatıldı (öğrenci hocaya sormayacak); yeni belirsizlikte en savunulabilir seçimi yap, gerekçesiyle iki dosyaya da yaz.
 - Bu dosyadaki "Tarihler" ve "Komutlar" bölümlerini değişiklik olunca güncelle.
 
 ## 7. Çalışma biçimi
 
 - Büyük bir adıma başlamadan önce kısa plan sun, öğrenci onayından sonra uygula.
 - Her faz sonunda: ne yapıldı (2-3 cümle), neyi öğrenci doğrulamalı, sıradaki adım.
-- Belirsiz noktada (özellikle hocadan teyit gereken: `docs/06_KARARLAR.md` "Açık") durup sor.
-- İletişim dili: Türkçe. Kod, değişken adları, commit'ler ve rapor/README: İngilizce (rapor dili teyit bekliyor, bkz. kararlar).
+- Belirsiz noktada kendin karar ver ve belgele; yalnız yıkıcı/geri alınamaz işlem, ücretli/giriş gerektiren kaynak veya etik belirsizlikte dur ve sor.
+- İletişim dili: Türkçe. Kod, değişken adları, commit'ler ve rapor/README/sunum: İngilizce (D-019).
