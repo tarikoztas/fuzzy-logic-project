@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ASRFCM-CSI Reproduction and Fuzzy-Rule Extension</title>
+<style>
+@page { size: A4; margin: 16mm 15mm 17mm 15mm; }
+html { font-family: "Times New Roman", Times, serif; font-size: 9.6pt; line-height: 1.22; color: #000; background: #fff; }
+body { margin: 0; }
+h1.title { font-size: 19pt; font-weight: normal; text-align: center; margin: 0 0 6pt; line-height: 1.15; }
+.authors { text-align: center; font-size: 10pt; margin-bottom: 10pt; }
+.authors .aff { font-size: 8.8pt; font-style: italic; }
+.columns { column-count: 2; column-gap: 5.5mm; text-align: justify; hyphens: auto; }
+.abstract { font-weight: bold; font-size: 8.9pt; }
+.abstract em { font-weight: bold; }
+.keywords { font-weight: bold; font-size: 8.9pt; margin-bottom: 6pt; }
+h2 { font-size: 9.6pt; font-weight: normal; font-variant: small-caps; text-align: center; margin: 9pt 0 4pt; break-after: avoid; }
+h3 { font-size: 9.6pt; font-weight: normal; font-style: italic; margin: 6pt 0 2pt; break-after: avoid; }
+p { margin: 0 0 4pt; text-indent: 1em; }
+p.noindent { text-indent: 0; }
+figure { margin: 6pt 0; break-inside: avoid; text-align: center; }
+figure img { width: 100%; }
+figure.wide { column-span: all; margin: 8pt 0; }
+figcaption { font-size: 8pt; text-align: justify; margin-top: 2pt; }
+table { border-collapse: collapse; width: 100%; font-size: 7.7pt; margin: 4pt 0 6pt; break-inside: avoid; }
+table.wide { column-span: all; }
+caption { font-size: 7.8pt; font-variant: small-caps; margin-bottom: 3pt; text-align: center; }
+th, td { border-top: 0.5pt solid #000; border-bottom: 0.5pt solid #000; padding: 1.4pt 2.5pt; text-align: center; }
+td.l, th.l { text-align: left; }
+.eq { text-align: center; margin: 3pt 0 5pt; font-style: italic; }
+.eq span.n { float: right; font-style: normal; }
+ol.refs { font-size: 7.9pt; padding-left: 16pt; margin: 0; }
+ol.refs li { margin-bottom: 2pt; text-align: left; }
+.small { font-size: 8pt; }
+code { font-family: Consolas, "Courier New", monospace; font-size: 8.2pt; }
+ul.tight { margin: 0 0 4pt 0; padding-left: 13pt; }
+ul.tight li { margin-bottom: 1.5pt; }
+</style>
+</head>
+<body>
+<h1 class="title">Reproducing an Adaptive Sparse-Regularized Fuzzy Clustering Method for Noisy Image Segmentation and Extending It with a Mamdani Rule Base</h1>
+<div class="authors">Tarık Öztaş (1306230040)<br><span class="aff">Department of Computer Engineering, İstanbul University-Cerrahpaşa — Fuzzy Logic Term Project</span></div>
+
+<div class="columns">
+<p class="noindent abstract"><em>Abstract</em>—We re-implement, from scratch, the adaptive sparse-regularized fuzzy C-means method with complementary spatial information of Wu et al. (Expert Systems with Applications, 2024) and reproduce its main experiments on three synthetic images and eight BSDS500 images. Our FCM baseline matches the paper-reported FCM results within {{E1_acc_mad}} accuracy points on average, and the reproduced method matches the paper within {{E2_acc_mad_low}} points up to 5&nbsp;% mixed noise, while it is up to {{E2_acc_maxgap}} points lower at 15&nbsp;% noise. In the process we document six ambiguities and inconsistencies of the paper, among them that its Kappa values are a fixed rescaling of accuracy and that, with the published parameters, its non-local means step behaves like a mean filter. As an extension we replace the paper's closed-form per-pixel trust coefficients by an explicit Mamdani fuzzy inference system with nine IF–THEN rules, and compare membership-function shapes, defuzzification methods and a Sugeno variant. The pre-registered rule base did not improve the method: it was significantly worse at high noise ({{E5_full_acc_drop15}} accuracy points on sy2/sy3 at 15&nbsp;%), and an exploratory variant gave only small gains at low noise. We analyse why and report robustness results for four noise types.</p>
+<p class="noindent keywords">Index Terms—fuzzy C-means, image segmentation, fuzzy inference system, reproducibility, dual-tree complex wavelet transform, sparse regularization.</p>
+
+<h2>I. Introduction</h2>
+<p>Segmentation divides an image into homogeneous regions and is a basic step of many vision pipelines. Fuzzy C-means (FCM) [2] is popular for this task because it assigns each pixel a degree of membership in every cluster instead of a hard label, but it treats pixels as independent points in gray-level space and is therefore very sensitive to noise [1]. A long line of work adds spatial information to FCM [8]–[23]. The reference paper of this project, Wu et al. [1], combines four ideas: (i) a local estimate ξ in which neighbours are split by gray-level rank into a golden-ratio reward set and a penalty set, (ii) a non-local estimate ϑ obtained by non-local means in the dual-tree complex wavelet (DTCWT) domain, (iii) per-pixel coefficients α, β, γ that weigh the original value against the two estimates, and (iv) an ℓ0 sparse regularization of the membership matrix solved by hard thresholding. The paper reports large gains over FCM and eight other methods.</p>
+<p>This project follows the course guideline: examine the paper, re-implement it, reproduce at least one of its experiments, extend it, and evaluate the extension against the baseline in controlled experiments. Our contributions are:</p>
+<ul class="tight">
+<li>an independent open-source implementation of FCM and of the complete method with unit tests, re-created test data (synthetic images and BSDS500 ground truths extracted from the paper's figures) and a validated reading of the under-specified mixed-noise model;</li>
+<li>a reproduction of Tables 1–9 of [1] with 10 seeds per setting and an analysis of the differences, including six documented ambiguities or inconsistencies of the paper (Section&nbsp;IX);</li>
+<li>an extension that replaces the closed-form trust coefficients by an explicit Mamdani fuzzy inference system [35], with hypotheses fixed before the experiments, comparisons of membership functions, defuzzification methods and a Sugeno variant [36], robustness experiments for four noise types, and an honest negative result.</li>
+</ul>
+
+<h2>II. Related Work</h2>
+<p><em>Local spatial information.</em> BCFCM [8] first added a neighbourhood term to the FCM objective; FCM_S1/S2 [9] replaced it with pre-filtered images and a kernel distance; FGFCM [10] combined spatial and gray-level similarity and clustered the gray-level histogram. FLICM [11] introduced a parameter-free fuzzy factor and led to KWFLICM [13] and ADFLICM [14]. FRFCM [15] uses morphological reconstruction [6] and membership filtering, DSFCM_N [16] models noise as a sparse deviation, and FCM_SICM [18] uses bilateral filtering and membership linking. As noted in [1], these operators essentially average the neighbourhood, which is biased when many neighbours are corrupted.</p>
+<p><em>Non-local and region-level information.</em> Following non-local means [5], FCM_SNLS [12] gathers information from pixels with similar patches. FALRCM [20] adds region-level information with median memberships, and FSC_LNML [22] combines fuzzy subspace clustering with adaptive local variance, non-local information and membership linking. Jiao et al. [24] build a weighted image from regional and local filtering and adapt, per pixel, its balance with the original image.</p>
+<p><em>Transform domain and sparsity.</em> WFCM [17] clusters in a wavelet-frame domain; SRFCM [19] adds morphological reconstruction and a sparse regularization of the memberships, solved by a Lagrangian step, thresholding and normalization — the scheme that [1] adopts. Chen et al. [25] use sparse self-representation within fuzzy clustering.</p>
+<p><em>Other directions.</em> Recent work changes the fuzzy partition itself [27], combines fuzzy clustering with deep networks [26], or estimates K automatically [28]. Among these methods, [1] is the only one that combines local, non-local, wavelet-domain, sparse and per-pixel adaptive components; its closest relatives are SRFCM [19] and FSC_LNML [22]. None of them expresses the per-pixel weighting as an explicit fuzzy rule base, which is the gap our extension addresses.</p>
+
+<h2>III. Theoretical Background</h2>
+<h3>A. Fuzzy sets and fuzzy inference</h3>
+<p>A fuzzy set A on a universe X is defined by a membership function μ<sub>A</sub>: X → [0,1] [34]. A Mamdani system [35] maps crisp inputs to crisp outputs in four steps: <em>fuzzification</em> (membership degrees of each input in its linguistic terms), <em>rule evaluation</em> (the firing strength of a rule “IF x<sub>1</sub> is A AND x<sub>2</sub> is B THEN z is C” is min(μ<sub>A</sub>(x<sub>1</sub>), μ<sub>B</sub>(x<sub>2</sub>))), <em>implication and aggregation</em> (each consequent set is clipped at its firing strength and the clipped sets are combined with max), and <em>defuzzification</em> of the aggregated set μ(z): the centroid ∫zμ(z)dz/∫μ(z)dz, the bisector of the area, or the mean of the maxima. In a zero-order Takagi–Sugeno system [36] the consequents are constants c<sub>r</sub> and the output is Σw<sub>r</sub>c<sub>r</sub>/Σw<sub>r</sub>.</p>
+<h3>B. Fuzzy C-means</h3>
+<p>FCM [2] partitions N gray values y<sub>j</sub> into K fuzzy clusters with centres c<sub>i</sub> by minimizing</p>
+<div class="eq">J = Σ<sub>i</sub>Σ<sub>j</sub> u<sub>ij</sub><sup>m</sup> (y<sub>j</sub> − c<sub>i</sub>)², Σ<sub>i</sub> u<sub>ij</sub> = 1 <span class="n">(1)</span></div>
+<p class="noindent">with fuzzifier m &gt; 1. Alternating optimization gives u<sub>ij</sub> = 1/Σ<sub>r</sub>(|y<sub>j</sub>−c<sub>i</sub>|/|y<sub>j</sub>−c<sub>r</sub>|)<sup>2/(m−1)</sup> and c<sub>i</sub> = Σ<sub>j</sub>u<sub>ij</sub><sup>m</sup>y<sub>j</sub>/Σ<sub>j</sub>u<sub>ij</sub><sup>m</sup>; each step cannot increase J. Each cluster is a fuzzy set over the pixels, and the crisp segmentation is obtained by defuzzification with argmax<sub>i</sub> u<sub>ij</sub>.</p>
+<h3>C. DTCWT and non-local means</h3>
+<p>The DTCWT [4] uses two real wavelet trees whose outputs form the real and imaginary parts of complex coefficients; it is nearly shift invariant and separates six orientations (±15°, ±45°, ±75°). Non-local means [5] replaces each value by a weighted mean of the values in a search window, the weights decreasing with the Gaussian-weighted distance between the surrounding patches.</p>
+
+<h2>IV. Original Method</h2>
+<figure class="wide"><img src="../results/figures/architecture.png" style="width:78%"><figcaption>Fig. 1. Implemented system. Grey boxes: method of [1] (reproduced). Orange: the proposed Mamdani fuzzy inference system replaces the closed-form coefficients (Eqs. 13–19 of [1]).</figcaption></figure>
+<p><em>Local information ξ</em> (Alg. 2 of [1]). In a w×w window the N<sub>R</sub>−1 neighbours of pixel i are sorted; the middle ⌈0.618(N<sub>R</sub>−1)⌉ form the reward set, the others the penalty set. With S<sub>ij</sub> = exp(−(x<sub>j</sub>−x<sub>i</sub>)²/τ<sub>i</sub>²), τ<sub>i</sub>² = Σ<sub>p</sub>(x<sub>p</sub>−x<sub>i</sub>)²/N<sub>R</sub>, the weights are SS<sub>ij</sub> = (1±σ)S<sub>ij</sub>·exp(−d<sub>ij</sub>) and ξ<sub>i</sub> = Σ<sub>j</sub>SS<sub>ij</sub>x<sub>j</sub>/Σ<sub>j</sub>SS<sub>ij</sub>, where d<sub>ij</sub> is the spatial distance.</p>
+<p><em>Non-local information ϑ.</em> The image is decomposed by a one-level DTCWT; non-local means with an S×S search window, w×w patches, Gaussian patch weights of standard deviation υ and filtering parameter g·w² is applied to all seven sub-images (Eqs. 10–11 of [1]); the inverse transform gives ϑ.</p>
+<p><em>Adaptive coefficients.</em> With ΔG<sub>1</sub> = k·exp(y<sub>j</sub>−ξ<sub>j</sub>) and ΔG<sub>2</sub> = k·exp(y<sub>j</sub>−ϑ<sub>j</sub>), α<sub>j</sub> = 1/(ΔG<sub>1</sub>+ΔG<sub>2</sub>), β<sub>j</sub> = ΔG<sub>1</sub>, γ<sub>j</sub> = ΔG<sub>2</sub>. A pixel that differs from its estimates receives less trust in its own value.</p>
+<p><em>Sparse-regularized FCM</em> (Alg. 3 of [1]). The objective is</p>
+<div class="eq">J = Σ<sub>i</sub>Σ<sub>j</sub> u<sub>ij</sub><sup>m</sup> d<sub>ij</sub> + δ‖U‖<sub>0</sub>, d<sub>ij</sub> = α<sub>j</sub>(y<sub>j</sub>−c<sub>i</sub>)² + β<sub>j</sub>(ξ<sub>j</sub>−c<sub>i</sub>)² + γ<sub>j</sub>(ϑ<sub>j</sub>−c<sub>i</sub>)² <span class="n">(2)</span></div>
+<p class="noindent">and each iteration computes centres c<sub>i</sub> = Σ<sub>j</sub>u<sub>ij</sub><sup>m</sup>(α<sub>j</sub>y<sub>j</sub>+β<sub>j</sub>ξ<sub>j</sub>+γ<sub>j</sub>ϑ<sub>j</sub>)/Σ<sub>j</sub>u<sub>ij</sub><sup>m</sup>(α<sub>j</sub>+β<sub>j</sub>+γ<sub>j</sub>), FCM-type memberships η<sub>ij</sub> from d<sub>ij</sub>, sets η<sub>ij</sub> &lt; √δ to zero and renormalizes the columns. Parameters: w = 5, S = 15, υ = 4, g = 10, σ = 0.3, k = 15, δ = 0.4, m = 2, ε = 10<sup>−6</sup>, T = 100.</p>
+<p><em>Fuzzy-system view.</em> Inputs are y, ξ and ϑ; each cluster is a fuzzy set whose membership function is u<sub>ij</sub>; the role of an inference mechanism is played by the minimization of (2) (“a pixel close to c<sub>i</sub> in the weighted distance belongs strongly to cluster i”); defuzzification is argmax. The method contains no explicit rule base — the motivation for our extension.</p>
+
+<h2>V. Reproduction Methodology</h2>
+<p><em>Implementation.</em> Everything is written in Python 3.12 (NumPy, SciPy, OpenCV, dtcwt) without code from the authors. Each module is unit-tested ({{n_tests}} tests): for example, the vectorized non-local means equals a direct transcription of Eqs. 10–11, the reward/penalty sets of the worked example in Fig. 1 of [1] are reproduced exactly, and the sparse method reduces exactly to FCM when the extra terms are switched off. FCM and the proposed method share the same random initial memberships for a given seed.</p>
+<p><em>Data.</em> The synthetic images are not published, so we extracted the raster of Fig. 9 of [1], resized each panel to 256×256 and assigned every pixel to the nearest of the measured gray levels (sy1: 0/255, K = 2; sy2: 0/107/255, K = 3; sy3: 0/107/222, K = 3). For BSDS500 [7] the paper evaluates against simplified 2–4 class ground truths shown in its Fig. 22; we re-created them the same way and validated them against the human segmentations (93.5–99.7&nbsp;% agreement after merging regions). Color images are converted to gray with BT.601 weights.</p>
+<p><em>Noise.</em> [1] describes “equal proportions of Gaussian, salt-and-pepper and multiplicative noise” without a definition of the level. We read p&nbsp;% mixed noise as Gaussian noise of variance p, then speckle (multiplicative uniform noise of variance p), then salt-and-pepper of density p. With this reading our FCM reproduces the paper-reported FCM within {{E1_acc_mad}} ACC points on average (Section&nbsp;VIII-A), which supports it.</p>
+<p><em>Metrics.</em> V<sub>PC</sub>, V<sub>PE</sub> (from U), ACC, F-score (macro average), NMI and Kappa (from the label map). Clusters are matched to classes with the Hungarian algorithm. We report Cohen's kappa; for comparison with the paper we also compute the rescaled ACC that its Kappa values correspond to (Section&nbsp;IX).</p>
+<p><em>Interpretation choices.</em> Table&nbsp;I lists the decisions that affect the results; all are recorded with their evidence in <code>report/decisions.md</code>.</p>
+{{TABLE_decisions}}
+
+<h2>VI. Proposed Extension: a Mamdani Rule Base for the Trust Coefficients</h2>
+<p><em>Motivation.</em> With k = 15 and gray values in [0,1], ΔG lies in [5.5, 40.8]; hence α ≈ 0.01–0.1 and β ≈ γ for almost every pixel, and the two estimates are always weighted alike. Our reproduction shows that they fail in different places: with the published parameters the non-local step acts almost as a 15×15 mean filter on each sub-band (strong in flat regions, blurring at edges), while ξ is edge-aware but weaker under heavy noise. A rule base can express such knowledge explicitly, is inspectable, and connects the method to fuzzy inference.</p>
+<p><em>Design</em> (fixed before the experiments). Two inputs per pixel: Dev = |y − (ξ+ϑ)/2| (deviation from the consensus; large ⇒ probably noise) and Dis = |ξ − ϑ| (disagreement of the estimates; large ⇒ probably an edge). Terms Small/Medium/Large on [0,1] (triangular/trapezoidal; Gaussian variant with the same crossover points); outputs α, β, γ with terms Low/Medium/High (Fig.&nbsp;2). The nine rules are given in Table&nbsp;II; inference uses min/min/max and centroid defuzzification, and the outputs are normalized to α+β+γ = 1 per pixel. A zero-order Sugeno version uses the same rules with the output-term centroids as constants. The FIS is evaluated once per image.</p>
+{{TABLE_rules}}
+<figure class="wide"><img src="../results/figures/fis_inference_example.png" style="width:92%"><figcaption>Fig. 2. Mamdani inference for one pixel (Dev = 0.25, Dis = 0.12): fuzzification of the inputs (left), firing strengths of the nine rules (middle), and the aggregated output set for γ with the three defuzzified values (right).</figcaption></figure>
+<p><em>Hypotheses</em> (CP4, committed before the runs). H1: the FIS raises ACC at 10–15&nbsp;% noise on sy2/sy3 and loses at most 0.5 points at 1–5&nbsp;%. H2: it also raises the mean ACC on the BSDS500 images. H3: membership shape and defuzzification change ACC by less than one point. H4: Sugeno is within one point of Mamdani-centroid. <em>Exploratory variant.</em> After the first runs showed that the pre-registered FIS (“full”) gives the noisy pixel about 30&nbsp;% of the total trust (paper: about 0.1&nbsp;%), we added exactly one post-hoc variant, “split”, which keeps the paper's α and total trust β+γ and uses the FIS only to divide that trust between ξ and ϑ. No other variant was tuned on the results.</p>
+
+<h2>VII. Experimental Setup</h2>
+<p>Synthetic images: mixed noise of 1, 5, 10 and 15&nbsp;%; BSDS500: 5&nbsp;%; robustness: Gaussian, speckle, salt-and-pepper and mixed noise at 0–20&nbsp;%. Every setting is run with 10 seeds; a seed fixes the noise realization and the initial memberships, which are shared by all methods. We report mean ± standard deviation and paired two-sided Wilcoxon signed-rank tests over the seeds (α = 0.05). E1–E3 reproduce Tables 2–8 (FCM and proposed method) and the ablation of Table 1; E4 repeats the parameter study of Figs. 10–13; E5 evaluates the extension (main comparison, FIS variants, robustness per noise type, single-factor ablation of the paper's arbitrary choices); E6 uses the eight BSDS500 images; E7 measures run time on an otherwise idle laptop CPU ({{cpu_note}}). All tables and figures are generated by scripts from the per-run CSV files.</p>
+{{RESULTS_AND_REST}}
+</div>
+</body>
+</html>

@@ -36,7 +36,7 @@ Orijinal PDF'ler: `references/papers/` (yönerge ve makale). Çelişki olursa **
 
 ## 4. Teknik özet
 
-- **Dil/ortam:** Python 3.10+ (numpy, scipy, scikit-image, opencv, matplotlib, pandas, dtcwt, numba). Bkz. `requirements.txt`.
+- **Dil/ortam:** Python 3.12 (numpy<2, scipy, scikit-image, opencv, matplotlib, pandas, dtcwt, pyyaml; python-pptx sunum için). numba kullanılmıyor (NLM vektörize). Bkz. `requirements.txt`.
 - **Makalenin çekirdeği:** FCM + (a) ödül/ceza kümeli yerel uzamsal bilgi ξ (altın oran 0.618), (b) DTCWT alanında yerel-olmayan bilgi ϑ, (c) adaptif katsayılar α,β,γ, (d) ℓ0 seyrek düzenlileştirme (hard threshold √δ + normalize).
 - **Katkı (kesin, D-006-final / D-033):** α,β,γ için açık Mamdani bulanık çıkarım sistemi (üyelik fonksiyonları, IF–THEN kural tabanı, min/max çıkarım, durulaştırma) + üyelik fonksiyonu / durulaştırma / Mamdani–Sugeno karşılaştırmaları; destekleyici: C1 gürültü türü robustness, C2 ablasyon.
 - **Makale parametreleri:** w=5, S=15, υ=4, g=10, σ=0.3, k=15, δ=0.4, m=2, ε=1e-6, T=100.
@@ -49,18 +49,20 @@ Orijinal PDF'ler: `references/papers/` (yönerge ve makale). Çelişki olursa **
 py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 .venv/Scripts/python.exe -m pip install -r requirements.txt   # (Linux/mac: .venv/bin/python)
 .venv/Scripts/python.exe -m pytest           # birim testler (pytest.ini: pythonpath=.)
-PYTHONPATH=. .venv/Scripts/python.exe experiments/noise_check/check_noise_levels.py   # gürültü tanımı kontrolü
-.venv/Scripts/python.exe -m src.data.bsds500  # BSDS500 8 görüntü kontrolü (veri: data/README.md)
-# Not: numpy<2 zorunlu (dtcwt 0.13 np.asfarray kullanıyor); tam sürümler requirements.lock.txt
-# Not: dtcwt 1 seviyede lowpass tam boyut (H×W), highpasses[0] (H/2×W/2×6) — Faz 3c'de dikkat
-.venv/Scripts/python.exe experiments/baseline/run_baseline.py --config experiments/baseline/config.yaml   # E1, ~30 s
-.venv/Scripts/python.exe experiments/baseline/plot_baseline.py                                           # E1 figürü
-.venv/Scripts/python.exe experiments/proposed/run_proposed.py --config experiments/proposed/config.yaml   # E2, ~3 dk
+.venv/Scripts/python.exe experiments/baseline/run_baseline.py --config experiments/baseline/config.yaml   # E1
+.venv/Scripts/python.exe experiments/proposed/run_proposed.py --config experiments/proposed/config.yaml   # E2
 .venv/Scripts/python.exe experiments/ablation/run_ablation.py --config experiments/ablation/config.yaml     # E3
-.venv/Scripts/python.exe experiments/plot_reproduction.py                                                  # E1–E3 figürleri
+.venv/Scripts/python.exe experiments/run_grid.py --config experiments/contribution/<main|bsds|bsds_rgb|fis_variants|robustness|ablation_c2>.yaml
+.venv/Scripts/python.exe experiments/run_grid.py --config experiments/sensitivity/config.yaml             # E4
+.venv/Scripts/python.exe experiments/timing/run_timing.py                                                  # E7 (boş makinede)
+.venv/Scripts/python.exe experiments/analyze_contribution.py      # özet, Wilcoxon, figürler
+.venv/Scripts/python.exe experiments/plot_reproduction.py; .venv/Scripts/python.exe experiments/plot_panels.py
+.venv/Scripts/python.exe report/build_report.py                   # report.html -> report.pdf + README sonuç blokları
+.venv/Scripts/python.exe presentation/build_slides.py             # slides.html -> presentation.pdf + .pptx
+.venv/Scripts/python.exe demo/demo.py --image sy3 --level 10 --pixel 120 80   # canlı demo
+# Not: numpy<2 zorunlu (dtcwt 0.13 np.asfarray). run_grid paralel ve kaldığı yerden devam eder; cache/ ξ,ϑ önbelleği.
 ```
 
-(Betik adları `docs/03_MIMARI.md`'deki planla uyumlu; oluşturulunca burayı güncelle.)
 
 ## 6. Durum takibi
 
