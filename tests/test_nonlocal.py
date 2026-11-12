@@ -96,8 +96,32 @@ def nlm_subband_with_weights_from(mag, values, S=5, w=3, upsilon=4.0, g=10.0):
 
 
 @pytest.mark.parametrize("name", synthetic.NAMES)
-def test_theta_reduces_noise(name):
+def test_theta_makes_clusters_more_separable(name):
+    # Criterion = what theta is used for: FCM on theta must beat FCM on the noisy image.
+    # (Mean absolute error is not used: averaging mixed noise shifts the gray levels
+    # (salt/pepper, clipping), which raises the MAE but does not hurt clustering.)
+    from src.eval.metrics import accuracy
+    from src.fcm.baseline_fcm import fcm
     s = synthetic.load(name)
     noisy = noise.add_noise(s.image, "mixed", 0.05, seed=0)
     theta = nonlocal_wavelet_info(noisy)
-    assert np.abs(theta - s.image).mean() < np.abs(noisy - s.image).mean()
+    acc_theta = accuracy(s.labels, fcm(theta, s.K, seed=0).labels)
+    assert acc_theta > accuracy(s.labels, fcm(noisy, s.K, seed=0).labels)
+
+
+def test_paper_scale_makes_nlm_almost_a_mean_filter():
+    # D-038: in [0, 1] units with h^2 = g*w^2 = 250 every weight is in [exp(-1/250), 1]
+    band = np.random.default_rng(5).random((20, 20))
+    nlm = nlm_subband(band, S=5, w=3)
+    p = np.pad(band, 2, mode="symmetric")
+    box = (sum(p[2 + dy:22 + dy, 2 + dx:22 + dx] for dy in range(-2, 3) for dx in range(-2, 3)) - band) / 24
+    assert np.abs(nlm - box).max() < 1e-3
+
+
+def test_theta_separable_at_high_noise():
+    # D-035 regression: the paper-literal scale keeps FCM on theta accurate at 15 % noise
+    from src.eval.metrics import accuracy
+    from src.fcm.baseline_fcm import fcm
+    s = synthetic.load("sy2")
+    y = noise.add_noise(s.image, "mixed", 0.15, seed=0)
+    assert accuracy(s.labels, fcm(nonlocal_wavelet_info(y), s.K, seed=0).labels) > 95

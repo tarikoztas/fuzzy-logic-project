@@ -25,9 +25,13 @@ Choices (report/decisions.md):
   * D-012: Eq. 10 uses y_q (the text's y_j is a typo).
   * D-010: complex sub-bands: patch distances from the magnitudes |y|, the same
     weights smooth the real and imaginary parts.
-  * D-035: intensities in 0..255 units (the image is scaled by 255 before the
-    DTCWT), Gaussian patch kernel normalised to sum 1, filtering parameter
-    h^2 = g * w^2 (= 250 for g=10, w=5), the classic NLM form of Buades et al.
+  * D-035 (revised): intensities in [0, 1] as in Algorithm 3, step 1 (scale = 1),
+    Gaussian patch kernel normalised to sum 1, filtering parameter h^2 = g * w^2
+    (= 250 for g = 10, w = 5).
+  * D-038 (finding): in [0, 1] units a patch distance is at most ~1, so every weight
+    exp(-dist / 250) lies in [0.996, 1]: with the paper's parameters the "non-local
+    means" behaves almost exactly like an S x S mean filter on each sub-band.
+    `scale` lets the ablation test a truly selective NLM (scale = 255).
   * borders: symmetric padding; one decomposition level; dtcwt defaults
     (near_sym_a / qshift_a filters).
 """
@@ -86,7 +90,7 @@ def nlm_subband(band: np.ndarray, S: int = 15, w: int = 5, upsilon: float = 4.0,
 
 
 def nonlocal_wavelet_info(img: np.ndarray, S: int = 15, w: int = 5, upsilon: float = 4.0,
-                          g: float = 10.0, scale: float = 255.0) -> np.ndarray:
+                          g: float = 10.0, scale: float = 1.0) -> np.ndarray:
     """theta for a gray image in [0, 1]: DTCWT -> NLM on all 7 sub-images -> inverse DTCWT."""
     img = np.asarray(img, dtype=np.float64)
     if img.ndim != 2:

@@ -27,7 +27,7 @@ from .sparse_fcm import sparse_fcm
 CACHE_DIR = Path(__file__).resolve().parents[2] / "cache"
 
 # Paper parameters (Sec. 4.1/4.4): w=5, S=15, upsilon=4, g=10, sigma=0.3, k=15, delta=0.4, m=2, eps=1e-6, T=100
-DEFAULTS = dict(w=5, S=15, upsilon=4.0, g=10.0, sigma=0.3, ratio=0.618, rounding="floor",
+DEFAULTS = dict(w=5, S=15, upsilon=4.0, g=10.0, nlm_scale=1.0, sigma=0.3, ratio=0.618, rounding="floor",
                 k=15.0, delta=0.4, m=2.0, eps=1e-6, T=100)
 
 
@@ -67,8 +67,8 @@ def compute_xi(img, w, sigma, ratio, rounding, use_cache=True):
     return _cached(local_spatial_info, img, "xi", use_cache, w=w, sigma=sigma, ratio=ratio, rounding=rounding)
 
 
-def compute_theta(img, S, w, upsilon, g, use_cache=True):
-    return _cached(nonlocal_wavelet_info, img, "theta", use_cache, S=S, w=w, upsilon=upsilon, g=g)
+def compute_theta(img, S, w, upsilon, g, scale=1.0, use_cache=True):
+    return _cached(nonlocal_wavelet_info, img, "theta", use_cache, S=S, w=w, upsilon=upsilon, g=g, scale=scale)
 
 
 def coefficients(y, xi, theta, method: str, k: float, variant: str, fis=None):
@@ -105,7 +105,7 @@ def run_asrfcm(img: np.ndarray, K: int, seed: int = 0, use_local: bool = True, u
     if use_local:
         xi, times["xi_s"] = compute_xi(y, p["w"], p["sigma"], p["ratio"], p["rounding"], use_cache)
     if use_nonlocal:
-        theta, times["theta_s"] = compute_theta(y, p["S"], p["w"], p["upsilon"], p["g"], use_cache)
+        theta, times["theta_s"] = compute_theta(y, p["S"], p["w"], p["upsilon"], p["g"], p["nlm_scale"], use_cache)
     t0 = time.perf_counter()
     alpha, beta, gamma = coefficients(y, xi, theta, coeff_method, p["k"], coeff_variant, fis)
     times["coeff_s"] = time.perf_counter() - t0
