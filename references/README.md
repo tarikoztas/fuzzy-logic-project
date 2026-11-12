@@ -9,6 +9,8 @@ python -X utf8 references/verification/verify_doi.py references/verification/doi
 `[V-abs]` = metadata verified **and** the abstract was read (summary below is based on the abstract).
 `[V-meta]` = metadata verified, abstract **not** accessible to us (publisher page blocked) → may be cited only as a pointer, not for claims about its method, until the student reads it via university access.
 
+Re-check (2026-11-12): all 38 DOIs in `verification/dois.txt` resolve on Crossref (`verification/crossref_recheck_2026-11-12.jsonl`); titles match the entries below except for HTML markup in two Crossref titles ([17], [19]: `<i>C</i>`); two DOIs in `dois.txt` (10.1016/j.sigpro.2024.109515, 10.1016/j.patcog.2022.108686) were candidates screened in Faz 1 and are not listed or cited.
+
 Format: IEEE. Local PDFs live in `references/papers/` and are **not** committed (publisher copyright).
 
 ---
