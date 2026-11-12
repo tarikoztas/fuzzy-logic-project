@@ -3,7 +3,7 @@
 Clustering returns arbitrary cluster numbers (cluster 0 may be the "white"
 region in one run and the "black" region in another). Before computing ACC,
 F-score or Kappa we must decide which cluster corresponds to which
-ground-truth class. The paper does not describe its protocol (docs/02 §9-11);
+ground-truth class. The paper does not describe its protocol (D-028, report/decisions.md);
 we use the standard choice: the one-to-one mapping that maximises the number of
 correctly labelled pixels, found with the Hungarian algorithm
 (`scipy.optimize.linear_sum_assignment`).

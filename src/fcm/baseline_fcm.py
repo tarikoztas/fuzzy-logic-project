@@ -41,7 +41,7 @@ def init_membership(K: int, N: int, seed: int) -> np.ndarray:
     """Random initial U (K x N) with columns summing to 1.
 
     Shared by FCM and the proposed method, so with the same seed both start
-    from the same memberships (fair comparison, docs/03 §7).
+    from the same memberships (fair comparison, D-015 in report/decisions.md).
     """
     rng = np.random.default_rng(seed)
     U = rng.random((K, N))

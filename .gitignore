@@ -35,3 +35,6 @@ report/*.log
 report/*.out
 report/*.synctex.gz
 ~$*
+
+# Private working notes (Turkish planning docs) - not published (D-034)
+docs/

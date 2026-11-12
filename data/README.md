@@ -26,4 +26,4 @@ Large/raw data is not committed (`.gitignore`). This file documents sources and 
 
 ## Noise
 
-Generated on the fly with fixed seeds (`src/data/noise.py`). "p % mixed noise" = Gaussian (variance p) → speckle (variance p) → salt-and-pepper (density p); see `docs/06_KARARLAR.md` D-027 and the plausibility check `experiments/noise_check/check_noise_levels.py`.
+Generated on the fly with fixed seeds (`src/data/noise.py`). "p % mixed noise" = Gaussian (variance p) → speckle (variance p) → salt-and-pepper (density p); see `report/decisions.md` D-027 and the plausibility check `experiments/noise_check/check_noise_levels.py`.

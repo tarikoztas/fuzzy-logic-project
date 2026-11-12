@@ -16,7 +16,7 @@ For the centre pixel i and a neighbour j (j != i):
     xi_i  = sum_j SS_ij x_j / sum_j SS_ij                                       (Eq. 9)
 N_R = w*w is the number of pixels in the window (the centre adds 0 to the sum).
 
-Implementation choices (docs/06_KARARLAR.md):
+Implementation choices (report/decisions.md):
   * reward-set size = floor(0.618 * (N_R - 1))  (D-014; the text says ceil, Fig. 1 shows floor);
     the reward set is the middle block of the sorted list; if the penalty count
     is odd, the extra penalty pixel is at the high end;

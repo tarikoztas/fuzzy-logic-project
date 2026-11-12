@@ -6,7 +6,7 @@ in FCM segmentation papers; the paper itself does not give its noise code).
 
 Paper (Sec. 4.3): "a composite noise profile consisting of equal proportions of
 Gaussian, salt-and-pepper, and multiplicative noise". It does not define the
-noise *level* precisely. Our reading (decision D-027, `docs/06_KARARLAR.md`):
+noise *level* precisely. Our reading (decision D-027, `report/decisions.md`):
 
     "p % mixed noise"  =  Gaussian(mean 0, variance p)
                         -> multiplicative/speckle(variance p)

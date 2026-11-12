@@ -1,6 +1,6 @@
 # Adaptive Sparse Regularized Fuzzy Clustering for Noisy Image Segmentation — Reproduction and Extension
 
-> Fuzzy Logic Course Term Project · Status: **work in progress** (see `docs/04_FAZLAR_VE_YOL_HARITASI.md`)
+> Fuzzy Logic Course Term Project · Status: **work in progress** (checkpoint notes in `report/checkpoints/`)
 > Sections below follow the course guideline (README requirements). Placeholders are marked `TODO`.
 
 ## Project Title
@@ -44,7 +44,7 @@ The reproduced method (ASRFCM-CSI, name used in this project) combines:
 | Defuzzification | `label = argmax_i u_ij` |
 | Outputs | membership matrix, cluster centers, label map |
 
-See `docs/03_MIMARI.md` for the module diagram and `docs/02_MAKALE_ANALIZI.md` §8 for the mapping to course terminology.
+Implementation choices and deviations from the paper: `report/decisions.md`.
 
 ## Dataset
 
@@ -83,7 +83,7 @@ python experiments/proposed/run_proposed.py --config experiments/proposed/config
 
 ## Proposed Extension
 
-`TODO` — selected contribution (candidates in `docs/06_KARARLAR.md`): rationale, hypothesis, design, how success is measured.
+`TODO` — selected contribution (decision D-006 in `report/decisions.md`): rationale, hypothesis, design, how success is measured.
 
 ## Experimental Results
 

@@ -1,4 +1,4 @@
-# Experiment E1 — baseline FCM on the synthetic images (docs/07 §2).
+# Experiment E1 — baseline FCM on the synthetic images (experiment plan: report/checkpoints/CP2_implementation_plan.md).
 method: fcm
 images: [sy1, sy2, sy3]          # K is taken from src/data/synthetic.py (2, 3, 3)
 noise:
