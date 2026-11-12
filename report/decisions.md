@@ -17,7 +17,7 @@ Public log of the choices made where the reference paper (Wu et al., ESWA 256:12
 |---|---|
 | D-030 / D-008 | sy1–sy3 re-created from the raster of the paper's Fig. 9 (`tools/extract_synthetic_from_figure.py`): crop, resize to 256×256, nearest gray level, 5×5 median. Measured gray levels: sy1 {0, 255}, sy2 {0, 107, 255}, sy3 {0, 107, 222} → K = 2, 3, 3. Same shapes and levels as the paper, not the original files. |
 | D-027 | "p % mixed noise" = Gaussian (mean 0, variance p) → multiplicative/speckle (J = I + n·I, n uniform, variance p) → salt-and-pepper (density p), applied in turn and clipped to [0, 1]. Evidence: a classifier that knows the true gray levels reaches an ACC within 2 points of the paper-reported FCM ACC in all 12 image/noise cases (`results/tables/noise_oracle_check.csv`). |
-| D-029 | BSDS500 from the official archive; color → gray with BT.601 weights (0.2989 R + 0.5870 G + 0.1140 B). Each image has 5–6 human segmentations with 3–51 regions; the ground-truth/K protocol is fixed in experiment E6 and its effect is reported. |
+| D-029 (closed) | BSDS500 from the official archive; color → gray with BT.601 weights (0.2989 R + 0.5870 G + 0.1140 B). The paper evaluates against simplified 2–4 class ground truths shown in its Fig. 22 (not the raw human segmentations, which have 3–51 regions). We re-created those maps from the figure raster (`tools/extract_bsds_gt_from_figure.py`, nearest palette colour, resize to 321×481, 5×5 median; `data/bsds_gt/`). K = number of classes: 100007 2, 118035 3, 167062 3, 201080 3, 241004 4, 42049 2, 67079 2, 86016 2. Validation: each map agrees with a merged human segmentation of the same image on 93.5–99.7 % of the pixels. |
 
 ## Metrics
 

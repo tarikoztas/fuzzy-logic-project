@@ -30,3 +30,12 @@ def test_bsds_paper_images():
         assert len(im.ground_truths) >= 5
         gt = bsds500.select_ground_truth(im, "fewest")
         assert gt.min() == 0 and gt.shape == im.gray.shape
+
+
+def test_paper_ground_truths_from_fig22():
+    expected_K = {"100007": 2, "118035": 3, "167062": 3, "201080": 3, "241004": 4,
+                  "42049": 2, "67079": 2, "86016": 2}
+    for pid, K in expected_K.items():
+        gt, k = bsds500.paper_ground_truth(pid)
+        assert k == K and gt.shape == (321, 481)
+        assert set(np.unique(gt)) == set(range(K))

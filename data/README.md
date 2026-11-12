@@ -22,7 +22,8 @@ Large/raw data is not committed (`.gitignore`). This file documents sources and 
   python -m src.data.bsds500     # lists the 8 paper images and their annotations
   ```
 - Images used in the paper: 100007, 118035, 167062, 201080, 241004, 42049, 67079, 86016 (321×481).
-- Color → gray: BT.601 weights (0.2989 R + 0.5870 G + 0.1140 B). Ground truth: each image has 5–6 human segmentations; `select_ground_truth(policy="fewest")` picks the one with the fewest regions. The final protocol (and K per image) is decided in experiment E6 (decision D-029).
+- Color → gray: BT.601 weights (0.2989 R + 0.5870 G + 0.1140 B).
+- Ground truth (committed, `data/bsds_gt/{id}_gt.png`): the simplified 2–4 class maps of the paper's Fig. 22, re-created from the figure by `tools/extract_bsds_gt_from_figure.py`; K = 2, 3, 3, 3, 4, 2, 2, 2 for the images in the order above. Each map agrees with a merged human segmentation of BSDS500 on 93.5–99.7 % of the pixels (decision D-029). The raw human segmentations remain available through `src/data/bsds500.py`.
 
 ## Noise
 

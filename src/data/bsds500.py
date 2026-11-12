@@ -6,12 +6,17 @@ https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/grouping/BSR/BSR_bsds
 Extract it so that `data/raw/BSR/BSDS500/data/{images,groundTruth}/...` exists
 (see data/README.md). The data is not committed to git.
 
-Open protocol points (the paper does not state them; decision D-029):
+Protocol (decision D-029):
   * colour -> gray: ITU-R BT.601 luma, 0.2989 R + 0.5870 G + 0.1140 B
     (the weights of MATLAB's rgb2gray); scaled to [0, 1];
-  * ground truth: every image has several human segmentations (5-19 regions
-    each). We return all of them; `select_ground_truth` picks one by a policy
-    (default: the one with the fewest regions, closest to a small K).
+  * ground truth used in the experiments: the simplified 2-4 class maps shown in
+    the paper's Fig. 22, re-created by tools/extract_bsds_gt_from_figure.py and
+    stored in data/bsds_gt/ (`paper_ground_truth`); K = number of classes
+    (100007: 2, 118035: 3, 167062: 3, 201080: 3, 241004: 4, 42049: 2, 67079: 2,
+    86016: 2). Each map agrees with a merged human segmentation of BSDS500 on
+    93.5-99.7 % of the pixels (merging = majority vote of each human region);
+  * the raw human segmentations (3-51 regions) are still available
+    (`ground_truths`, `select_ground_truth`).
 """
 from __future__ import annotations
 
@@ -23,6 +28,7 @@ import numpy as np
 import scipy.io as sio
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "raw" / "BSR" / "BSDS500" / "data"
+PAPER_GT_DIR = Path(__file__).resolve().parents[2] / "data" / "bsds_gt"
 PAPER_IDS = ("100007", "118035", "167062", "201080", "241004", "42049", "67079", "86016")
 SPLITS = ("train", "val", "test")
 BT601 = np.array([0.2989, 0.5870, 0.1140])  # R, G, B weights
@@ -58,6 +64,15 @@ def load(image_id: str, root: Path = ROOT) -> BSDSImage:
     # MATLAB labels start at 1 -> shift to 0
     gts = [cell["Segmentation"][0, 0].astype(np.int64) - 1 for cell in cells]
     return BSDSImage(image_id, split, rgb, to_gray(rgb), gts)
+
+
+def paper_ground_truth(image_id: str, gt_dir: Path = PAPER_GT_DIR) -> tuple[np.ndarray, int]:
+    """Simplified ground truth of the paper's Fig. 22 (labels 0..K-1) and its K."""
+    lab = cv2.imread(str(gt_dir / f"{image_id}_gt.png"), cv2.IMREAD_GRAYSCALE)
+    if lab is None:
+        raise FileNotFoundError(gt_dir / f"{image_id}_gt.png")
+    lab = lab.astype(np.int64)
+    return lab, int(lab.max()) + 1
 
 
 def select_ground_truth(img: BSDSImage, policy: str = "fewest") -> np.ndarray:
