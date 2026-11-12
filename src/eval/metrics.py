@@ -40,7 +40,7 @@ def vpe(U: np.ndarray) -> float:
     """
     U = _as_KN(U)
     pos = U > 0
-    return float(-np.sum(U[pos] * np.log(U[pos])) / U.shape[1] * 100.0)
+    return float(-np.sum(U[pos] * np.log(U[pos])) / U.shape[1] * 100.0) + 0.0  # +0.0 avoids "-0.0"
 
 
 def _square_confusion(gt: np.ndarray, pred_matched: np.ndarray) -> np.ndarray:
