@@ -70,12 +70,37 @@ def output_terms(shape: str) -> dict[str, MF]:
     raise ValueError("shape must be 'tri' or 'gauss'")
 
 
-def build_fis(shape: str = "tri", defuzz: str = "centroid", kind: str = "mamdani") -> FIS:
+# Second iteration, candidate B (D-044/D-045): an impulse input Imp = |y - median3x3(y)|.
+# Imp is Small -> the 9 rules above apply unchanged; Imp is Large (the pixel is an outlier
+# among its 3x3 neighbours, typical of salt-and-pepper) -> do not trust the pixel.
+IMP_TERMS = {"Small": MF("trap", 0.0, 0.0, 0.05, 0.2), "Large": MF("trap", 0.05, 0.2, 1.0, 1.0)}
+IMP_LARGE_RULES = {"Small": ("Low", "High", "High"), "Medium": ("Low", "High", "Medium"),
+                   "Large": ("Low", "High", "Low")}   # Dis term -> (alpha, beta, gamma)
+
+
+def build_fis(shape: str = "tri", defuzz: str = "centroid", kind: str = "mamdani", imp: bool = False) -> FIS:
     ins = [Variable("Dev", (0.0, 1.0), input_terms(shape)), Variable("Dis", (0.0, 1.0), input_terms(shape))]
     outs = [Variable(n, (0.0, 1.0), output_terms(shape)) for n in ("alpha", "beta", "gamma")]
-    rules = [Rule({"Dev": dev, "Dis": dis}, dict(zip(("alpha", "beta", "gamma"), cons)))
+    names = ("alpha", "beta", "gamma")
+    if not imp:
+        rules = [Rule({"Dev": dev, "Dis": dis}, dict(zip(names, cons))) for (dev, dis), cons in RULE_TABLE.items()]
+        return FIS(ins, outs, rules, kind=kind, defuzz=defuzz)
+    ins.append(Variable("Imp", (0.0, 1.0), IMP_TERMS))
+    rules = [Rule({"Imp": "Small", "Dev": dev, "Dis": dis}, dict(zip(names, cons)))
              for (dev, dis), cons in RULE_TABLE.items()]
+    rules += [Rule({"Imp": "Large", "Dis": dis}, dict(zip(names, cons))) for dis, cons in IMP_LARGE_RULES.items()]
     return FIS(ins, outs, rules, kind=kind, defuzz=defuzz)
+
+
+def impulse_input(y: np.ndarray) -> np.ndarray:
+    """Imp = |y - median3x3(y)|; colour: root-mean-square over the channels (as Dev/Dis, D-043)."""
+    from scipy.ndimage import median_filter
+
+    y = np.asarray(y, dtype=np.float64)
+    if y.ndim == 3:
+        d = np.stack([y[..., c] - median_filter(y[..., c], size=3, mode="mirror") for c in range(y.shape[-1])], -1)
+        return np.sqrt((d**2).mean(axis=-1))
+    return np.abs(y - median_filter(y, size=3, mode="mirror"))
 
 
 def fis_inputs(y: np.ndarray, xi: np.ndarray, theta: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -90,25 +115,36 @@ class FuzzyCoefficients:
     """Coefficient provider for src/fcm/pipeline.py: fis(y, xi, theta) -> (alpha, beta, gamma)."""
 
     def __init__(self, shape: str = "tri", defuzz: str = "centroid", kind: str = "mamdani",
-                 normalize: bool = True, mode: str = "full", k: float = 15.0, variant: str = "signed"):
+                 normalize: bool = True, mode: str = "full", k: float = 15.0, variant: str = "signed",
+                 alpha_scale: float = 1.0, imp: bool = False):
+        """alpha_scale (candidate A, second iteration): the FIS alpha is multiplied by this factor
+        before normalisation, i.e. the alpha output universe becomes [0, alpha_scale]. The paper's
+        formula gives the noisy pixel ~0.1 % of the trust, FIS-full ~30 % (D-041).
+        imp (candidate B): add the impulse input Imp (see IMP_TERMS)."""
         if mode not in ("full", "split"):
             raise ValueError("mode must be 'full' or 'split'")
-        self.fis = build_fis(shape, defuzz, kind)
+        if not 0.0 < alpha_scale <= 1.0:
+            raise ValueError("alpha_scale must be in (0, 1]")
+        self.fis = build_fis(shape, defuzz, kind, imp=imp)
         self.normalize, self.mode, self.k, self.variant = normalize, mode, k, variant
+        self.alpha_scale, self.imp = alpha_scale, imp
         self.label = (f"FIS-{mode}-{kind}-{shape}-{defuzz if kind == 'mamdani' else 'wavg'}"
-                      + ("" if normalize or mode == "split" else "-raw"))
+                      + ("" if normalize or mode == "split" else "-raw")
+                      + ("" if alpha_scale == 1.0 else f"-a{alpha_scale:g}") + ("-imp" if imp else ""))
 
     def __call__(self, y, xi, theta):
         if xi is None or theta is None:
             raise ValueError("the fuzzy coefficient system needs both xi and theta")
         dev, dis = fis_inputs(y, xi, theta)
-        out = self.fis.evaluate(Dev=dev, Dis=dis)
+        extra = {"Imp": impulse_input(y)} if self.imp else {}
+        out = self.fis.evaluate(Dev=dev, Dis=dis, **extra)
         a, b, g = (out[k].reshape(np.shape(dev)) for k in ("alpha", "beta", "gamma"))
         if self.mode == "split":
             from .adaptive_params import paper_coefficients
             ap, bp, gp = paper_coefficients(y, xi, theta, k=self.k, variant=self.variant)
             share = b / (b + g)
             return ap, (bp + gp) * share, (bp + gp) * (1.0 - share)
+        a = a * self.alpha_scale
         if self.normalize:
             s = a + b + g
             a, b, g = a / s, b / s, g / s

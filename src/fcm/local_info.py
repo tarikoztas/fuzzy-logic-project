@@ -75,14 +75,23 @@ def similarity_weights(center: np.ndarray, neigh: np.ndarray, dist: np.ndarray, 
     return factor * S * np.exp(-dist)                                                # Eqs. 5, 7, 8
 
 
-def local_spatial_info(img: np.ndarray, w: int = 5, sigma: float = 0.3, ratio: float = GOLDEN,
+def local_spatial_info(img: np.ndarray, w: int = 5, sigma: float | np.ndarray = 0.3, ratio: float = GOLDEN,
                        rounding: str = "floor") -> np.ndarray:
-    """xi for every pixel of a gray image (Algorithm 2). Same shape as `img`."""
+    """xi for every pixel of a gray image (Algorithm 2). Same shape as `img`.
+
+    `sigma` is normally one number (the paper). It may also be an array with the
+    image's shape (one reward factor per pixel), used by the per-pixel fuzzy-sigma
+    variant of the second iteration (src/fcm/fis_sigma.py)."""
     if w < 3 or w % 2 == 0:
         raise ValueError("w must be an odd window size >= 3")
-    if not 0.0 <= sigma < 1.0:
+    sig = np.asarray(sigma, dtype=np.float64)
+    if not (np.all(sig >= 0.0) and np.all(sig < 1.0)):
         raise ValueError("sigma must be in [0, 1)")
     img = np.asarray(img, dtype=np.float64)
+    if sig.ndim:  # per-pixel reward factor (second iteration, D-045): shape (H, W) -> (H, W, 1)
+        if sig.shape != img.shape:
+            raise ValueError("a per-pixel sigma must have the image's shape")
+        sigma = sig[..., None]
     r = w // 2
     padded = np.pad(img, r, mode="symmetric")
     win = sliding_window_view(padded, (w, w)).reshape(img.shape + (w * w,))  # (H, W, w*w)

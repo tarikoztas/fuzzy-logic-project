@@ -8,7 +8,9 @@ be resumed (tasks already in the CSV are skipped).
 Config keys:
     name, images (sy1/sy2/sy3, "bsds" = the 8 paper images, or "bsds:<id>"),
     noise: {kinds: [...], levels_pct: [...]}, seeds: [...],
-    methods: [{label, base, params?}]   base = "FCM" | "paper" | a name in src/fcm/variants.py
+    methods: [{label, base, params?, record_sigma?}]   base = "FCM" | "paper" | a name in src/fcm/variants.py
+        params may hold `fis: {...}` (FuzzyCoefficients options) and `fis_sigma: {...}`
+        (FuzzySigma options, second iteration); record_sigma: true adds a sigma_used column
     output: results/tables/<file>.csv,  workers (optional)
 
 Usage:
@@ -69,15 +71,26 @@ def run_method(y, K, seed, method: dict):
     base, params = method["base"], dict(method.get("params", {}))
     if base == "FCM":
         r = fcm(y, K, seed=seed)
-        return r, {"xi_s": 0.0, "theta_s": 0.0, "coeff_s": 0.0, "cluster_s": r.time_s}
+        return r, {"xi_s": 0.0, "theta_s": 0.0, "coeff_s": 0.0, "cluster_s": r.time_s}, float("nan")
     kw = kwargs_for(base)
+    params.pop("record_sigma", None)
+    sigma_params = params.pop("fis_sigma", None)
+    if sigma_params is not None:  # second iteration, candidate C: fuzzy rule for the reward factor
+        from src.fcm.fis_sigma import FuzzySigma
+
+        kw = {**kw, "sigma_rule": FuzzySigma(**sigma_params)}
     fis_params = params.pop("fis", None)
     if fis_params is not None:  # FIS options given directly in the config
         from src.fcm.fis_coefficients import FuzzyCoefficients
 
         kw = {**kw, "coeff_method": "fis", "fis": FuzzyCoefficients(**fis_params)}
     pr = run_asrfcm(y, K, seed=seed, **kw, **params)
-    return pr.result, pr.times
+    return pr.result, pr.times, pr.sigma_used
+
+
+def cfg_has_sigma(methods: list[dict]) -> bool:
+    """Record the reward factor actually used only for second-iteration grids (keeps old CSV columns)."""
+    return any(m.get("record_sigma") for m in methods)
 
 
 def run_task(task: tuple, methods: list[dict]) -> list[dict]:
@@ -89,10 +102,11 @@ def run_task(task: tuple, methods: list[dict]) -> list[dict]:
     y = noise.add_noise(clean, kind, pct / 100, seed)
     rows = []
     for m in methods:
-        res, times = run_method(y, K, seed, m)
+        res, times, sigma_used = run_method(y, K, seed, m)
         met = evaluate(gt, U=res.U)
         rows.append({"image": image, "noise_kind": kind, "noise_pct": pct, "seed": seed, "method": m["label"],
-                     "K": K, **met, "Iterations": res.n_iter, **{f"time_{k}": v for k, v in times.items()}})
+                     "K": K, **met, "Iterations": res.n_iter, **{f"time_{k}": v for k, v in times.items()},
+                     **({"sigma_used": sigma_used} if cfg_has_sigma(methods) else {})})
     return rows
 
 

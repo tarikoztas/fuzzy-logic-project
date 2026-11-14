@@ -40,6 +40,7 @@ class PipelineResult:
     beta: np.ndarray | None
     gamma: np.ndarray | None
     times: dict = field(default_factory=dict)   # xi_s, theta_s, coeff_s, cluster_s
+    sigma_used: float = float("nan")            # reward factor of the local term (mean if per pixel)
 
 
 def _key(img: np.ndarray, tag: str, **params) -> str:
@@ -103,17 +104,39 @@ def coefficients(y, xi, theta, method: str, k: float, variant: str, fis=None):
 
 def run_asrfcm(img: np.ndarray, K: int, seed: int = 0, use_local: bool = True, use_nonlocal: bool = True,
                use_sparse: bool = True, coeff_method: str = "paper", coeff_variant: str = "signed",
-               empty_col_policy: str = "keep", fis=None, use_cache: bool = True, **params) -> PipelineResult:
-    """Run the proposed method on a noisy image in [0, 1]. `params` override DEFAULTS."""
+               empty_col_policy: str = "keep", fis=None, sigma_rule=None, use_cache: bool = True,
+               **params) -> PipelineResult:
+    """Run the proposed method on a noisy image in [0, 1]. `params` override DEFAULTS.
+
+    sigma_rule: optional callable y -> reward factor sigma (a number, or an (H, W) array
+    for one value per pixel). It replaces the fixed sigma of the local term; used by the
+    fuzzy-sigma variants of the second iteration (src/fcm/fis_sigma.py, D-045)."""
     p = {**DEFAULTS, **params}
     unknown = set(params) - set(DEFAULTS)
     if unknown:
         raise ValueError(f"unknown parameters {unknown}")
     y = np.asarray(img, dtype=np.float64)
     times = {"xi_s": 0.0, "theta_s": 0.0}
+    sigma_used = float("nan")
     xi = theta = None
     if use_local:
-        xi, times["xi_s"] = compute_xi(y, p["w"], p["sigma"], p["ratio"], p["rounding"], use_cache)
+        sigma = p["sigma"]
+        if sigma_rule is not None:
+            sigma = sigma_rule(y)
+            if np.ndim(sigma) == 0:
+                sigma = round(float(sigma), 4)  # a number: rounded so the xi cache is reused
+        if np.ndim(sigma) == 0:
+            sigma_used = float(sigma)
+            xi, times["xi_s"] = compute_xi(y, p["w"], sigma, p["ratio"], p["rounding"], use_cache)
+        else:  # one sigma per pixel: computed directly (an array cannot be a cache key)
+            sigma_used = float(np.mean(sigma))
+            t0 = time.perf_counter()
+            if np.ndim(y) == 2:
+                xi = local_spatial_info(y, p["w"], sigma, p["ratio"], p["rounding"])
+            else:
+                xi = np.stack([local_spatial_info(np.ascontiguousarray(y[..., c]), p["w"], sigma, p["ratio"],
+                                                  p["rounding"]) for c in range(y.shape[-1])], axis=-1)
+            times["xi_s"] = time.perf_counter() - t0
     if use_nonlocal:
         theta, times["theta_s"] = compute_theta(y, p["S"], p["w"], p["upsilon"], p["g"], p["nlm_scale"], use_cache)
     t0 = time.perf_counter()
@@ -122,7 +145,7 @@ def run_asrfcm(img: np.ndarray, K: int, seed: int = 0, use_local: bool = True, u
     res = sparse_fcm(y, xi, theta, alpha, beta, gamma, K, m=p["m"], delta=p["delta"] if use_sparse else 0.0,
                      T=p["T"], eps=p["eps"], seed=seed, empty_col_policy=empty_col_policy)
     times["cluster_s"] = res.time_s
-    return PipelineResult(res, xi, theta, alpha, beta, gamma, times)
+    return PipelineResult(res, xi, theta, alpha, beta, gamma, times, sigma_used)
 
 
 __all__ = ["DEFAULTS", "EPS", "PipelineResult", "run_asrfcm", "compute_xi", "compute_theta", "coefficients"]
