@@ -24,6 +24,7 @@ data/*.tar*
 
 # Caches and temporary outputs
 cache/
+.tmp/
 *.npz
 *.log
 .DS_Store

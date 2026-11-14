@@ -60,6 +60,7 @@ py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 .venv/Scripts/python.exe report/build_report.py                   # report.html -> report.pdf + README sonuç blokları
 .venv/Scripts/python.exe presentation/build_slides.py             # slides.html -> presentation.pdf + .pptx
 .venv/Scripts/python.exe demo/demo.py --image sy3 --level 10 --pixel 120 80   # canlı demo
+# Geçici dosyalar: .tmp/ (gitignore; C dolu). pip önbelleği .venv/pip.ini ile .tmp/pip-cache, pytest temp .tmp/pytest.
 # Not: numpy<2 zorunlu (dtcwt 0.13 np.asfarray). run_grid paralel ve kaldığı yerden devam eder; cache/ ξ,ϑ önbelleği.
 ```
 
