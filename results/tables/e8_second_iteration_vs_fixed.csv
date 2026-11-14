@@ -1,0 +1,25 @@
+image,noise_pct,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+sy1,1,FIS-sigma,sigma=0.9 (fixed),ACC,0.001,10,0.0514,False
+sy1,1,FIS-sigma+A,sigma=0.9 (fixed),ACC,0.002,10,0.0121,True
+sy1,5,FIS-sigma,sigma=0.9 (fixed),ACC,-0.004,10,0.0122,True
+sy1,5,FIS-sigma+A,sigma=0.9 (fixed),ACC,0.001,10,0.7976,False
+sy1,10,FIS-sigma,sigma=0.9 (fixed),ACC,0.0,10,0.3787,False
+sy1,10,FIS-sigma+A,sigma=0.9 (fixed),ACC,-0.001,10,0.4922,False
+sy1,15,FIS-sigma,sigma=0.9 (fixed),ACC,0.006,10,0.021,True
+sy1,15,FIS-sigma+A,sigma=0.9 (fixed),ACC,-0.067,10,0.002,True
+sy2,1,FIS-sigma,sigma=0.9 (fixed),ACC,0.064,10,0.002,True
+sy2,1,FIS-sigma+A,sigma=0.9 (fixed),ACC,0.386,10,0.002,True
+sy2,5,FIS-sigma,sigma=0.9 (fixed),ACC,0.017,10,0.0195,True
+sy2,5,FIS-sigma+A,sigma=0.9 (fixed),ACC,0.241,10,0.002,True
+sy2,10,FIS-sigma,sigma=0.9 (fixed),ACC,-0.0,10,0.8379,False
+sy2,10,FIS-sigma+A,sigma=0.9 (fixed),ACC,-0.237,10,0.002,True
+sy2,15,FIS-sigma,sigma=0.9 (fixed),ACC,0.116,10,0.002,True
+sy2,15,FIS-sigma+A,sigma=0.9 (fixed),ACC,-1.411,10,0.002,True
+sy3,1,FIS-sigma,sigma=0.9 (fixed),ACC,-0.004,10,0.0079,True
+sy3,1,FIS-sigma+A,sigma=0.9 (fixed),ACC,-0.003,10,0.0466,True
+sy3,5,FIS-sigma,sigma=0.9 (fixed),ACC,-0.022,10,0.0059,True
+sy3,5,FIS-sigma+A,sigma=0.9 (fixed),ACC,-0.017,10,0.0039,True
+sy3,10,FIS-sigma,sigma=0.9 (fixed),ACC,0.036,10,0.002,True
+sy3,10,FIS-sigma+A,sigma=0.9 (fixed),ACC,-0.585,10,0.002,True
+sy3,15,FIS-sigma,sigma=0.9 (fixed),ACC,0.195,10,0.002,True
+sy3,15,FIS-sigma+A,sigma=0.9 (fixed),ACC,-1.943,10,0.002,True

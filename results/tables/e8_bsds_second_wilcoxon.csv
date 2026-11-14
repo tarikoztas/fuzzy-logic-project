@@ -1,0 +1,25 @@
+image,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+100007,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.305,10,0.002,True
+100007,FIS-sigma,ASRFCM-paper,ACC,0.307,10,0.002,True
+100007,FIS-sigma+A,ASRFCM-paper,ACC,0.583,10,0.002,True
+118035,sigma=0.9 (fixed),ASRFCM-paper,ACC,2.429,10,0.002,True
+118035,FIS-sigma,ASRFCM-paper,ACC,2.382,10,0.002,True
+118035,FIS-sigma+A,ASRFCM-paper,ACC,2.07,10,0.002,True
+167062,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.251,10,0.002,True
+167062,FIS-sigma,ASRFCM-paper,ACC,0.223,10,0.002,True
+167062,FIS-sigma+A,ASRFCM-paper,ACC,-2.313,10,0.4316,False
+201080,sigma=0.9 (fixed),ASRFCM-paper,ACC,1.843,10,0.002,True
+201080,FIS-sigma,ASRFCM-paper,ACC,1.87,10,0.002,True
+201080,FIS-sigma+A,ASRFCM-paper,ACC,1.284,10,0.002,True
+241004,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.326,10,0.002,True
+241004,FIS-sigma,ASRFCM-paper,ACC,0.313,10,0.002,True
+241004,FIS-sigma+A,ASRFCM-paper,ACC,0.033,10,0.4922,False
+42049,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.242,10,0.002,True
+42049,FIS-sigma,ASRFCM-paper,ACC,0.241,10,0.002,True
+42049,FIS-sigma+A,ASRFCM-paper,ACC,0.205,10,0.002,True
+67079,sigma=0.9 (fixed),ASRFCM-paper,ACC,1.375,10,0.002,True
+67079,FIS-sigma,ASRFCM-paper,ACC,1.406,10,0.002,True
+67079,FIS-sigma+A,ASRFCM-paper,ACC,1.369,10,0.002,True
+86016,sigma=0.9 (fixed),ASRFCM-paper,ACC,2.228,10,0.002,True
+86016,FIS-sigma,ASRFCM-paper,ACC,2.298,10,0.002,True
+86016,FIS-sigma+A,ASRFCM-paper,ACC,2.037,10,0.002,True

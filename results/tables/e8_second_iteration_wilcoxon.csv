@@ -1,0 +1,73 @@
+image,noise_pct,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+sy1,1,FCM,ASRFCM-paper,ACC,-0.483,10,0.002,True
+sy1,1,FIS-full,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,1,FIS-sigma,ASRFCM-paper,ACC,0.0,10,0.5791,False
+sy1,1,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,0.1527,False
+sy1,1,FIS-split,ASRFCM-paper,ACC,0.0,10,0.1527,False
+sy1,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.001,10,0.0728,False
+sy1,5,FCM,ASRFCM-paper,ACC,-4.67,10,0.002,True
+sy1,5,FIS-full,ASRFCM-paper,ACC,-0.027,10,0.002,True
+sy1,5,FIS-sigma,ASRFCM-paper,ACC,0.008,10,0.002,True
+sy1,5,FIS-sigma+A,ASRFCM-paper,ACC,0.013,10,0.002,True
+sy1,5,FIS-split,ASRFCM-paper,ACC,0.0,10,0.3571,False
+sy1,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.012,10,0.002,True
+sy1,10,FCM,ASRFCM-paper,ACC,-13.765,10,0.002,True
+sy1,10,FIS-full,ASRFCM-paper,ACC,-0.282,10,0.002,True
+sy1,10,FIS-sigma,ASRFCM-paper,ACC,0.056,10,0.002,True
+sy1,10,FIS-sigma+A,ASRFCM-paper,ACC,0.054,10,0.002,True
+sy1,10,FIS-split,ASRFCM-paper,ACC,-0.053,10,0.002,True
+sy1,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.055,10,0.002,True
+sy1,15,FCM,ASRFCM-paper,ACC,-21.784,10,0.002,True
+sy1,15,FIS-full,ASRFCM-paper,ACC,-1.774,10,0.002,True
+sy1,15,FIS-sigma,ASRFCM-paper,ACC,0.207,10,0.002,True
+sy1,15,FIS-sigma+A,ASRFCM-paper,ACC,0.134,10,0.002,True
+sy1,15,FIS-split,ASRFCM-paper,ACC,-0.583,10,0.002,True
+sy1,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.201,10,0.002,True
+sy2,1,FCM,ASRFCM-paper,ACC,-2.058,10,0.002,True
+sy2,1,FIS-full,ASRFCM-paper,ACC,0.347,10,0.002,True
+sy2,1,FIS-sigma,ASRFCM-paper,ACC,-0.008,10,0.002,True
+sy2,1,FIS-sigma+A,ASRFCM-paper,ACC,0.314,10,0.002,True
+sy2,1,FIS-split,ASRFCM-paper,ACC,0.321,10,0.002,True
+sy2,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.072,10,0.002,True
+sy2,5,FCM,ASRFCM-paper,ACC,-22.097,10,0.002,True
+sy2,5,FIS-full,ASRFCM-paper,ACC,-0.95,10,0.002,True
+sy2,5,FIS-sigma,ASRFCM-paper,ACC,0.01,10,0.4755,False
+sy2,5,FIS-sigma+A,ASRFCM-paper,ACC,0.234,10,0.002,True
+sy2,5,FIS-split,ASRFCM-paper,ACC,0.146,10,0.002,True
+sy2,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.007,10,0.359,False
+sy2,10,FCM,ASRFCM-paper,ACC,-30.605,10,0.002,True
+sy2,10,FIS-full,ASRFCM-paper,ACC,-10.232,10,0.002,True
+sy2,10,FIS-sigma,ASRFCM-paper,ACC,0.951,10,0.002,True
+sy2,10,FIS-sigma+A,ASRFCM-paper,ACC,0.715,10,0.002,True
+sy2,10,FIS-split,ASRFCM-paper,ACC,-1.573,10,0.002,True
+sy2,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.952,10,0.002,True
+sy2,15,FCM,ASRFCM-paper,ACC,-30.497,10,0.002,True
+sy2,15,FIS-full,ASRFCM-paper,ACC,-16.013,10,0.002,True
+sy2,15,FIS-sigma,ASRFCM-paper,ACC,4.612,10,0.002,True
+sy2,15,FIS-sigma+A,ASRFCM-paper,ACC,3.084,10,0.002,True
+sy2,15,FIS-split,ASRFCM-paper,ACC,-3.754,10,0.002,True
+sy2,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,4.495,10,0.002,True
+sy3,1,FCM,ASRFCM-paper,ACC,-3.731,10,0.002,True
+sy3,1,FIS-full,ASRFCM-paper,ACC,-0.054,10,0.002,True
+sy3,1,FIS-sigma,ASRFCM-paper,ACC,0.003,10,0.0137,True
+sy3,1,FIS-sigma+A,ASRFCM-paper,ACC,0.003,10,0.0107,True
+sy3,1,FIS-split,ASRFCM-paper,ACC,0.001,10,0.5384,False
+sy3,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.006,10,0.0039,True
+sy3,5,FCM,ASRFCM-paper,ACC,-26.322,10,0.002,True
+sy3,5,FIS-full,ASRFCM-paper,ACC,-1.808,10,0.002,True
+sy3,5,FIS-sigma,ASRFCM-paper,ACC,0.149,10,0.002,True
+sy3,5,FIS-sigma+A,ASRFCM-paper,ACC,0.154,10,0.002,True
+sy3,5,FIS-split,ASRFCM-paper,ACC,-0.107,10,0.002,True
+sy3,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.171,10,0.002,True
+sy3,10,FCM,ASRFCM-paper,ACC,-35.199,10,0.002,True
+sy3,10,FIS-full,ASRFCM-paper,ACC,-10.372,10,0.002,True
+sy3,10,FIS-sigma,ASRFCM-paper,ACC,1.762,10,0.002,True
+sy3,10,FIS-sigma+A,ASRFCM-paper,ACC,1.14,10,0.002,True
+sy3,10,FIS-split,ASRFCM-paper,ACC,-2.483,10,0.002,True
+sy3,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,1.726,10,0.002,True
+sy3,15,FCM,ASRFCM-paper,ACC,-33.475,10,0.002,True
+sy3,15,FIS-full,ASRFCM-paper,ACC,-15.545,10,0.002,True
+sy3,15,FIS-sigma,ASRFCM-paper,ACC,5.948,10,0.002,True
+sy3,15,FIS-sigma+A,ASRFCM-paper,ACC,3.81,10,0.002,True
+sy3,15,FIS-split,ASRFCM-paper,ACC,-5.189,10,0.002,True
+sy3,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,5.753,10,0.002,True

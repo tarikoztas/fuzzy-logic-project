@@ -1,0 +1,217 @@
+image,noise_kind,noise_pct,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+sy1,gaussian,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.003,10,0.002,True
+sy1,gaussian,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,gaussian,0,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,gaussian,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.002,10,0.0072,True
+sy1,gaussian,1,FIS-sigma,ASRFCM-paper,ACC,-0.0,10,0.5791,False
+sy1,gaussian,1,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,0.5791,False
+sy1,gaussian,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.002,10,0.0488,True
+sy1,gaussian,5,FIS-sigma,ASRFCM-paper,ACC,-0.0,10,0.229,False
+sy1,gaussian,5,FIS-sigma+A,ASRFCM-paper,ACC,0.002,10,0.0244,True
+sy1,gaussian,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.012,10,0.002,True
+sy1,gaussian,10,FIS-sigma,ASRFCM-paper,ACC,0.008,10,0.0059,True
+sy1,gaussian,10,FIS-sigma+A,ASRFCM-paper,ACC,0.014,10,0.002,True
+sy1,gaussian,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.025,10,0.002,True
+sy1,gaussian,15,FIS-sigma,ASRFCM-paper,ACC,0.024,10,0.002,True
+sy1,gaussian,15,FIS-sigma+A,ASRFCM-paper,ACC,0.029,10,0.002,True
+sy1,gaussian,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.046,10,0.002,True
+sy1,gaussian,20,FIS-sigma,ASRFCM-paper,ACC,0.045,10,0.002,True
+sy1,gaussian,20,FIS-sigma+A,ASRFCM-paper,ACC,0.046,10,0.002,True
+sy1,mixed,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.003,10,0.002,True
+sy1,mixed,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,mixed,0,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,mixed,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.001,10,0.0728,False
+sy1,mixed,1,FIS-sigma,ASRFCM-paper,ACC,0.0,10,0.5791,False
+sy1,mixed,1,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,0.1527,False
+sy1,mixed,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.012,10,0.002,True
+sy1,mixed,5,FIS-sigma,ASRFCM-paper,ACC,0.008,10,0.002,True
+sy1,mixed,5,FIS-sigma+A,ASRFCM-paper,ACC,0.013,10,0.002,True
+sy1,mixed,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.055,10,0.002,True
+sy1,mixed,10,FIS-sigma,ASRFCM-paper,ACC,0.056,10,0.002,True
+sy1,mixed,10,FIS-sigma+A,ASRFCM-paper,ACC,0.054,10,0.002,True
+sy1,mixed,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.201,10,0.002,True
+sy1,mixed,15,FIS-sigma,ASRFCM-paper,ACC,0.207,10,0.002,True
+sy1,mixed,15,FIS-sigma+A,ASRFCM-paper,ACC,0.134,10,0.002,True
+sy1,mixed,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.939,10,0.002,True
+sy1,mixed,20,FIS-sigma,ASRFCM-paper,ACC,0.963,10,0.002,True
+sy1,mixed,20,FIS-sigma+A,ASRFCM-paper,ACC,0.454,10,0.002,True
+sy1,salt_pepper,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.003,10,0.002,True
+sy1,salt_pepper,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,salt_pepper,0,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,salt_pepper,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.002,10,0.0053,True
+sy1,salt_pepper,1,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,salt_pepper,1,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,salt_pepper,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.002,10,0.0056,True
+sy1,salt_pepper,5,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,salt_pepper,5,FIS-sigma+A,ASRFCM-paper,ACC,-0.001,10,0.0894,False
+sy1,salt_pepper,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.013,10,0.002,True
+sy1,salt_pepper,10,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,salt_pepper,10,FIS-sigma+A,ASRFCM-paper,ACC,-0.004,10,0.0059,True
+sy1,salt_pepper,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.027,10,0.002,True
+sy1,salt_pepper,15,FIS-sigma,ASRFCM-paper,ACC,0.0,10,0.3049,False
+sy1,salt_pepper,15,FIS-sigma+A,ASRFCM-paper,ACC,-0.015,10,0.002,True
+sy1,salt_pepper,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.044,10,0.002,True
+sy1,salt_pepper,20,FIS-sigma,ASRFCM-paper,ACC,0.0,10,0.1527,False
+sy1,salt_pepper,20,FIS-sigma+A,ASRFCM-paper,ACC,-0.064,10,0.002,True
+sy1,speckle,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.003,10,0.002,True
+sy1,speckle,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,speckle,0,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,speckle,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.003,10,0.002,True
+sy1,speckle,1,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,speckle,1,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,0.5791,False
+sy1,speckle,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.005,10,0.0058,True
+sy1,speckle,5,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,speckle,5,FIS-sigma+A,ASRFCM-paper,ACC,0.004,10,0.0076,True
+sy1,speckle,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.006,10,0.002,True
+sy1,speckle,10,FIS-sigma,ASRFCM-paper,ACC,-0.0,10,0.5791,False
+sy1,speckle,10,FIS-sigma+A,ASRFCM-paper,ACC,0.005,10,0.008,True
+sy1,speckle,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.0,10,0.878,False
+sy1,speckle,15,FIS-sigma,ASRFCM-paper,ACC,0.0,10,0.5791,False
+sy1,speckle,15,FIS-sigma+A,ASRFCM-paper,ACC,-0.002,10,0.2603,False
+sy1,speckle,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.002,10,0.7695,False
+sy1,speckle,20,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy1,speckle,20,FIS-sigma+A,ASRFCM-paper,ACC,-0.004,10,0.0412,True
+sy2,gaussian,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.014,10,0.002,True
+sy2,gaussian,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,gaussian,0,FIS-sigma+A,ASRFCM-paper,ACC,0.319,10,0.002,True
+sy2,gaussian,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.06,10,0.002,True
+sy2,gaussian,1,FIS-sigma,ASRFCM-paper,ACC,-0.007,10,0.002,True
+sy2,gaussian,1,FIS-sigma+A,ASRFCM-paper,ACC,0.316,10,0.002,True
+sy2,gaussian,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.043,10,0.002,True
+sy2,gaussian,5,FIS-sigma,ASRFCM-paper,ACC,-0.01,10,0.084,False
+sy2,gaussian,5,FIS-sigma+A,ASRFCM-paper,ACC,0.265,10,0.002,True
+sy2,gaussian,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.094,10,0.002,True
+sy2,gaussian,10,FIS-sigma,ASRFCM-paper,ACC,0.089,10,0.002,True
+sy2,gaussian,10,FIS-sigma+A,ASRFCM-paper,ACC,0.251,10,0.002,True
+sy2,gaussian,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.577,10,0.002,True
+sy2,gaussian,15,FIS-sigma,ASRFCM-paper,ACC,0.557,10,0.002,True
+sy2,gaussian,15,FIS-sigma+A,ASRFCM-paper,ACC,0.459,10,0.002,True
+sy2,gaussian,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,1.322,10,0.002,True
+sy2,gaussian,20,FIS-sigma,ASRFCM-paper,ACC,1.353,10,0.002,True
+sy2,gaussian,20,FIS-sigma+A,ASRFCM-paper,ACC,0.852,10,0.002,True
+sy2,mixed,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.014,10,0.002,True
+sy2,mixed,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,mixed,0,FIS-sigma+A,ASRFCM-paper,ACC,0.319,10,0.002,True
+sy2,mixed,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.072,10,0.002,True
+sy2,mixed,1,FIS-sigma,ASRFCM-paper,ACC,-0.008,10,0.002,True
+sy2,mixed,1,FIS-sigma+A,ASRFCM-paper,ACC,0.314,10,0.002,True
+sy2,mixed,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.007,10,0.359,False
+sy2,mixed,5,FIS-sigma,ASRFCM-paper,ACC,0.01,10,0.4755,False
+sy2,mixed,5,FIS-sigma+A,ASRFCM-paper,ACC,0.234,10,0.002,True
+sy2,mixed,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.952,10,0.002,True
+sy2,mixed,10,FIS-sigma,ASRFCM-paper,ACC,0.951,10,0.002,True
+sy2,mixed,10,FIS-sigma+A,ASRFCM-paper,ACC,0.715,10,0.002,True
+sy2,mixed,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,4.495,10,0.002,True
+sy2,mixed,15,FIS-sigma,ASRFCM-paper,ACC,4.612,10,0.002,True
+sy2,mixed,15,FIS-sigma+A,ASRFCM-paper,ACC,3.084,10,0.002,True
+sy2,mixed,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,9.349,10,0.002,True
+sy2,mixed,20,FIS-sigma,ASRFCM-paper,ACC,9.658,10,0.002,True
+sy2,mixed,20,FIS-sigma+A,ASRFCM-paper,ACC,6.805,10,0.002,True
+sy2,salt_pepper,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.014,10,0.002,True
+sy2,salt_pepper,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,salt_pepper,0,FIS-sigma+A,ASRFCM-paper,ACC,0.319,10,0.002,True
+sy2,salt_pepper,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.016,10,0.002,True
+sy2,salt_pepper,1,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,salt_pepper,1,FIS-sigma+A,ASRFCM-paper,ACC,0.31,10,0.002,True
+sy2,salt_pepper,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.01,10,0.008,True
+sy2,salt_pepper,5,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,salt_pepper,5,FIS-sigma+A,ASRFCM-paper,ACC,0.264,10,0.002,True
+sy2,salt_pepper,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.022,10,0.0248,True
+sy2,salt_pepper,10,FIS-sigma,ASRFCM-paper,ACC,0.0,10,0.8756,False
+sy2,salt_pepper,10,FIS-sigma+A,ASRFCM-paper,ACC,0.16,10,0.002,True
+sy2,salt_pepper,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.135,10,0.002,True
+sy2,salt_pepper,15,FIS-sigma,ASRFCM-paper,ACC,0.002,10,0.0724,False
+sy2,salt_pepper,15,FIS-sigma+A,ASRFCM-paper,ACC,-0.102,10,0.002,True
+sy2,salt_pepper,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.439,10,0.002,True
+sy2,salt_pepper,20,FIS-sigma,ASRFCM-paper,ACC,0.007,10,0.002,True
+sy2,salt_pepper,20,FIS-sigma+A,ASRFCM-paper,ACC,-0.533,10,0.002,True
+sy2,speckle,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.014,10,0.002,True
+sy2,speckle,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,speckle,0,FIS-sigma+A,ASRFCM-paper,ACC,0.319,10,0.002,True
+sy2,speckle,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.055,10,0.002,True
+sy2,speckle,1,FIS-sigma,ASRFCM-paper,ACC,-0.0,10,0.3049,False
+sy2,speckle,1,FIS-sigma+A,ASRFCM-paper,ACC,0.334,10,0.002,True
+sy2,speckle,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.058,10,0.002,True
+sy2,speckle,5,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,speckle,5,FIS-sigma+A,ASRFCM-paper,ACC,0.336,10,0.002,True
+sy2,speckle,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.043,10,0.002,True
+sy2,speckle,10,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,speckle,10,FIS-sigma+A,ASRFCM-paper,ACC,0.297,10,0.002,True
+sy2,speckle,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.028,10,0.002,True
+sy2,speckle,15,FIS-sigma,ASRFCM-paper,ACC,-0.0,10,0.3049,False
+sy2,speckle,15,FIS-sigma+A,ASRFCM-paper,ACC,0.261,10,0.002,True
+sy2,speckle,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.0,10,1.0,False
+sy2,speckle,20,FIS-sigma,ASRFCM-paper,ACC,0.0,10,0.641,False
+sy2,speckle,20,FIS-sigma+A,ASRFCM-paper,ACC,0.159,10,0.002,True
+sy3,gaussian,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,gaussian,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,gaussian,0,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,gaussian,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.002,10,0.506,False
+sy3,gaussian,1,FIS-sigma,ASRFCM-paper,ACC,0.001,10,0.214,False
+sy3,gaussian,1,FIS-sigma+A,ASRFCM-paper,ACC,0.002,10,0.0488,True
+sy3,gaussian,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.088,10,0.002,True
+sy3,gaussian,5,FIS-sigma,ASRFCM-paper,ACC,0.065,10,0.002,True
+sy3,gaussian,5,FIS-sigma+A,ASRFCM-paper,ACC,0.083,10,0.002,True
+sy3,gaussian,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.341,10,0.002,True
+sy3,gaussian,10,FIS-sigma,ASRFCM-paper,ACC,0.319,10,0.002,True
+sy3,gaussian,10,FIS-sigma+A,ASRFCM-paper,ACC,0.275,10,0.002,True
+sy3,gaussian,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,1.125,10,0.002,True
+sy3,gaussian,15,FIS-sigma,ASRFCM-paper,ACC,1.148,10,0.002,True
+sy3,gaussian,15,FIS-sigma+A,ASRFCM-paper,ACC,0.781,10,0.002,True
+sy3,gaussian,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,2.354,10,0.002,True
+sy3,gaussian,20,FIS-sigma,ASRFCM-paper,ACC,2.418,10,0.002,True
+sy3,gaussian,20,FIS-sigma+A,ASRFCM-paper,ACC,1.421,10,0.002,True
+sy3,mixed,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,mixed,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,mixed,0,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,mixed,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.006,10,0.0039,True
+sy3,mixed,1,FIS-sigma,ASRFCM-paper,ACC,0.003,10,0.0137,True
+sy3,mixed,1,FIS-sigma+A,ASRFCM-paper,ACC,0.003,10,0.0107,True
+sy3,mixed,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.171,10,0.002,True
+sy3,mixed,5,FIS-sigma,ASRFCM-paper,ACC,0.149,10,0.002,True
+sy3,mixed,5,FIS-sigma+A,ASRFCM-paper,ACC,0.154,10,0.002,True
+sy3,mixed,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,1.726,10,0.002,True
+sy3,mixed,10,FIS-sigma,ASRFCM-paper,ACC,1.762,10,0.002,True
+sy3,mixed,10,FIS-sigma+A,ASRFCM-paper,ACC,1.14,10,0.002,True
+sy3,mixed,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,5.753,10,0.002,True
+sy3,mixed,15,FIS-sigma,ASRFCM-paper,ACC,5.948,10,0.002,True
+sy3,mixed,15,FIS-sigma+A,ASRFCM-paper,ACC,3.81,10,0.002,True
+sy3,mixed,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,8.765,10,0.002,True
+sy3,mixed,20,FIS-sigma,ASRFCM-paper,ACC,9.146,10,0.002,True
+sy3,mixed,20,FIS-sigma+A,ASRFCM-paper,ACC,5.723,10,0.002,True
+sy3,salt_pepper,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,salt_pepper,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,salt_pepper,0,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,salt_pepper,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.003,10,0.012,True
+sy3,salt_pepper,1,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,salt_pepper,1,FIS-sigma+A,ASRFCM-paper,ACC,-0.0,10,0.3046,False
+sy3,salt_pepper,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.023,10,0.002,True
+sy3,salt_pepper,5,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,salt_pepper,5,FIS-sigma+A,ASRFCM-paper,ACC,-0.006,10,0.0059,True
+sy3,salt_pepper,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.07,10,0.002,True
+sy3,salt_pepper,10,FIS-sigma,ASRFCM-paper,ACC,0.0,10,0.5791,False
+sy3,salt_pepper,10,FIS-sigma+A,ASRFCM-paper,ACC,-0.058,10,0.002,True
+sy3,salt_pepper,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.18,10,0.002,True
+sy3,salt_pepper,15,FIS-sigma,ASRFCM-paper,ACC,0.002,10,0.0072,True
+sy3,salt_pepper,15,FIS-sigma+A,ASRFCM-paper,ACC,-0.228,10,0.002,True
+sy3,salt_pepper,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.451,10,0.002,True
+sy3,salt_pepper,20,FIS-sigma,ASRFCM-paper,ACC,0.007,10,0.002,True
+sy3,salt_pepper,20,FIS-sigma+A,ASRFCM-paper,ACC,-0.499,10,0.002,True
+sy3,speckle,0,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,speckle,0,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,speckle,0,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,speckle,1,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,speckle,1,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,speckle,1,FIS-sigma+A,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,speckle,5,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.007,10,0.0059,True
+sy3,speckle,5,FIS-sigma,ASRFCM-paper,ACC,0.0,10,1.0,False
+sy3,speckle,5,FIS-sigma+A,ASRFCM-paper,ACC,-0.009,10,0.002,True
+sy3,speckle,10,sigma=0.9 (fixed),ASRFCM-paper,ACC,-0.004,10,0.1309,False
+sy3,speckle,10,FIS-sigma,ASRFCM-paper,ACC,-0.0,10,0.3049,False
+sy3,speckle,10,FIS-sigma+A,ASRFCM-paper,ACC,-0.006,10,0.0059,True
+sy3,speckle,15,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.06,10,0.002,True
+sy3,speckle,15,FIS-sigma,ASRFCM-paper,ACC,-0.0,10,0.5791,False
+sy3,speckle,15,FIS-sigma+A,ASRFCM-paper,ACC,-0.133,10,0.002,True
+sy3,speckle,20,sigma=0.9 (fixed),ASRFCM-paper,ACC,0.252,10,0.002,True
+sy3,speckle,20,FIS-sigma,ASRFCM-paper,ACC,0.001,10,0.1213,False
+sy3,speckle,20,FIS-sigma+A,ASRFCM-paper,ACC,-0.433,10,0.002,True

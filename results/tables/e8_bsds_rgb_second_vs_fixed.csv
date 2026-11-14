@@ -1,0 +1,9 @@
+image,method,baseline,metric,mean_diff,n,p_value,significant_0.05
+100007,FIS-sigma,sigma=0.9 (fixed),ACC,0.042,10,0.002,True
+118035,FIS-sigma,sigma=0.9 (fixed),ACC,-0.075,10,0.002,True
+167062,FIS-sigma,sigma=0.9 (fixed),ACC,-0.122,10,0.0059,True
+201080,FIS-sigma,sigma=0.9 (fixed),ACC,-0.092,10,0.002,True
+241004,FIS-sigma,sigma=0.9 (fixed),ACC,-0.137,10,0.0098,True
+42049,FIS-sigma,sigma=0.9 (fixed),ACC,-0.025,10,0.002,True
+67079,FIS-sigma,sigma=0.9 (fixed),ACC,-0.233,10,0.002,True
+86016,FIS-sigma,sigma=0.9 (fixed),ACC,-0.244,10,0.002,True

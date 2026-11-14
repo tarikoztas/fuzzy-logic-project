@@ -1,0 +1,13 @@
+noise_pct,method,baseline,n,mean_diff,p_value,significant_0.05
+1,FIS-sigma,ASRFCM-paper,30,-0.002,0.358,False
+1,FIS-sigma,sigma=0.9 (fixed),30,0.021,0.0447,True
+1,FIS-sigma+A,ASRFCM-paper,30,0.106,2.37e-05,True
+5,FIS-sigma,ASRFCM-paper,30,0.056,3.55e-05,True
+5,FIS-sigma,sigma=0.9 (fixed),30,-0.003,0.294,False
+5,FIS-sigma+A,ASRFCM-paper,30,0.134,1.86e-09,True
+10,FIS-sigma,ASRFCM-paper,30,0.923,1.86e-09,True
+10,FIS-sigma,sigma=0.9 (fixed),30,0.012,0.00491,True
+10,FIS-sigma+A,ASRFCM-paper,30,0.636,1.86e-09,True
+15,FIS-sigma,ASRFCM-paper,30,3.589,1.86e-09,True
+15,FIS-sigma,sigma=0.9 (fixed),30,0.106,2.86e-06,True
+15,FIS-sigma+A,ASRFCM-paper,30,2.343,1.86e-09,True

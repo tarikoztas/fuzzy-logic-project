@@ -65,3 +65,24 @@ The α scale 0.002 of candidate A is the median ratio between the paper's α sha
 
 ### Test runs (each run once)
 `experiments/contribution/second_iteration.yaml`, `robustness_second.yaml`, `bsds_second.yaml`, `bsds_rgb_second.yaml`; analysis `experiments/analyze_second_iteration.py`.
+
+## Part 3 — Test results (single run after the pre-registration commit)
+
+Verdicts computed by `experiments/analyze_second_iteration.py` (`results/tables/e8_hypotheses.csv`):
+
+| Hypothesis | Criterion | Value | Verdict |
+|---|---|---|---|
+| H5 | FIS-sigma > paper at 10 % and 15 % (pooled Wilcoxon p<0.05) | 10%: +0.92 (p=1.9e-09); 15%: +3.59 (p=1.9e-09) | holds |
+| H5 | FIS-sigma not >0.5 below paper at 1 % and 5 % on any image | worst -0.01 | holds |
+| H5 | overall | — | holds |
+| H5-control | |FIS-sigma - sigma 0.9| < 0.5 on every setting (expected null) | range -0.02 to +0.19 | holds |
+| H6 | FIS-sigma+A mean ACC >= paper on every image and level | worst +0.00 | holds |
+| H6 | no significant loss (per image and level, p<0.05) | 0 significant losses | holds |
+| H6 | overall | — | holds |
+
+- FIS-σ vs ASRFCM-paper, pooled over sy1–sy3 (n = 30): -0.00 / +0.06 / +0.92 / +3.59 ACC points at 1 / 5 / 10 / 15 % mixed noise; at 15 % sy2/sy3 reach 97.00/95.08 % (paper's settings 92.38/89.13 %).
+- FIS-σ+A vs ASRFCM-paper: +0.11 / +0.13 / +0.64 / +2.34.
+- BSDS500, 5 %, mean over 8 images: gray 79.85 → FIS-σ 80.98 (fixed σ = 0.9: 80.98; FIS-σ+A 80.51); colour 85.29 → 85.43 (fixed: 85.54; FIS-σ+A 85.39).
+- Noise types: mixed 20 % 86.90 → 93.49; salt-and-pepper 20 % 99.35 → 99.35 (fixed σ = 0.9: 99.66) — the median-based noise estimate does not see sparse impulses (D-046).
+
+**Interpretation.** The diagnosis of the first iteration is confirmed: bounding the trust in the noisy pixel removes the loss of the first rule base, and adapting the reward factor closes most of the high-noise reproduction gap. As pre-registered (H5-control), the fuzzy σ is not better than the best fixed value on mixed noise; its contribution is the automatic choice of σ.

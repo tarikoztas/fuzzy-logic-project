@@ -8,9 +8,10 @@ less) closes most of the high-noise gap. A fixed number cannot be right for ever
 image, so a small Mamdani system picks sigma from how noisy the image looks.
 
 Input  NoiseLevel  (image level): robust noise estimate from the finest diagonal
-       Haar wavelet coefficients, sigma_n = median(|HH|) / 0.6745 (the classical
-       median-absolute-deviation estimator of Donoho and Johnstone). Flat image
-       regions give HH = 0, so mainly noise contributes.
+       Haar wavelet coefficients, sigma_n = median(|HH|) / 0.6745 (median absolute
+       deviation: for Gaussian noise of std s, median(|n|) = 0.6745 s). Flat image
+       regions give HH = 0, so mainly noise contributes; texture and edges also add
+       to it, so a textured natural image looks "noisier" than a flat synthetic one.
    or  LocalNoise  (pixel level): mean over a w x w window of |y - median3x3(y)|,
        i.e. how much impulse-like deviation there is around the pixel.
 Output Sigma, universe [0, 1.2] (clipped to [0, 0.95]; Eq. 5 needs sigma < 1).

@@ -25,7 +25,8 @@ from src.fcm.pipeline import run_asrfcm  # noqa: E402
 
 METHODS = [{"label": "FCM", "base": "FCM"}, {"label": "ASRFCM-paper", "base": "paper"},
            {"label": "FIS-full", "base": "FIS-full (pre-registered)"},
-           {"label": "FIS-split", "base": "FIS-split (post-hoc)"}]
+           {"label": "FIS-split", "base": "FIS-split (post-hoc)"},
+           {"label": "FIS-sigma", "base": "FIS-sigma"}, {"label": "FIS-sigma+A", "base": "FIS-sigma+A"}]
 REPEATS = 3
 
 
@@ -45,7 +46,7 @@ def main() -> None:
         y = noise.add_noise(img, "mixed", 0.05, 0)
         for m in METHODS:
             for r in range(REPEATS):
-                res, t = run_method_nocache(y, K, m)
+                res, t, _sigma = run_method_nocache(y, K, m)
                 pre = t.get("xi_s", 0) + t.get("theta_s", 0) + t.get("coeff_s", 0)
                 rows.append({"image": name, "pixels": y.size, "method": m["label"], "repeat": r,
                              "preprocess_s": pre, "cluster_s": t["cluster_s"], "total_s": pre + t["cluster_s"],

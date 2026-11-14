@@ -1,0 +1,8 @@
+hypothesis,criterion,value,holds
+H5,FIS-sigma > paper at 10 % and 15 % (pooled Wilcoxon p<0.05),10%: +0.92 (p=1.9e-09); 15%: +3.59 (p=1.9e-09),True
+H5,FIS-sigma not >0.5 below paper at 1 % and 5 % on any image,worst -0.01,True
+H5,overall,,True
+H5-control,|FIS-sigma - sigma 0.9| < 0.5 on every setting (expected null),range -0.02 to +0.19,True
+H6,FIS-sigma+A mean ACC >= paper on every image and level,worst +0.00,True
+H6,"no significant loss (per image and level, p<0.05)",0 significant losses,True
+H6,overall,,True
