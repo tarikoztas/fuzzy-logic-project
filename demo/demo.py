@@ -1,6 +1,7 @@
 """Live demo: segment a noisy image with FCM, the reproduced method (ASRFCM-CSI)
-and the fuzzy-rule extension, side by side, and explain the fuzzy inference for
-one pixel. Runs offline on a laptop CPU in well under two minutes.
+and the fuzzy-rule extensions (first iteration: FIS full/split; second iteration:
+fuzzy reward factor FIS-sigma and FIS-sigma+A), side by side; explain the sigma rule
+for the image and the coefficient FIS for one pixel. Runs offline on a laptop CPU.
 
 Examples:
     python demo/demo.py                                   # sy3, 10 % mixed noise
@@ -27,7 +28,9 @@ from src.data import noise  # noqa: E402
 from src.eval.metrics import evaluate  # noqa: E402
 from src.fcm.baseline_fcm import fcm  # noqa: E402
 from src.fcm.fis_coefficients import FuzzyCoefficients, build_fis, fis_inputs  # noqa: E402
+from src.fcm.fis_sigma import FuzzySigma, noise_estimate  # noqa: E402
 from src.fcm.pipeline import run_asrfcm  # noqa: E402
+from src.fcm.variants import FIS_SIGMA, FIS_SIGMA_A  # noqa: E402
 
 
 def load(name: str, K: int | None):
@@ -76,6 +79,13 @@ def main() -> None:
     for label, mode in (("ASRFCM + FIS (full)", "full"), ("ASRFCM + FIS (split)", "split")):
         results[label] = run_asrfcm(y, K, seed=args.seed, coeff_method="fis",
                                     fis=FuzzyCoefficients(mode=mode, k=args.k), **params).result
+    # second iteration (D-045): sigma chosen by a 3-rule Mamdani system from the image noise estimate
+    fs = FuzzySigma(**FIS_SIGMA)
+    r_fs = run_asrfcm(y, K, seed=args.seed, use_cache=False, sigma_rule=fs, **params)
+    results["ASRFCM + FIS-sigma"] = r_fs.result
+    results["ASRFCM + FIS-sigma+A"] = run_asrfcm(
+        y, K, seed=args.seed, use_cache=False, sigma_rule=FuzzySigma(**FIS_SIGMA_A), coeff_method="fis",
+        fis=FuzzyCoefficients(mode="full", alpha_scale=0.002, k=args.k), **params).result
     print(f"\n{args.image}, {args.noise} noise {args.level:g} %, K={K}, seed {args.seed} "
           f"(total {time.perf_counter() - t0:.1f} s)\n")
     print(f"{'method':24s} {'ACC':>7s} {'NMI':>7s} {'Kappa':>7s} {'V_PC':>7s} {'iter':>5s}")
@@ -85,6 +95,13 @@ def main() -> None:
             print(f"{name:24s} {m['ACC']:7.2f} {m['NMI']:7.2f} {m['Kappa']:7.2f} {m['VPC']:7.2f} {r.n_iter:5d}")
         else:
             print(f"{name:24s} {'-':>7s} {'-':>7s} {'-':>7s} {evaluate(r.labels, U=r.U)['VPC']:7.2f} {r.n_iter:5d}")
+
+    n_hat = noise_estimate(y)
+    w_sig = fs.fis.firing_strengths({"Noise": np.array([n_hat])})[:, 0]
+    print(f"\nfuzzy reward factor: noise estimate median(|HH|)/0.6745 = {n_hat:.3f}")
+    for line, wr in zip(fs.fis.rule_table(), w_sig):
+        print(f"  fires {wr:.2f}  {line}")
+    print(f"  crisp (centroid): sigma = {r_fs.sigma_used:.3f}   (paper: 0.3)")
 
     if args.pixel:
         i, j = args.pixel
@@ -109,10 +126,10 @@ def main() -> None:
     panels += [(name, r.labels) for name, r in results.items()]
     if gt is not None:
         panels.append(("ground truth", gt))
-    fig, axes = plt.subplots(1, len(panels), figsize=(2.6 * len(panels), 2.9))
+    fig, axes = plt.subplots(1, len(panels), figsize=(2.3 * len(panels), 2.7))
     for ax, (title, im) in zip(axes, panels):
         ax.imshow(im, cmap="gray")
-        ax.set_title(title, fontsize=8)
+        ax.set_title(title.replace("sigma", "σ"), fontsize=7.5)
         ax.axis("off")
     fig.tight_layout()
     out = ROOT / "results" / "figures" / "demo_panel.png"
