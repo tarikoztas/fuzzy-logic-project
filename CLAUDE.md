@@ -38,7 +38,7 @@ Orijinal PDF'ler: `references/papers/` (yönerge ve makale). Çelişki olursa **
 
 - **Dil/ortam:** Python 3.12 (numpy<2, scipy, scikit-image, opencv, matplotlib, pandas, dtcwt, pyyaml; python-pptx sunum için). numba kullanılmıyor (NLM vektörize). Bkz. `requirements.txt`.
 - **Makalenin çekirdeği:** FCM + (a) ödül/ceza kümeli yerel uzamsal bilgi ξ (altın oran 0.618), (b) DTCWT alanında yerel-olmayan bilgi ϑ, (c) adaptif katsayılar α,β,γ, (d) ℓ0 seyrek düzenlileştirme (hard threshold √δ + normalize).
-- **Katkı (kesin, D-006-final / D-033):** α,β,γ için açık Mamdani bulanık çıkarım sistemi (üyelik fonksiyonları, IF–THEN kural tabanı, min/max çıkarım, durulaştırma) + üyelik fonksiyonu / durulaştırma / Mamdani–Sugeno karşılaştırmaları; destekleyici: C1 gürültü türü robustness, C2 ablasyon.
+- **Katkı (kesin, D-006-final / D-033):** α,β,γ için açık Mamdani bulanık çıkarım sistemi (üyelik fonksiyonları, IF–THEN kural tabanı, min/max çıkarım, durulaştırma) + üyelik fonksiyonu / durulaştırma / Mamdani–Sugeno karşılaştırmaları; destekleyici: C1 gürültü türü robustness, C2 ablasyon. İkinci iterasyon (D-044/D-045, önceden kayıtlı): σ için 3 kurallı Mamdani (FIS-σ, `src/fcm/fis_sigma.py`) + sınırlı α (FIS-σ+A).
 - **Makale parametreleri:** w=5, S=15, υ=4, g=10, σ=0.3, k=15, δ=0.4, m=2, ε=1e-6, T=100.
 - **Metrikler:** V_PC, V_PE, ACC, F-score, NMI, Kappa (+ iterasyon sayısı, süre).
 - **Bilinen makale belirsizlikleri / tuzakları:** `docs/02_MAKALE_ANALIZI.md` §9 — kodlamadan ÖNCE oku (ör. hard threshold sonrası sıfırlanan sütunlar, Eq. 10'daki y_j/y_q, Eq. 15-16 işaret belirsizliği).
@@ -55,10 +55,13 @@ py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 .venv/Scripts/python.exe experiments/run_grid.py --config experiments/contribution/<main|bsds|bsds_rgb|fis_variants|robustness|ablation_c2>.yaml
 .venv/Scripts/python.exe experiments/run_grid.py --config experiments/sensitivity/config.yaml             # E4
 .venv/Scripts/python.exe experiments/timing/run_timing.py                                                  # E7 (boş makinede)
+.venv/Scripts/python.exe experiments/run_grid.py --config experiments/contribution/<tuning|second_iteration|bsds_second|bsds_rgb_second|robustness_second>.yaml   # E8 (ikinci iterasyon; tuning yalnız seed 100-104)
+.venv/Scripts/python.exe experiments/summarize_tuning.py; .venv/Scripts/python.exe experiments/analyze_second_iteration.py   # E8 ayar kaydı, H5/H6 kararları, figürler
 .venv/Scripts/python.exe experiments/analyze_contribution.py      # özet, Wilcoxon, figürler
 .venv/Scripts/python.exe experiments/plot_reproduction.py; .venv/Scripts/python.exe experiments/plot_panels.py
 .venv/Scripts/python.exe report/build_report.py                   # report.html -> report.pdf + README sonuç blokları
-.venv/Scripts/python.exe presentation/build_slides.py             # slides.html -> presentation.pdf + .pptx
+.venv/Scripts/python.exe report/build_report.py --lang tr         # Türkçe rapor: report_tr.pdf
+.venv/Scripts/python.exe presentation/build_slides.py [--lang tr]  # slides[_tr].html -> presentation[_tr].pdf + .pptx + konuşmacı notları
 .venv/Scripts/python.exe demo/demo.py --image sy3 --level 10 --pixel 120 80   # canlı demo
 # Geçici dosyalar: .tmp/ (gitignore; C dolu). pip önbelleği .venv/pip.ini ile .tmp/pip-cache, pytest temp .tmp/pytest.
 # Not: numpy<2 zorunlu (dtcwt 0.13 np.asfarray). run_grid paralel ve kaldığı yerden devam eder; cache/ ξ,ϑ önbelleği.
@@ -67,7 +70,7 @@ py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 
 ## 6. Durum takibi
 
-- **Durum (12.11.2026):** Faz 0–8 teknik olarak tamam (rapor, sunum, demo, son kontrol 33/33, temiz klon testi). Öğrenciye kalan: rapor/sunum okuma ve onay, DOI kontrolü, demo provası, `docs/13` çalışması, Classroom yüklemesi.
+- **Durum (14.11.2026):** Faz 0–8 + ikinci iterasyon (docs/14; D-044–D-046, CP6) tamam: H5/H6 tuttu; İngilizce ve Türkçe rapor (report.pdf, report_tr.pdf) ve sunum (23 slayt, PDF+PPTX, iki dil); son kontrol tamamı PASS. Öğrenciye kalan: rapor/sunum okuma ve onay, DOI kontrolü, demo provası, `docs/13` çalışması, Classroom yüklemesi.
 
 - İlerleme: `docs/04_FAZLAR_VE_YOL_HARITASI.md` içindeki checkbox'lar (her faz sonunda işaretle).
 - Kararlar: `docs/06_KARARLAR.md` (yeni karar → yeni satır) **ve** herkese açık özeti `report/decisions.md`. Hocaya bağlı sorular kapatıldı (öğrenci hocaya sormayacak); yeni belirsizlikte en savunulabilir seçimi yap, gerekçesiyle iki dosyaya da yaz.

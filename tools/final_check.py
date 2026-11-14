@@ -47,9 +47,35 @@ def main() -> None:
     figs = re.findall(r'src="\.\./(results/figures/[^"]+)"', html)
     check("all report figures exist", all((ROOT / f).exists() for f in figs), f"{len(figs)} figures")
 
-    for f in ("presentation/presentation.pdf", "presentation/presentation.pptx", "requirements.txt",
-              "requirements.lock.txt", "LICENSE", "references/README.md", "demo/demo.py", "report/decisions.md"):
+    # Turkish report (same numbers, report_template_tr.html): exists, opens, page count, sections, figures
+    pdf_tr = ROOT / "report" / "report_tr.pdf"
+    check("report/report_tr.pdf exists", pdf_tr.exists())
+    if pdf_tr.exists():
+        check("Turkish report has 8-12 pages + references", 8 <= pdf_pages(pdf_tr) <= 15, f"{pdf_tr.name}: {pdf_pages(pdf_tr)} pages")
+    html_tr = (ROOT / "report" / "report_tr.html").read_text(encoding="utf-8") if (ROOT / "report" / "report_tr.html").exists() else ""
+    tr_secs = ["Giriş", "İlgili Çalışmalar", "Kuramsal Altyapı", "Özgün Yöntem", "Yeniden Gerçekleştirme Yöntemi", "Önerilen Geliştirme",
+               "Deney Düzeni", "Sonuçlar", "Tartışma", "Sınırlılıklar", "Sonuç", "Kaynaklar", "Üretken Yapay Zekâ Kullanım Beyanı"]
+    check("Turkish report has all sections", all(s in html_tr for s in tr_secs), ", ".join(s for s in tr_secs if s not in html_tr))
+    check("Turkish report has no unfilled placeholder", html_tr != "" and "{{" not in html_tr)
+    figs_tr = re.findall(r'src="\.\./(results/figures/[^"]+)"', html_tr)
+    check("all Turkish report figures exist", all((ROOT / f).exists() for f in figs_tr), f"{len(figs_tr)} figures")
+
+    for f in ("presentation/presentation.pdf", "presentation/presentation.pptx", "presentation/presentation_tr.pdf",
+              "presentation/presentation_tr.pptx", "presentation/speaker_notes.md", "presentation/speaker_notes_tr.md",
+              "requirements.txt", "requirements.lock.txt", "LICENSE", "references/README.md", "demo/demo.py",
+              "report/decisions.md", "report/checkpoints/CP6_second_iteration_plan.md", "results/tables/e8_tuning_log.csv",
+              "results/tables/e8_hypotheses.csv"):
         check(f"{f} exists", (ROOT / f).exists())
+    for f in ("presentation/presentation.pdf", "presentation/presentation_tr.pdf"):
+        if (ROOT / f).exists():
+            n = pdf_pages(ROOT / f)
+            check(f"{f} has 15-30 slides", 15 <= n <= 30, f"{n} slides")
+    # pre-registration order (D-045): the selection/hypotheses commit precedes the commit that adds the test results
+    order = git("log", "--reverse", "--format=%h %s").splitlines()
+    i_pre = next((k for k, l in enumerate(order) if "pre-registration of FIS-sigma" in l), None)
+    i_res = next((k for k, l in enumerate(order) if "second-iteration test results" in l), None)
+    check("pre-registration commit precedes the test-result commit", i_pre is not None and (i_res is None or i_pre < i_res),
+          f"pre {i_pre}, results {i_res}")
 
     tracked = git("ls-files").splitlines()
     check("docs/ not in the repository", not any(t.startswith("docs/") for t in tracked))
