@@ -23,9 +23,11 @@ from src.viz.fis_plots import control_surfaces, inference_example, membership_fu
 def main() -> None:
     FIGURES.mkdir(parents=True, exist_ok=True)
     membership_functions(str(FIGURES / "fis_membership"))
+    membership_functions(str(FIGURES / "fis_membership_tr"), lang="tr")
     control_surfaces(str(FIGURES / "fis_surfaces"))
     # a salt-like pixel near an edge: deviates from the consensus, estimates partly disagree
     ex = inference_example(str(FIGURES / "fis_inference_example"), dev=0.25, dis=0.12, output="gamma")
+    inference_example(str(FIGURES / "fis_inference_example_tr"), dev=0.25, dis=0.12, output="gamma", lang="tr")
     rows = [{"rule": f"R{i + 1}", "Dev": dev, "Dis": dis, "alpha": c[0], "beta": c[1], "gamma": c[2]}
             for i, ((dev, dis), c) in enumerate(RULE_TABLE.items())]
     save(pd.DataFrame(rows), "results/tables/fis_rule_base.csv")

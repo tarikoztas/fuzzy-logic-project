@@ -22,28 +22,38 @@ def _style(ax):
     ax.tick_params(colors=MUTED, labelsize=8)
 
 
+TR_TERMS = {"Small": "Küçük", "Medium": "Orta", "Large": "Büyük", "Low": "Düşük", "High": "Yüksek"}
+
+
+def _term(name: str, lang: str) -> str:
+    return TR_TERMS.get(name, name) if lang == "tr" else name
+
+
 def _save(fig, stem):
     for ext in ("png", "pdf"):
         fig.savefig(f"{stem}.{ext}", dpi=200)
     plt.close(fig)
 
 
-def membership_functions(stem: str) -> None:
+def membership_functions(stem: str, lang: str = "en") -> None:
+    tr = lang == "tr"
     x = np.linspace(0, 1, 501)
     fig, axes = plt.subplots(2, 2, figsize=(9, 5.2), sharex=True)
+    titles = (("Girdiler Dev, Dis (gri fark)" if tr else "Inputs Dev, Dis (gray difference)", input_terms),
+              ("Çıktılar α, β, γ (güven)" if tr else "Outputs alpha, beta, gamma (trust)", output_terms))
     for row, shape in enumerate(("tri", "gauss")):
-        for col, (title, terms) in enumerate((("Inputs Dev, Dis (gray difference)", input_terms(shape)),
-                                              ("Outputs alpha, beta, gamma (trust)", output_terms(shape)))):
+        for col, (title, terms_of) in enumerate(titles):
             ax = axes[row][col]
-            for i, (name, mf) in enumerate(terms.items()):
-                ax.plot(x, mf(x), color=SERIES[i], linewidth=2, label=name)
-            ax.set_title(f"{title} - {'triangular' if shape == 'tri' else 'Gaussian'}", fontsize=9, color=INK)
+            for i, (name, mf) in enumerate(terms_of(shape).items()):
+                ax.plot(x, mf(x), color=SERIES[i], linewidth=2, label=_term(name, lang))
+            kind = ("üçgen" if shape == "tri" else "Gauss") if tr else ("triangular" if shape == "tri" else "Gaussian")
+            ax.set_title(f"{title} - {kind}", fontsize=9, color=INK)
             ax.set_ylim(-0.03, 1.05)
-            ax.set_ylabel("membership", fontsize=8, color=INK)
+            ax.set_ylabel("üyelik derecesi" if tr else "membership", fontsize=8, color=INK)
             ax.legend(frameon=False, fontsize=8)
             _style(ax)
     for ax in axes[1]:
-        ax.set_xlabel("value", fontsize=8, color=INK)
+        ax.set_xlabel("değer" if tr else "value", fontsize=8, color=INK)
     fig.tight_layout()
     _save(fig, stem)
 
@@ -67,7 +77,7 @@ def control_surfaces(stem: str, shape: str = "tri", defuzz: str = "centroid") ->
     _save(fig, stem)
 
 
-def inference_example(stem: str, dev: float, dis: float, output: str = "gamma") -> dict:
+def inference_example(stem: str, dev: float, dis: float, output: str = "gamma", lang: str = "en") -> dict:
     """Fuzzification -> rule firing -> clipped consequents -> aggregation -> crisp value, for one pixel."""
     fis = build_fis()
     w = fis.firing_strengths({"Dev": np.array([dev]), "Dis": np.array([dis])})[:, 0]
@@ -77,21 +87,27 @@ def inference_example(stem: str, dev: float, dis: float, output: str = "gamma") 
     fig, axes = plt.subplots(1, 3, figsize=(12, 3.3), gridspec_kw={"width_ratios": [1, 1.2, 1.3]})
     x = np.linspace(0, 1, 501)
     for i, (name, mf) in enumerate(input_terms("tri").items()):
-        axes[0].plot(x, mf(x), color=SERIES[i], linewidth=2, label=name)
+        axes[0].plot(x, mf(x), color=SERIES[i], linewidth=2, label=_term(name, lang))
+    tr = lang == "tr"
     axes[0].axvline(dev, color=INK, linestyle="--", linewidth=1)
     axes[0].axvline(dis, color=MUTED, linestyle=":", linewidth=1.5)
     axes[0].set_xlim(0, 0.6)
-    axes[0].set_title(f"1. fuzzification (Dev={dev}, dashed; Dis={dis}, dotted)", fontsize=9, color=INK)
+    axes[0].set_title(f"1. bulanıklaştırma (Dev={dev}, kesikli; Dis={dis}, noktalı)" if tr else
+                      f"1. fuzzification (Dev={dev}, dashed; Dis={dis}, dotted)", fontsize=9, color=INK)
     axes[0].legend(frameon=False, fontsize=8)
     labels = [f"R{i + 1}" for i in range(len(fis.rules))]
     axes[1].bar(labels, w, color=SERIES[0], width=0.6)
     axes[1].set_ylim(0, 1)
-    axes[1].set_title("2. rule firing strength (AND = min)", fontsize=9, color=INK)
-    axes[2].fill_between(z, agg[0], color=SERIES[0], alpha=0.35, label="aggregated set (max of clipped)")
+    axes[1].set_title("2. kural ateşlenme derecesi (VE = min)" if tr else "2. rule firing strength (AND = min)", fontsize=9, color=INK)
+    axes[2].fill_between(z, agg[0], color=SERIES[0], alpha=0.35,
+                         label="birleşik küme (kırpılmışların max'ı)" if tr else "aggregated set (max of clipped)")
+    names = {"centroid": "ağırlık merkezi", "bisector": "açıortay", "mom": "MOM"} if tr else {}
     for m, ls in zip(crisp, ("-", "--", ":")):
-        axes[2].axvline(crisp[m], color=INK, linestyle=ls, linewidth=1.2, label=f"{m} = {crisp[m]:.3f}")
+        axes[2].axvline(crisp[m], color=INK, linestyle=ls, linewidth=1.2, label=f"{names.get(m, m)} = {crisp[m]:.3f}")
     axes[2].set_ylim(0, 1.05)
-    axes[2].set_title(f"3-4. {output}: implication, aggregation, defuzzification", fontsize=9, color=INK)
+    sym = {"alpha": "α", "beta": "β", "gamma": "γ"}.get(output, output) if tr else output
+    axes[2].set_title(f"3-4. {sym}: çıkarım, birleştirme, durulaştırma" if tr else
+                      f"3-4. {output}: implication, aggregation, defuzzification", fontsize=9, color=INK)
     axes[2].legend(frameon=False, fontsize=7)
     for ax in axes:
         _style(ax)

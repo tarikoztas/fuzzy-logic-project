@@ -7,7 +7,10 @@ No number in the report body is typed by hand: every {{placeholder}} is computed
 here from a CSV produced by the experiment scripts (paper-reported values come
 from results/tables/paper_reported_*.csv and are labelled as such).
 
-Usage:  python report/build_report.py [--no-pdf]
+The Turkish version (--lang tr) uses report_template_tr.html and report_results_template_tr.html
+with the same placeholders and the same numbers, and writes report_tr.html / report_tr.pdf.
+
+Usage:  python report/build_report.py [--lang en|tr] [--no-pdf]
 """
 from __future__ import annotations
 
@@ -91,42 +94,49 @@ def replace_block(text: str, name: str, content: str) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-pdf", action="store_true")
+    ap.add_argument("--lang", choices=["en", "tr"], default="en")
     args = ap.parse_args()
     from report.report_values import compute  # local module with all values and tables
 
-    values, readme_blocks = compute()
-    tpl = (REPORT / "report_template.html").read_text(encoding="utf-8")
-    rest = (REPORT / "report_results_template.html").read_text(encoding="utf-8")
+    sfx = "" if args.lang == "en" else f"_{args.lang}"
+    values, readme_blocks = compute(args.lang)
+    tpl = (REPORT / f"report_template{sfx}.html").read_text(encoding="utf-8")
+    rest = (REPORT / f"report_results_template{sfx}.html").read_text(encoding="utf-8")
     values["RESULTS_AND_REST"] = render(rest, values)
     html = render(tpl, values)
     from report.report_values_extra import renumber_citations
     html = renumber_citations(html)
-    out = REPORT / "report.html"
+    if args.lang == "tr":
+        # Turkish typography: the percent sign precedes the number (%5, %79.85)
+        html = re.sub(r"(?<![\w%.])(\d[\d.,/–]*\d|\d)&nbsp;%", r"%\1", html)
+        html = html.replace("Table&nbsp;", "Tablo&nbsp;").replace("Fig.&nbsp;", "Şekil&nbsp;").replace("Section&nbsp;", "Bölüm&nbsp;")
+    out = REPORT / f"report{sfx}.html"
     out.write_text(html, encoding="utf-8")
     print(f"wrote {out.relative_to(ROOT)}")
 
-    readme = ROOT / "README.md"
-    text = readme.read_text(encoding="utf-8")
-    for name, content in readme_blocks.items():
-        text = replace_block(text, name, content)
-    readme.write_text(text, encoding="utf-8")
-    print("updated README result blocks")
+    if args.lang == "en":
+        readme = ROOT / "README.md"
+        text = readme.read_text(encoding="utf-8")
+        for name, content in readme_blocks.items():
+            text = replace_block(text, name, content)
+        readme.write_text(text, encoding="utf-8")
+        print("updated README result blocks")
 
     if args.no_pdf:
         return
-    pdf = REPORT / "report.pdf"
+    pdf = REPORT / f"report{sfx}.pdf"
     print_pdf(out, pdf)
     # page count without references and disclosure (guideline: 8-12 pages excluding references)
     cut = html.index('<h2 class="refs">')
     body_only = html[:cut] + "</div></body></html>"
-    tmp_html = REPORT / "_body_only.html"
-    tmp_pdf = REPORT / "_body_only.pdf"
+    tmp_html = REPORT / f"_body_only{sfx}.html"
+    tmp_pdf = REPORT / f"_body_only{sfx}.pdf"
     tmp_html.write_text(body_only, encoding="utf-8")
     print_pdf(tmp_html, tmp_pdf)
     n_all, n_body = pdf_pages(pdf), pdf_pages(tmp_pdf)
     tmp_html.unlink()
     tmp_pdf.unlink()
-    print(f"report.pdf: {n_all} pages in total, {n_body} pages without references/disclosure")
+    print(f"{pdf.name}: {n_all} pages in total, {n_body} pages without references/disclosure")
     if not 8 <= n_body <= 12:
         print("WARNING: body length outside the 8-12 page requirement")
 
