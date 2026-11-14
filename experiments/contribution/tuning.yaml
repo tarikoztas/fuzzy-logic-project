@@ -1,0 +1,24 @@
+# E8 tuning (second iteration, D-044): TUNING SET ONLY - seeds 100-104, never used for reporting results.
+# References (not counted in the 12-configuration budget): ASRFCM-paper, sigma=0.9 (fixed), FIS-full, FIS-split.
+# Candidates: A = bounded alpha, B = impulse input, C = fuzzy sigma (image / pixel level); combinations.
+name: e8_tuning
+images: [sy1, sy2, sy3]
+noise: {kinds: [mixed], levels_pct: [1, 5, 10, 15]}
+seeds: [100, 101, 102, 103, 104]
+methods:
+  - {label: "ref: ASRFCM-paper", base: paper, record_sigma: true}
+  - {label: "ref: sigma=0.9 (fixed)", base: "sigma=0.9 (fixed)"}
+  - {label: "ref: FIS-full", base: "FIS-full (pre-registered)"}
+  - {label: "ref: FIS-split", base: "FIS-split (post-hoc)"}
+  # round 1 (6 configurations)
+  - {label: "T1 A: FIS-full alpha_scale=0.002", base: paper, params: {fis: {mode: full, alpha_scale: 0.002}}}
+  - {label: "T2 B: FIS-full + Imp", base: paper, params: {fis: {mode: full, imp: true}}}
+  - {label: "T3 A+B: FIS-full + Imp, alpha_scale=0.002", base: paper, params: {fis: {mode: full, imp: true, alpha_scale: 0.002}}}
+  - {label: "T4 C: FIS-sigma image (0.05,0.15,0.25)->(0.3,0.6,0.9)", base: paper, params: {fis_sigma: {level: image, breaks: [0.05, 0.15, 0.25], out: [0.3, 0.6, 0.9]}}}
+  - {label: "T5 C: FIS-sigma image (0.05,0.10,0.15)->(0.3,0.6,0.9)", base: paper, params: {fis_sigma: {level: image, breaks: [0.05, 0.10, 0.15], out: [0.3, 0.6, 0.9]}}}
+  - {label: "T6 C: FIS-sigma pixel (0.03,0.10,0.18)->(0.3,0.6,0.9)", base: paper, params: {fis_sigma: {level: pixel, breaks: [0.03, 0.10, 0.18], out: [0.3, 0.6, 0.9]}}}
+  # round 2 (3 configurations; chosen after round 1: C equals a fixed sigma = 0.9, A and A+B equal FIS-split)
+  - {label: "T7 C: FIS-sigma image (0.05,0.15,0.25)->(0.3,0.6,0.95)", base: paper, params: {fis_sigma: {level: image, breaks: [0.05, 0.15, 0.25], out: [0.3, 0.6, 0.95]}}}
+  - {label: "T8 C+A: FIS-sigma image + FIS-full alpha_scale=0.002", base: paper, params: {fis_sigma: {level: image, breaks: [0.05, 0.15, 0.25], out: [0.3, 0.6, 0.9]}, fis: {mode: full, alpha_scale: 0.002}}}
+  - {label: "T9 C+split: FIS-sigma image + FIS-split", base: paper, params: {fis_sigma: {level: image, breaks: [0.05, 0.15, 0.25], out: [0.3, 0.6, 0.9]}, fis: {mode: split}}}
+output: results/tables/e8_tuning_runs.csv

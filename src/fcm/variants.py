@@ -41,10 +41,30 @@ FIS_VARIANTS = {
 }
 
 
+# Second iteration (D-044/D-045). Candidates A/B change the coefficient FIS, C adds a fuzzy
+# rule for the reward factor sigma (src/fcm/fis_sigma.py). Their settings are given in the
+# tuning/test configs (experiments/contribution/tuning.yaml, second_iteration.yaml).
+SECOND = {
+    "sigma=0.9 (fixed)": dict(sigma=0.9),   # control: a larger but fixed reward factor
+}
+# Selected after tuning (D-045): FIS-sigma (primary, T7) and FIS-sigma+A (secondary, T8).
+FIS_SIGMA = dict(level="image", breaks=(0.05, 0.15, 0.25), out=(0.3, 0.6, 0.95))
+FIS_SIGMA_A = dict(level="image", breaks=(0.05, 0.15, 0.25), out=(0.3, 0.6, 0.9))
+
+
 def kwargs_for(name: str) -> dict:
-    """run_asrfcm keyword arguments for a variant name (ABLATION or FIS_VARIANTS)."""
+    """run_asrfcm keyword arguments for a variant name (ABLATION, FIS_VARIANTS or SECOND)."""
     if name in ABLATION:
         return {**PAPER, **ABLATION[name]}
     if name in FIS_VARIANTS:
         return {**PAPER, "coeff_method": "fis", "fis": FuzzyCoefficients(**FIS_VARIANTS[name])}
+    if name in SECOND:
+        return {**PAPER, **SECOND[name]}
+    if name == "FIS-sigma":
+        from .fis_sigma import FuzzySigma
+        return {**PAPER, "sigma_rule": FuzzySigma(**FIS_SIGMA)}
+    if name == "FIS-sigma+A":
+        from .fis_sigma import FuzzySigma
+        return {**PAPER, "sigma_rule": FuzzySigma(**FIS_SIGMA_A), "coeff_method": "fis",
+                "fis": FuzzyCoefficients(mode="full", alpha_scale=0.002)}
     raise KeyError(name)

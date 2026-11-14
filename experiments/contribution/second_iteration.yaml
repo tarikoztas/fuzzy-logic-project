@@ -1,0 +1,15 @@
+# E8 test (second iteration, D-045): run ONCE after the pre-registration commit. Same images, noise and
+# seeds (0-9) as E5-main. Primary: FIS-sigma; secondary: FIS-sigma+A; control: fixed sigma = 0.9.
+name: e8_second_iteration
+images: [sy1, sy2, sy3]
+noise: {kinds: [mixed], levels_pct: [1, 5, 10, 15]}
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+methods:
+  - {label: FCM, base: FCM}
+  - {label: ASRFCM-paper, base: paper, record_sigma: true}
+  - {label: "sigma=0.9 (fixed)", base: "sigma=0.9 (fixed)"}
+  - {label: FIS-full, base: "FIS-full (pre-registered)"}
+  - {label: FIS-split, base: "FIS-split (post-hoc)"}
+  - {label: FIS-sigma, base: FIS-sigma}
+  - {label: FIS-sigma+A, base: FIS-sigma+A}
+output: results/tables/e8_second_iteration_runs.csv

@@ -31,3 +31,37 @@ The pre-registered fuzzy rule base of CP4 (FIS-full) did not beat the paper's co
 
 ### Controls in the test
 FCM, ASRFCM-paper (σ = 0.3), FIS-full, FIS-split and **ASRFCM with a fixed σ = 0.9**. The last control separates the value of the fuzzy rule from the value of simply using a larger σ.
+
+## Part 2 — Tuning outcome and pre-registration (committed before the test run, D-045)
+
+### Tuning (seeds 100–104 only)
+9 of the 12 allowed configurations were run; all are listed, with the four references, in `results/tables/e8_tuning_log.csv` (mean ACC over the four levels):
+
+| Configuration | Mean ACC | Note |
+|---|---|---|
+| ref: ASRFCM-paper | 97.74 | σ = 0.3 |
+| ref: σ = 0.9 (fixed) | 98.85 | |
+| ref: FIS-full / FIS-split | 93.05 / 96.64 | first iteration |
+| T1 A (α scale 0.002) | 96.70 | ≈ FIS-split |
+| T2 B (Imp input) | 93.98 | |
+| T3 A+B | 96.70 | |
+| T4 / T5 C (image level) | 98.85 / 98.85 | ≈ fixed σ = 0.9 |
+| T6 C (pixel level) | 98.84 | |
+| **T7 C, output Large = 0.95** | **98.88** | **selected** |
+| T8 C+A | 98.56 | ≥ ASRFCM-paper at every level |
+| T9 C+split | 98.51 | |
+
+The α scale 0.002 of candidate A is the median ratio between the paper's α share (≈ 0.12 %) and the FIS-full α share (28–45 %) on seed 100.
+
+### Selected variants
+- **Primary: FIS-σ (T7).** Input *Noise* = median(|HH|)/0.6745 of the one-level Haar transform of the image (≈ 0.07, 0.16, 0.25, 0.31 at 1, 5, 10, 15 % mixed noise). Terms Low trap(0, 0, 0.05, 0.15), Medium tri(0.05, 0.15, 0.25), High trap(0.15, 0.25, 0.5, 0.5). Output σ: triangles centred at 0.3 (Small), 0.6 (Medium), 0.95 (Large). Rules: Low → Small, Medium → Medium, High → Large. Mamdani, min/max, centroid. α, β, γ from the paper's formula.
+- **Secondary: FIS-σ+A (T8)**, declared here although not chosen by the rule: FIS-σ with output 0.3/0.6/0.9 plus the CP4 coefficient rule base with α scale 0.002.
+
+### Hypotheses
+- **H5 (primary).** On the synthetic test grid (sy1–sy3, mixed noise, seeds 0–9), FIS-σ has a higher mean ACC than ASRFCM-paper at 10 % and at 15 % noise, each significant (paired two-sided Wilcoxon over the 30 image–seed pairs, p < 0.05), and at 1 % and 5 % its mean ACC is not more than 0.5 point lower on any image.
+- **H5-control (expected null).** FIS-σ and a fixed σ = 0.9 differ by less than 0.5 point in mean ACC on every synthetic mixed-noise setting. A benefit of the fuzzy rule over the fixed value can only appear for low noise or other noise types (0 % and the single noise types of C1) or on natural images (BSDS500).
+- **H6 (secondary).** FIS-σ+A has a mean ACC ≥ ASRFCM-paper at every level on every image, with no significant loss (p < 0.05).
+- **BSDS500** (gray and colour, 5 %): reported per image without a threshold; FIS-σ vs ASRFCM-paper and vs σ = 0.9 (Wilcoxon over 10 seeds).
+
+### Test runs (each run once)
+`experiments/contribution/second_iteration.yaml`, `robustness_second.yaml`, `bsds_second.yaml`, `bsds_rgb_second.yaml`; analysis `experiments/analyze_second_iteration.py`.
