@@ -89,10 +89,11 @@ td:first-child, th:first-child {{ text-align: left; font-weight: 600; }}
 .title-slide {{ position: absolute; inset: 0; display: flex; }}
 .title-slide .band {{ width: 14mm; background: linear-gradient({ACCENT}, {ACCENT_DARK}); }}
 .title-slide .band2 {{ width: 3mm; background: {ORANGE}; }}
-.title-slide .inner {{ flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 26mm 0 20mm; }}
+.title-slide .inner {{ flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 26mm 0 9mm; }}
 .title-slide .kicker {{ font-size: 12pt; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: {ACCENT}; }}
 .title-slide h1 {{ font-size: 30pt; line-height: 1.18; margin: 4mm 0 6mm; font-weight: 650; }}
-.title-slide .sub {{ font-size: 14pt; color: {MUTED}; line-height: 1.5; border-top: 1px solid {RULE}; padding-top: 5mm; }}
+.title-slide .sub {{ font-size: 14pt; color: {MUTED}; line-height: 1.6; border-top: 1px solid {RULE}; padding-top: 5mm; width: 100%; }}
+.title-slide .sub .name {{ font-size: 16pt; font-weight: 650; color: {INK}; }}
 """
 
 
@@ -100,6 +101,12 @@ def inline(s: str) -> str:
     """Escape, then **bold** -> <b>."""
     parts = html.escape(str(s), quote=False).split("**")
     return "".join(f"<b>{p}</b>" if i % 2 else p for i, p in enumerate(parts))
+
+
+def _subtitle_html(sub: str) -> str:
+    """One line per item (name, student ID, university, reference paper); the first line is the name."""
+    lines = [inline(x) for x in str(sub).split("\n")]
+    return "<br>".join([f'<span class="name">{lines[0]}</span>'] + lines[1:]) if lines else ""
 
 
 def bullets_html(items) -> str:
@@ -126,7 +133,7 @@ def slide_html(i: int, n: int, s: dict, lang: str) -> str:
     if s.get("kind") == "title":
         return (f'<section class="slide"><div class="title-slide"><div class="band"></div><div class="band2"></div>'
                 f'<div class="inner"><div class="kicker">{inline(s.get("kicker", ""))}</div><h1>{inline(s["title"])}</h1>'
-                f'<div class="sub">{s.get("subtitle_html") or inline(s.get("subtitle", ""))}</div></div></div></section>')
+                f'<div class="sub">{s.get("subtitle_html") or _subtitle_html(s.get("subtitle", ""))}</div></div></div></section>')
     text = f'<p class="lead">{inline(s["lead"])}</p>' if s.get("lead") else ""
     if s.get("bullets"):
         text += bullets_html(s["bullets"])
@@ -292,10 +299,18 @@ def build_pptx(slides: list[dict], lang: str) -> Path:
         if s.get("kind") == "title":
             box(sl, 0, 0, 14, H, ACCENT)
             box(sl, 14, 0, 3, H, ORANGE)
-            text(sl, 37, 38, W - 63, 10, _upper(s.get("kicker", ""), lang), 13, ACCENT, True)
-            text(sl, 37, 50, W - 63, 60, s["title"], 30, INK, True, MSO_ANCHOR.MIDDLE)
-            box(sl, 37, 116, W - 63, 0.4, RULE)
-            text(sl, 37, 120, W - 63, 40, _plain(s.get("subtitle", "")), 14, MUTED)
+            cx, cw = 30, W - 52   # centred block to the right of the colour band
+            text(sl, cx, 30, cw, 10, _upper(s.get("kicker", ""), lang), 13, ACCENT, True, align=PP_ALIGN.CENTER)
+            text(sl, cx, 42, cw, 50, s["title"], 30, INK, True, MSO_ANCHOR.MIDDLE, align=PP_ALIGN.CENTER)
+            box(sl, cx, 98, cw, 0.4, RULE)
+            tb = sl.shapes.add_textbox(Mm(cx), Mm(102), Mm(cw), Mm(50))
+            tf = tb.text_frame
+            tf.word_wrap = True
+            for k, line in enumerate(_plain(s.get("subtitle", "")).split("\n")):
+                para = tf.paragraphs[0] if k == 0 else tf.add_paragraph()
+                para.alignment = PP_ALIGN.CENTER
+                para.space_after = Pt(3)
+                _runs(para, line, 16 if k == 0 else 14, INK if k == 0 else MUTED, k == 0)
         else:
             box(sl, 0, 0, W * 0.7, 2.6, ACCENT)
             box(sl, W * 0.7, 0, W * 0.3, 2.6, ORANGE)
