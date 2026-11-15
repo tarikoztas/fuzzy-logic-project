@@ -39,3 +39,6 @@ report/*.synctex.gz
 
 # Private working notes (Turkish planning docs) - not published (D-034)
 docs/
+
+# Local copy of the Classroom submission files
+classroom_teslim/
