@@ -41,7 +41,7 @@ def panel(names: list[str], level: float, stem: str) -> None:
         y = noise.add_noise(clean, "mixed", level / 100, 0)
         ims = [clean, y]
         for m in METHODS:
-            res, _ = run_method(y, K, 0, m)
+            res = run_method(y, K, 0, m)[0]  # (result, times, sigma_used)
             ims.append(as_gray_levels(res.labels, gt, K))
         ims.append(gt / max(1, K - 1))
         for j, im in enumerate(ims):

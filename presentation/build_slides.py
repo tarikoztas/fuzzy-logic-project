@@ -167,6 +167,11 @@ def _plain(s) -> str:
     return str(s).replace("**", "")
 
 
+def _upper(s: str, lang: str) -> str:
+    """Upper case with the Turkish dotted/dotless i (i -> İ, ı -> I); str.upper() would give I for both."""
+    return (s.replace("i", "İ").replace("ı", "I") if lang == "tr" else s).upper()
+
+
 def _lines(items, chars: int) -> float:
     """Rough number of rendered lines of a bullet list for a text box `chars` characters wide."""
     n = 0.0
@@ -287,7 +292,7 @@ def build_pptx(slides: list[dict], lang: str) -> Path:
         if s.get("kind") == "title":
             box(sl, 0, 0, 14, H, ACCENT)
             box(sl, 14, 0, 3, H, ORANGE)
-            text(sl, 37, 38, W - 63, 10, s.get("kicker", "").upper(), 13, ACCENT, True)
+            text(sl, 37, 38, W - 63, 10, _upper(s.get("kicker", ""), lang), 13, ACCENT, True)
             text(sl, 37, 50, W - 63, 60, s["title"], 30, INK, True, MSO_ANCHOR.MIDDLE)
             box(sl, 37, 116, W - 63, 0.4, RULE)
             text(sl, 37, 120, W - 63, 40, _plain(s.get("subtitle", "")), 14, MUTED)
@@ -295,7 +300,7 @@ def build_pptx(slides: list[dict], lang: str) -> Path:
             box(sl, 0, 0, W * 0.7, 2.6, ACCENT)
             box(sl, W * 0.7, 0, W * 0.3, 2.6, ORANGE)
             if s.get("section"):
-                text(sl, PAD_X, HEAD_TOP - 1, 200, 7, _plain(s["section"]).upper(), 10, ACCENT, True)
+                text(sl, PAD_X, HEAD_TOP - 1, 200, 7, _upper(_plain(s["section"]), lang), 10, ACCENT, True)
             text(sl, PAD_X, HEAD_TOP + 5, W - 2 * PAD_X, 14, s["title"], 24, INK, True)
             box(sl, PAD_X + 1, HEAD_TOP + 21.5, 22, 1.1, ACCENT)
             box(sl, PAD_X, H - 8.6, W - 2 * PAD_X, 0.3, RULE)

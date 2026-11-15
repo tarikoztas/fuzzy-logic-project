@@ -111,6 +111,7 @@ python experiments/analyze_contribution.py      # summaries, Wilcoxon tests, fig
 python experiments/analyze_second_iteration.py  # E8: hypotheses H5/H6, Wilcoxon tests, figures
 python experiments/plot_reproduction.py         # E1-E3 figures
 python experiments/plot_panels.py               # segmentation panels
+python experiments/plot_intro.py                # introductory figure for the slides
 python report/build_report.py                   # report.html -> report.pdf (headless Edge/Chrome)
 python report/build_report.py --lang tr         # Turkish report: report_tr.pdf
 python presentation/build_slides.py             # presentation.pdf + .pptx (add --lang tr for the Turkish slides)

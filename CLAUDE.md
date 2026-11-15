@@ -58,7 +58,7 @@ py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 .venv/Scripts/python.exe experiments/run_grid.py --config experiments/contribution/<tuning|second_iteration|bsds_second|bsds_rgb_second|robustness_second>.yaml   # E8 (ikinci iterasyon; tuning yalnız seed 100-104)
 .venv/Scripts/python.exe experiments/summarize_tuning.py; .venv/Scripts/python.exe experiments/analyze_second_iteration.py   # E8 ayar kaydı, H5/H6 kararları, figürler
 .venv/Scripts/python.exe experiments/analyze_contribution.py      # özet, Wilcoxon, figürler
-.venv/Scripts/python.exe experiments/plot_reproduction.py; .venv/Scripts/python.exe experiments/plot_panels.py
+.venv/Scripts/python.exe experiments/plot_reproduction.py; .venv/Scripts/python.exe experiments/plot_panels.py; .venv/Scripts/python.exe experiments/plot_intro.py
 .venv/Scripts/python.exe report/build_report.py                   # report.html -> report.pdf + README sonuç blokları
 .venv/Scripts/python.exe report/build_report.py --lang tr         # Türkçe rapor: report_tr.pdf
 .venv/Scripts/python.exe presentation/build_slides.py [--lang tr]  # slides[_tr].html -> presentation[_tr].pdf + .pptx + konuşmacı notları
@@ -70,7 +70,7 @@ py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 
 ## 6. Durum takibi
 
-- **Durum (14.11.2026):** Faz 0–8 + ikinci iterasyon (docs/14; D-044–D-046, CP6) tamam: H5/H6 tuttu; İngilizce ve Türkçe rapor (report.pdf, report_tr.pdf) ve sunum (23 slayt, PDF+PPTX, iki dil; D-047: [1]'de raporlanan değerlerle açık karşılaştırma; D-048: demo ve tutarsızlık slaytı yok); son kontrol tamamı PASS. Öğrenciye kalan: rapor/sunum okuma ve onay, DOI kontrolü, demo provası, `docs/13` çalışması, Classroom yüklemesi.
+- **Durum (14.11.2026):** Faz 0–8 + ikinci iterasyon (docs/14; D-044–D-046, CP6) tamam: H5/H6 tuttu; İngilizce ve Türkçe rapor (report.pdf, report_tr.pdf) ve sunum (27 slayt, PDF+PPTX, iki dil; D-049: 4 giriş slaytı; D-047: [1]'de raporlanan değerlerle açık karşılaştırma; D-048: demo ve tutarsızlık slaytı yok); son kontrol tamamı PASS. Öğrenciye kalan: rapor/sunum okuma ve onay, DOI kontrolü, demo provası, `docs/13` çalışması, Classroom yüklemesi.
 
 - İlerleme: `docs/04_FAZLAR_VE_YOL_HARITASI.md` içindeki checkbox'lar (her faz sonunda işaretle).
 - Kararlar: `docs/06_KARARLAR.md` (yeni karar → yeni satır) **ve** herkese açık özeti `report/decisions.md`. Hocaya bağlı sorular kapatıldı (öğrenci hocaya sormayacak); yeni belirsizlikte en savunulabilir seçimi yap, gerekçesiyle iki dosyaya da yaz.
