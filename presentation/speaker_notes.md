@@ -74,20 +74,24 @@ Explain the protocol: tuning set separate from the test set, budget, pre-registr
 
 ## 19. Result: H5 holds, H6 holds
 
-FIS-σ reaches 97.00/95.08 % at 15 % on sy2/sy3, close to the paper-reported 98.53/97.36 %. Honest part: a fixed σ = 0.9 is as good on mixed noise (differences -0.02 … +0.19); the rule's value is choosing σ automatically. FIS-σ+A is the first rule base made harmless and better at low noise.
+FIS-σ reaches 97.00/95.08 % at 15 % on sy2/sy3 (paper-reported 98.53/97.36 %: closer, still below; next slides). Honest part: a fixed σ = 0.9 is as good on mixed noise (differences -0.02 … +0.19); the rule's value is choosing σ automatically. FIS-σ+A is the first rule base made harmless and better at low noise.
 
 ## 20. Beyond the test grid: noise types and real images
 
 Show that the gain carries over to the real images and to all noise types, and say clearly where the fixed σ = 0.9 is equally good.
 
-## 21. BSDS500 (5 % mixed noise) and the colour finding
+## 21. Against the paper's own numbers: closer, not better
+
+Separate the two comparisons. Controlled (same code, same noise): FIS-σ beats the paper's settings at 10–15 % and never loses meaningfully. Against the numbers printed in the paper (other implementation, other noise realizations, so indicative only): equal at low noise, still 1.53/2.28 points below at 15 % on sy2/sy3, down from 6.15/8.23. Do not claim that we beat the paper.
+
+## 22. BSDS500 (5 % mixed noise) and the colour finding
 
 Explain the colour finding (D-042) and the multichannel generalisation (D-043).
 
-## 22. What the contribution adds — and its limits
+## 23. What the contribution adds — and its limits
 
 Be clear about what was and was not done; the guideline values the analysis, not only the accuracy.
 
-## 23. Live demo and conclusion
+## 24. Live demo and conclusion
 
 Run the demo with a different noise type than in the report; backup: results/figures/demo_panel.png.

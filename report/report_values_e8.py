@@ -45,19 +45,21 @@ def second_iteration(V: dict, readme: dict, html_table) -> None:
     sig = d.groupby(["noise_pct", "method"]).sigma_used.mean().unstack("method")
     pooled = csv("e8_pooled_wilcoxon.csv")
     pz = lambda lvl, m, b: pooled[(pooled.noise_pct == lvl) & (pooled.method == m) & (pooled.baseline == b)].iloc[0]
+    e2 = csv("e2_asrfcm_vs_paper.csv")
+    pr = e2[e2.metric == "ACC"].set_index(["image", "noise_pct"]).paper_reported
     rows = []
     for img in ("sy1", "sy2", "sy3"):
         for p in (1, 5, 10, 15):
             g = d[(d.image == img) & (d.noise_pct == p)]
-            r = [img, p, mean_std(g[g.method == PAPER].ACC), mean_std(g[g.method == FIXED].ACC)]
+            r = [img, p, f2(pr[(img, p)]), mean_std(g[g.method == PAPER].ACC), mean_std(g[g.method == FIXED].ACC)]
             for m in (FS, FSA):
                 ww = w[(w.image == img) & (w.noise_pct == p) & (w.method == m)].iloc[0]
                 r.append(f"{g[g.method == m].ACC.mean():.2f} ({ww.mean_diff:+.2f}{'*' if ww['significant_0.05'] else ''})")
             rows.append(r)
-    t = pd.DataFrame(rows, columns=[L("Image", "Görüntü"), L("Noise %", "Gürültü %"), L("ASRFCM (σ = 0.3)", "ASRFCM (σ = 0.3)"),
+    t = pd.DataFrame(rows, columns=[L("Image", "Görüntü"), L("Noise %", "Gürültü %"), L("Reported [1]", "Makalede [1]"), L("ASRFCM (σ = 0.3)", "ASRFCM (σ = 0.3)"),
                                     L("σ = 0.9 fixed", "σ = 0.9 sabit"), L("FIS-σ (Δ)", "FIS-σ (Δ)"), L("FIS-σ+A (Δ)", "FIS-σ+A (Δ)")])
-    V["TABLE_e8"] = html_table(t, L("Table X. Second iteration on the test grid (seeds 0–9): ACC (%), mean ± std or mean; Δ = difference to ASRFCM with the paper's settings; * paired Wilcoxon p < 0.05",
-                                    "Tablo X. Test ızgarasında ikinci iterasyon (tohum 0–9): ACC (%), ortalama ± std ya da ortalama; Δ = makale ayarlı ASRFCM'ye göre fark; * eşleştirilmiş Wilcoxon p < 0.05"),
+    V["TABLE_e8"] = html_table(t, L("Table X. Second iteration on the test grid (seeds 0–9): ACC (%), mean ± std or mean; Reported = value printed in [1] (other implementation and noise realizations); Δ = difference to our ASRFCM with the paper's settings; * paired Wilcoxon p < 0.05",
+                                    "Tablo X. Test ızgarasında ikinci iterasyon (tohum 0–9): ACC (%), ortalama ± std ya da ortalama; Makalede = [1]'de basılı değer (başka uygulama ve gürültü örnekleri); Δ = bizim makale ayarlı ASRFCM'ye göre fark; * eşleştirilmiş Wilcoxon p < 0.05"),
                                wide=True)
     for lvl in (1, 5, 10, 15):
         V[f"E8_fs_gain{lvl}"] = f"{pz(lvl, FS, PAPER).mean_diff:+.2f}"
@@ -68,9 +70,19 @@ def second_iteration(V: dict, readme: dict, html_table) -> None:
     big = acc.loc[[("sy2", 15), ("sy3", 15)]]
     V["E8_fs_15_sy2"], V["E8_fs_15_sy3"] = f2(big.loc[("sy2", 15), FS]), f2(big.loc[("sy3", 15), FS])
     V["E8_paper_15_sy2"], V["E8_paper_15_sy3"] = f2(big.loc[("sy2", 15), PAPER]), f2(big.loc[("sy3", 15), PAPER])
-    e2 = csv("e2_asrfcm_vs_paper.csv")
-    pr = e2[e2.metric == "ACC"].set_index(["image", "noise_pct"]).paper_reported
     V["E8_reported_15_sy2"], V["E8_reported_15_sy3"] = f2(pr[("sy2", 15)]), f2(pr[("sy3", 15)])
+    # comparison with the values printed in [1] (indicative only: other implementation and noise realizations)
+    rep_fs = pd.Series({k: acc.loc[k, FS] - pr[k] for k in acc.index})
+    rep_pp = pd.Series({k: acc.loc[k, PAPER] - pr[k] for k in acc.index})
+    lo = rep_fs[[k for k in rep_fs.index if k[1] in (1, 5)]]
+    V["E8_rep_low_min"], V["E8_rep_low_max"] = f"{lo.min():+.2f}", f"{lo.max():+.2f}"
+    V["E8_rep_low_n"] = f"{int((lo >= 0).sum())}/{len(lo)}"
+    V["E8_rep_sy1_15"] = f"{rep_fs[('sy1', 15)]:+.2f}"
+    V["E8_gap15_before"] = f"{-rep_pp[('sy2', 15)]:.2f}/{-rep_pp[('sy3', 15)]:.2f}"
+    V["E8_gap15_after"] = f"{-rep_fs[('sy2', 15)]:.2f}/{-rep_fs[('sy3', 15)]:.2f}"
+    V["E8_gap10_after"] = f"{-rep_fs[('sy2', 10)]:.2f}/{-rep_fs[('sy3', 10)]:.2f}"
+    k15 = [("sy2", 15), ("sy3", 15)]
+    V["E8_gap15_closed"] = f"{100 * (1 - rep_fs[k15].abs().sum() / rep_pp[k15].abs().sum()):.0f}"
     low = (acc[FS] - acc[PAPER]).loc[(slice(None), [1, 5])]
     V["E8_fs_worst_low"] = f"{low.min():+.2f}"
     dc = acc[FS] - acc[FIXED]
@@ -173,15 +185,36 @@ def second_iteration(V: dict, readme: dict, html_table) -> None:
         V["E8_rule_value"] = L(
             f"noise-free images: FIS-σ {g('E8_rob_mixed_0_fs')}&nbsp;%, fixed σ = 0.9 {g('E8_rob_mixed_0_fixed')}&nbsp;%, paper {g('E8_rob_mixed_0_paper')}&nbsp;%",
             f"gürültüsüz görüntüler: FIS-σ {g('E8_rob_mixed_0_fs')}&nbsp;%, sabit σ = 0.9 {g('E8_rob_mixed_0_fixed')}&nbsp;%, makale {g('E8_rob_mixed_0_paper')}&nbsp;%")
+        rr = V.get("E6_paper_ours_mean", "–")
+        V["E8_vs_reported_text"] = L(
+            f"Table&nbsp;X also lists the values printed in [1]. They come from another implementation and other noise realizations, so this "
+            f"comparison is indicative only; the controlled comparison is the one with our implementation of the method above. At 1 and 5&nbsp;% noise "
+            f"FIS-σ differs from the reported values by {g('E8_rep_low_min')} to {g('E8_rep_low_max')} points (equal or higher in {g('E8_rep_low_n')} "
+            f"settings, which we read as agreement, not as an improvement over [1]). At 10 and 15&nbsp;% it is still below them on the three-class images: "
+            f"{g('E8_gap10_after')} points at 10&nbsp;% and {g('E8_gap15_after')} points at 15&nbsp;% on sy2/sy3, compared with {g('E8_gap15_before')} points "
+            f"with the paper's settings, so about {g('E8_gap15_closed')}&nbsp;% of the gap at 15&nbsp;% is closed, but not all of it; on sy1 it matches the "
+            f"reported value ({g('E8_rep_sy1_15')}). On the colour BSDS500 images FIS-σ ({g('E8_bsds_rgb_fs')}&nbsp;%) also stays below the reported "
+            f"{rr}&nbsp;%. In short, the second iteration improves the method under identical conditions, but it does not exceed the results reported in [1].",
+            f"Tablo&nbsp;X, [1]'de basılı değerleri de veriyor. Bu değerler başka bir uygulamadan ve başka gürültü örneklerinden geldiği için bu karşılaştırma "
+            f"yalnızca yol göstericidir; denetimli karşılaştırma yukarıdaki, yöntemin bizim uygulamamızla yapılanıdır. %1 ve %5 gürültüde FIS-σ raporlanan "
+            f"değerlerden {g('E8_rep_low_min')} ile {g('E8_rep_low_max')} puan farklı ({g('E8_rep_low_n')} ayarda eşit ya da daha yüksek; bunu [1]'e göre bir "
+            f"iyileşme değil, uyum olarak okuyoruz). %10 ve %15'te üç sınıflı görüntülerde hâlâ raporlanan değerlerin altında: sy2/sy3'te %10'da "
+            f"{g('E8_gap10_after')}, %15'te {g('E8_gap15_after')} puan; makale ayarlarıyla bu fark {g('E8_gap15_before')} puandı. Yani %15'teki farkın yaklaşık "
+            f"%{g('E8_gap15_closed')}'i kapanıyor, tamamı değil; sy1'de raporlanan değerle aynı ({g('E8_rep_sy1_15')}). Renkli BSDS500 görüntülerinde de FIS-σ "
+            f"(%{g('E8_bsds_rgb_fs')}) raporlanan %{rr} değerinin altında kalıyor. Kısacası ikinci iterasyon yöntemi aynı koşullar altında iyileştiriyor, "
+            f"ama [1]'de raporlanan sonuçları geçmiyor.")
         sp_fs, sp_fx = g("E8_rob_salt_pepper_20_fs"), g("E8_rob_salt_pepper_20_fixed")
         V["E8_sp20"] = L(f"{sp_fs} vs {sp_fx}&nbsp;% at 20&nbsp;%", f"%20'de {sp_fs} ve {sp_fx}&nbsp;%")
     else:  # results not available yet
-        V["E8_beyond_text"] = V["E8_rule_value"] = V["E8_sp20"] = "–"
+        V["E8_beyond_text"] = V["E8_rule_value"] = V["E8_sp20"] = V["E8_vs_reported_text"] = "–"
 
     readme["second_iteration"] = (
         "**Second iteration (E8, pre-registered in `report/checkpoints/CP6_second_iteration_plan.md`): ACC (%) on the synthetic test grid, "
         "mean ± std over seeds 0–9; Δ vs ASRFCM with the paper's settings, * = paired Wilcoxon p < 0.05.**\n\n" + md_table(t)
         + f"\n\nH5 (FIS-σ better than the paper at 10/15 % without loss at 1/5 %) {V['E8_H5']}; H6 (FIS-σ+A never below the paper) {V['E8_H6']}; "
           f"as expected, FIS-σ is practically equal to a fixed σ = 0.9 on this grid (differences {V['E8_fs_fixed_range']} points). "
+          f"Against the values printed in [1] (other implementation and noise realizations, indicative only) FIS-σ agrees at 1–5 % "
+          f"({V['E8_rep_low_min']} … {V['E8_rep_low_max']} points) but stays below at 10–15 %: {V['E8_gap15_after']} points on sy2/sy3 at 15 %, "
+          f"down from {V['E8_gap15_before']} with the paper's settings, so the second iteration improves the method but does not exceed the reported results. "
           "Tuning log: `results/tables/e8_tuning_log.csv`; hypotheses: `results/tables/e8_hypotheses.csv`; figures `results/figures/e8_*.png`.\n\n"
           "**Guideline-format table (second iteration):**\n\n" + md_table(gl))

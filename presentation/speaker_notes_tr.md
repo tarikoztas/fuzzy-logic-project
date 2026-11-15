@@ -74,20 +74,24 @@ Protokolü anlatın: ayar kümesi test kümesinden ayrı, deneme bütçesi, ön 
 
 ## 19. Sonuç: H5 tuttu, H6 tuttu
 
-FIS-σ, %15'te sy2/sy3'te 97.00/95.08'e ulaşıyor; makalede raporlanan 98.53/97.36'e yakın. Dürüst kısım: karışık gürültüde sabit σ = 0.9 de aynı derecede iyi (farklar -0.02 … +0.19); kuralın değeri σ'yı otomatik seçmesi. FIS-σ+A, ilk kural tabanını zararsız ve düşük gürültüde daha iyi hâle getiriyor.
+FIS-σ, %15'te sy2/sy3'te 97.00/95.08'e ulaşıyor (makalede raporlanan 98.53/97.36: daha yakın ama hâlâ altında; sonraki slayt). Dürüst kısım: karışık gürültüde sabit σ = 0.9 de aynı derecede iyi (farklar -0.02 … +0.19); kuralın değeri σ'yı otomatik seçmesi. FIS-σ+A, ilk kural tabanını zararsız ve düşük gürültüde daha iyi hâle getiriyor.
 
 ## 20. Test ızgarasının ötesi: gürültü türleri ve gerçek görüntüler
 
 Kazancın gerçek görüntülere ve tüm gürültü türlerine taşındığını gösterin; sabit σ = 0.9'un nerede aynı derecede iyi olduğunu açıkça söyleyin.
 
-## 21. BSDS500 (%5 karışık gürültü) ve renk bulgusu
+## 21. Makalenin kendi sayılarına göre: daha yakın, ama daha iyi değil
+
+İki karşılaştırmayı ayırın. Denetimli (aynı kod, aynı gürültü): FIS-σ %10–15'te makale ayarlarını geçiyor, hiçbir yerde anlamlı kaybı yok. Makalede basılı sayılara göre (başka uygulama, başka gürültü örnekleri; yalnızca yol gösterici): düşük gürültüde eşit, %15'te sy2/sy3'te hâlâ 1.53/2.28 puan aşağıda (önce 6.15/8.23). 'Makaleyi geçtik' demeyin.
+
+## 22. BSDS500 (%5 karışık gürültü) ve renk bulgusu
 
 Renk bulgusunu (D-042) ve çok kanallı genellemeyi (D-043) açıklayın.
 
-## 22. Katkının getirdikleri — ve sınırları
+## 23. Katkının getirdikleri — ve sınırları
 
 Neyin yapılıp neyin yapılmadığını açıkça söyleyin; yönerge yalnız doğruluğu değil analizi de değerlendiriyor.
 
-## 23. Canlı demo ve sonuç
+## 24. Canlı demo ve sonuç
 
 Demoyu rapordakinden farklı bir gürültü türüyle çalıştırın; yedek: results/figures/demo_panel.png.

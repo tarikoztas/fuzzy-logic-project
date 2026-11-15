@@ -86,3 +86,7 @@ Verdicts computed by `experiments/analyze_second_iteration.py` (`results/tables/
 - Noise types: mixed 20 % 86.90 → 93.49; salt-and-pepper 20 % 99.35 → 99.35 (fixed σ = 0.9: 99.66) — the median-based noise estimate does not see sparse impulses (D-046).
 
 **Interpretation.** The diagnosis of the first iteration is confirmed: bounding the trust in the noisy pixel removes the loss of the first rule base, and adapting the reward factor closes most of the high-noise reproduction gap. As pre-registered (H5-control), the fuzzy σ is not better than the best fixed value on mixed noise; its contribution is the automatic choice of σ.
+
+### Addendum (15.11.2026) — comparison with the values printed in [1]
+
+Added to the report (Table X column "Reported [1]", paragraph in Section VIII-I, abstract, conclusion, limitations) and as slide 21. It is descriptive only and does not change the verdicts above, which compare against our implementation of the method under identical noise. Against the printed values (other implementation, other noise realizations): at 1–5 % FIS-σ is within −0.06 … +0.14 points (agreement); at 15 % on sy2/sy3 it is still 1.53/2.28 points below, down from 6.15/8.23 with the paper's settings (≈ 73 % of the gap closed); on colour BSDS500 85.43 vs 87.36 %. The second iteration therefore improves the method but does not exceed the results reported in [1] (D-047).

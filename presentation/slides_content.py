@@ -4,7 +4,7 @@ report/report_values.py (CSV-based), so both languages show identical values.
 Guideline Sec. 4 coverage: problem & motivation (2), literature (3), fuzzy-logic background (4),
 method & architecture incl. inputs/outputs, membership functions, rules, inference, defuzzification
 (5-9), experiments & data (10), paper's results (11), critical evaluation (14, 22), our implementation
-and contribution with comparative results (12-13, 15-21), demo (23).
+and contribution with comparative results (12-13, 15-22), demo (24).
 """
 from __future__ import annotations
 
@@ -52,6 +52,20 @@ def _e8_rows():
                 ww = w[(w.image == img) & (w.noise_pct == p) & (w.method == m)].iloc[0]
                 cell.append(f"{g[m]:.2f} ({ww.mean_diff:+.1f}{'*' if ww['significant_0.05'] else ''})")
             rows.append([f"{img} {p}%", f"{g['ASRFCM-paper']:.2f}", f"{g['sigma=0.9 (fixed)']:.2f}", *cell])
+    return rows
+
+
+def _e8_reported_rows():
+    """FIS-σ against the values printed in [1] (indicative: other implementation and noise realizations)."""
+    d = pd.read_csv(T + "e8_second_iteration_runs.csv")
+    pr = pd.read_csv(T + "e2_asrfcm_vs_paper.csv").query("metric == 'ACC'").set_index(["image", "noise_pct"]).paper_reported
+    rows = []
+    for img in ("sy2", "sy3"):
+        for p in (5, 10, 15):
+            g = d[(d.image == img) & (d.noise_pct == p)].groupby("method").ACC.mean()
+            r = pr[(img, p)]
+            rows.append([f"{img} {p}%", f"{r:.2f}", f"{g['ASRFCM-paper']:.2f} ({g['ASRFCM-paper'] - r:+.2f})",
+                         f"{g['FIS-sigma']:.2f} ({g['FIS-sigma'] - r:+.2f})"])
     return rows
 
 
@@ -222,8 +236,8 @@ def slides(lang: str = "en") -> list[dict]:
                       (V["E8_fsa_worst"], L("worst difference of FIS-σ+A to the paper", "FIS-σ+A'nın makaleye göre en kötü farkı"))],
          "table": {"columns": [L("Setting", "Ayar"), "σ = 0.3", L("σ = 0.9 fixed", "σ = 0.9 sabit"), "FIS-σ (Δ)", "FIS-σ+A (Δ)"], "rows": _e8_rows(),
                    "caption": L("ACC (%), mean of seeds 0–9; Δ vs σ = 0.3; * Wilcoxon p < 0.05", "ACC (%), 0–9 tohumlarının ortalaması; Δ σ = 0.3'e göre; * Wilcoxon p < 0.05")},
-         "notes": L(f"FIS-σ reaches {V['E8_fs_15_sy2']}/{V['E8_fs_15_sy3']} % at 15 % on sy2/sy3, close to the paper-reported {V['E8_reported_15_sy2']}/{V['E8_reported_15_sy3']} %. Honest part: a fixed σ = 0.9 is as good on mixed noise (differences {V['E8_fs_fixed_range']}); the rule's value is choosing σ automatically. FIS-σ+A is the first rule base made harmless and better at low noise.",
-                    f"FIS-σ, %15'te sy2/sy3'te {V['E8_fs_15_sy2']}/{V['E8_fs_15_sy3']}'e ulaşıyor; makalede raporlanan {V['E8_reported_15_sy2']}/{V['E8_reported_15_sy3']}'e yakın. Dürüst kısım: karışık gürültüde sabit σ = 0.9 de aynı derecede iyi (farklar {V['E8_fs_fixed_range']}); kuralın değeri σ'yı otomatik seçmesi. FIS-σ+A, ilk kural tabanını zararsız ve düşük gürültüde daha iyi hâle getiriyor.")},
+         "notes": L(f"FIS-σ reaches {V['E8_fs_15_sy2']}/{V['E8_fs_15_sy3']} % at 15 % on sy2/sy3 (paper-reported {V['E8_reported_15_sy2']}/{V['E8_reported_15_sy3']} %: closer, still below; next slides). Honest part: a fixed σ = 0.9 is as good on mixed noise (differences {V['E8_fs_fixed_range']}); the rule's value is choosing σ automatically. FIS-σ+A is the first rule base made harmless and better at low noise.",
+                    f"FIS-σ, %15'te sy2/sy3'te {V['E8_fs_15_sy2']}/{V['E8_fs_15_sy3']}'e ulaşıyor (makalede raporlanan {V['E8_reported_15_sy2']}/{V['E8_reported_15_sy3']}: daha yakın ama hâlâ altında; sonraki slayt). Dürüst kısım: karışık gürültüde sabit σ = 0.9 de aynı derecede iyi (farklar {V['E8_fs_fixed_range']}); kuralın değeri σ'yı otomatik seçmesi. FIS-σ+A, ilk kural tabanını zararsız ve düşük gürültüde daha iyi hâle getiriyor.")},
         {"section": L("Contribution · iteration 2", "Katkı · iterasyon 2"), "title": L("Beyond the test grid: noise types and real images", "Test ızgarasının ötesi: gürültü türleri ve gerçek görüntüler"),
          "bullets": [L(f"BSDS500 gray: σ = 0.3 {V['E8_bsds_gray_paper']} → FIS-σ {V['E8_bsds_gray_fs']} % (fixed 0.9: {V['E8_bsds_gray_fixed']} %)",
                        f"BSDS500 gri: σ = 0.3 {V['E8_bsds_gray_paper']} → FIS-σ {V['E8_bsds_gray_fs']} (sabit 0.9: {V['E8_bsds_gray_fixed']})"),
@@ -236,6 +250,21 @@ def slides(lang: str = "en") -> list[dict]:
          "image": f"results/figures/e8_robustness_acc{'_tr' if lang == 'tr' else ''}.png",
          "notes": L("Show that the gain carries over to the real images and to all noise types, and say clearly where the fixed σ = 0.9 is equally good.",
                     "Kazancın gerçek görüntülere ve tüm gürültü türlerine taşındığını gösterin; sabit σ = 0.9'un nerede aynı derecede iyi olduğunu açıkça söyleyin.")},
+        {"section": L("Contribution · iteration 2", "Katkı · iterasyon 2"),
+         "title": L("Against the paper's own numbers: closer, not better", "Makalenin kendi sayılarına göre: daha yakın, ama daha iyi değil"),
+         "callouts": [(f"{V['E8_gap15_closed']} %", L("of the gap to [1] at 15 % closed (sy2/sy3)", "%15'te [1]'e olan farkın kapanan kısmı (sy2/sy3)")),
+                      (V["E8_gap15_after"], L(f"points still below [1] at 15 % (was {V['E8_gap15_before']})", f"%15'te [1]'in hâlâ altında kalınan puan (önce {V['E8_gap15_before']})")),
+                      (f"{V['E8_bsds_rgb_fs']} / {V['E6_paper_ours_mean']}", L("BSDS500 colour: FIS-σ / reported in [1]", "BSDS500 renkli: FIS-σ / [1]'de raporlanan"))],
+         "table": {"columns": [L("Setting", "Ayar"), L("Reported [1]", "Makalede [1]"), L("σ = 0.3, ours (Δ)", "σ = 0.3, bizim (Δ)"), "FIS-σ (Δ)"],
+                   "rows": _e8_reported_rows(),
+                   "caption": L(f"ACC (%), mean of seeds 0–9; Δ = difference to the value reported in [1]. At 1–5 % FIS-σ is within {V['E8_rep_low_min']} … {V['E8_rep_low_max']} of [1] (agreement)",
+                                f"ACC (%), 0–9 tohumlarının ortalaması; Δ = [1]'de raporlanan değere göre fark. %1–5'te FIS-σ [1]'den {V['E8_rep_low_min']} … {V['E8_rep_low_max']} farklı (uyum)")},
+         "notes": L("Separate the two comparisons. Controlled (same code, same noise): FIS-σ beats the paper's settings at 10–15 % and never loses meaningfully. "
+                    "Against the numbers printed in the paper (other implementation, other noise realizations, so indicative only): equal at low noise, "
+                    f"still {V['E8_gap15_after']} points below at 15 % on sy2/sy3, down from {V['E8_gap15_before']}. Do not claim that we beat the paper.",
+                    "İki karşılaştırmayı ayırın. Denetimli (aynı kod, aynı gürültü): FIS-σ %10–15'te makale ayarlarını geçiyor, hiçbir yerde anlamlı kaybı yok. "
+                    "Makalede basılı sayılara göre (başka uygulama, başka gürültü örnekleri; yalnızca yol gösterici): düşük gürültüde eşit, %15'te sy2/sy3'te "
+                    f"hâlâ {V['E8_gap15_after']} puan aşağıda (önce {V['E8_gap15_before']}). 'Makaleyi geçtik' demeyin.")},
         {"section": L("Real images", "Gerçek görüntüler"), "title": L("BSDS500 (5 % mixed noise) and the colour finding", "BSDS500 (%5 karışık gürültü) ve renk bulgusu"),
          "bullets": [L(f"Gray protocol: mean ACC FCM {V['E6_fcm_mean']} → method {V['E6_asr_mean']} % (paper: {V['E6_paper_fcm_mean']} → {V['E6_paper_ours_mean']} %, colour)",
                        f"Gri protokol: ortalama ACC FCM {V['E6_fcm_mean']} → yöntem {V['E6_asr_mean']} (makale: {V['E6_paper_fcm_mean']} → {V['E6_paper_ours_mean']}, renkli)"),
@@ -247,7 +276,10 @@ def slides(lang: str = "en") -> list[dict]:
         {"section": L("Discussion", "Tartışma"), "title": L("What the contribution adds — and its limits", "Katkının getirdikleri — ve sınırları"),
          "bullets": [L("Covers the guideline's contribution types: new inputs/outputs, MF shapes, defuzzification, Mamdani vs Sugeno, rule-base change, new scenario (colour), robustness, ablation, cost",
                        "Yönergedeki katkı türlerini kapsıyor: yeni girdi/çıktılar, üyelik şekilleri, durulaştırma, Mamdani–Sugeno, kural tabanı değişikliği, yeni senaryo (renkli), dayanıklılık, ablasyon, maliyet"),
-                     L("Negative first result analysed → diagnosis tested in a pre-registered second iteration → H5/H6 hold", "Olumsuz ilk sonuç analiz edildi → teşhis önceden kayıtlı ikinci iterasyonda sınandı → H5/H6 tuttu"),
+                     L("Process: iteration 1 failed (H1/H2 rejected) → failure analysed → diagnosis tested in a pre-registered iteration 2 → H5/H6 hold",
+                       "Süreç: iterasyon 1 başarısız (H1/H2 reddedildi) → başarısızlık analiz edildi → teşhis önceden kayıtlı iterasyon 2'de sınandı → H5/H6 tuttu"),
+                     L(f"Better than the paper's method under identical conditions; below the values reported in [1] at 10–15 % ({V['E8_gap15_after']} points at 15 %)",
+                       f"Aynı koşullarda makalenin yönteminden iyi; %10–15'te [1]'de raporlanan değerlerin altında (%15'te {V['E8_gap15_after']} puan)"),
                      L("Limits: test images re-created from figures; 8 comparison methods not re-implemented; K must be known", "Sınırlar: test görüntüleri şekillerden yeniden üretildi; 8 karşılaştırma yöntemi yeniden yazılmadı; K bilinmeli"),
                      L("Iteration 2 tuned on the same images (other seeds); fixed σ = 0.9 equally good on mixed noise", "İterasyon 2 aynı görüntülerde (başka tohumlarla) ayarlandı; karışık gürültüde sabit σ = 0.9 de aynı derecede iyi"),
                      L("Next: a texture-robust noise estimate, per-pixel rules learned from data, automatic K", "Sonraki adımlar: dokuya dayanıklı gürültü tahmini, veriden öğrenilen piksel düzeyi kurallar, otomatik K")],
@@ -256,8 +288,8 @@ def slides(lang: str = "en") -> list[dict]:
          "bullets": [L("python demo/demo.py --image sy3 --noise salt_pepper --level 20 --pixel 120 80", "python demo/demo.py --image sy3 --noise salt_pepper --level 20 --pixel 120 80"),
                      L("FCM, the method, both rule-base iterations side by side; σ rule firing for the image and α, β, γ rules for one pixel (offline, ≈ 20 s)",
                        "FCM, yöntem ve iki kural tabanı iterasyonu yan yana; görüntü için σ kurallarının, bir piksel için α, β, γ kurallarının ateşlenmesi (çevrimdışı, ≈ 20 s)"),
-                     L("Conclusion: faithful reproduction at low/medium noise; six documented inconsistencies; a fuzzy reward factor closes most of the high-noise gap",
-                       "Sonuç: düşük/orta gürültüde sadık yeniden üretim; belgelenmiş altı tutarsızlık; bulanık ödül katsayısı yüksek gürültü farkının çoğunu kapatıyor"),
+                     L("Conclusion: faithful reproduction at low/medium noise; six documented inconsistencies; a fuzzy reward factor beats the paper's settings at high noise and narrows, but does not close, the gap to the reported values",
+                       "Sonuç: düşük/orta gürültüde sadık yeniden üretim; belgelenmiş altı tutarsızlık; bulanık ödül katsayısı yüksek gürültüde makale ayarlarını geçiyor, raporlanan değerlere olan farkı daraltıyor ama kapatmıyor"),
                      L("Code, data steps, results, decisions: github.com/tarikoztas/fuzzy-logic-project", "Kod, veri adımları, sonuçlar, kararlar: github.com/tarikoztas/fuzzy-logic-project")],
          "notes": L("Run the demo with a different noise type than in the report; backup: results/figures/demo_panel.png.",
                     "Demoyu rapordakinden farklı bir gürültü türüyle çalıştırın; yedek: results/figures/demo_panel.png.")},

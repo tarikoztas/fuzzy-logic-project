@@ -215,22 +215,22 @@ More results: robustness per noise type `results/figures/e5_robustness_acc.png`,
 <!-- BEGIN:second_iteration -->
 **Second iteration (E8, pre-registered in `report/checkpoints/CP6_second_iteration_plan.md`): ACC (%) on the synthetic test grid, mean ± std over seeds 0–9; Δ vs ASRFCM with the paper's settings, * = paired Wilcoxon p < 0.05.**
 
-| Image | Noise % | ASRFCM (σ = 0.3) | σ = 0.9 fixed | FIS-σ (Δ) | FIS-σ+A (Δ) |
-|---|---|---|---|---|---|
-| sy1 | 1 | 99.99 ± 0.00 | 99.99 ± 0.00 | 99.99 (+0.00) | 99.99 (+0.00) |
-| sy1 | 5 | 99.91 ± 0.02 | 99.92 ± 0.01 | 99.92 (+0.01*) | 99.92 (+0.01*) |
-| sy1 | 10 | 99.72 ± 0.03 | 99.77 ± 0.02 | 99.77 (+0.06*) | 99.77 (+0.05*) |
-| sy1 | 15 | 99.34 ± 0.04 | 99.54 ± 0.03 | 99.55 (+0.21*) | 99.48 (+0.13*) |
-| sy2 | 1 | 99.58 ± 0.02 | 99.51 ± 0.01 | 99.57 (-0.01*) | 99.89 (+0.31*) |
-| sy2 | 5 | 99.24 ± 0.04 | 99.23 ± 0.03 | 99.25 (+0.01) | 99.47 (+0.23*) |
-| sy2 | 10 | 97.82 ± 0.09 | 98.77 ± 0.06 | 98.77 (+0.95*) | 98.54 (+0.71*) |
-| sy2 | 15 | 92.38 ± 0.19 | 96.88 ± 0.07 | 97.00 (+4.61*) | 95.47 (+3.08*) |
-| sy3 | 1 | 99.95 ± 0.01 | 99.96 ± 0.01 | 99.96 (+0.00*) | 99.96 (+0.00*) |
-| sy3 | 5 | 99.22 ± 0.04 | 99.39 ± 0.05 | 99.37 (+0.15*) | 99.37 (+0.15*) |
-| sy3 | 10 | 96.62 ± 0.12 | 98.34 ± 0.08 | 98.38 (+1.76*) | 97.76 (+1.14*) |
-| sy3 | 15 | 89.13 ± 0.35 | 94.88 ± 0.18 | 95.08 (+5.95*) | 92.94 (+3.81*) |
+| Image | Noise % | Reported [1] | ASRFCM (σ = 0.3) | σ = 0.9 fixed | FIS-σ (Δ) | FIS-σ+A (Δ) |
+|---|---|---|---|---|---|---|
+| sy1 | 1 | 99.89 | 99.99 ± 0.00 | 99.99 ± 0.00 | 99.99 (+0.00) | 99.99 (+0.00) |
+| sy1 | 5 | 99.86 | 99.91 ± 0.02 | 99.92 ± 0.01 | 99.92 (+0.01*) | 99.92 (+0.01*) |
+| sy1 | 10 | 99.75 | 99.72 ± 0.03 | 99.77 ± 0.02 | 99.77 (+0.06*) | 99.77 (+0.05*) |
+| sy1 | 15 | 99.56 | 99.34 ± 0.04 | 99.54 ± 0.03 | 99.55 (+0.21*) | 99.48 (+0.13*) |
+| sy2 | 1 | 99.43 | 99.58 ± 0.02 | 99.51 ± 0.01 | 99.57 (-0.01*) | 99.89 (+0.31*) |
+| sy2 | 5 | 99.22 | 99.24 ± 0.04 | 99.23 ± 0.03 | 99.25 (+0.01) | 99.47 (+0.23*) |
+| sy2 | 10 | 99.04 | 97.82 ± 0.09 | 98.77 ± 0.06 | 98.77 (+0.95*) | 98.54 (+0.71*) |
+| sy2 | 15 | 98.53 | 92.38 ± 0.19 | 96.88 ± 0.07 | 97.00 (+4.61*) | 95.47 (+3.08*) |
+| sy3 | 1 | 99.84 | 99.95 ± 0.01 | 99.96 ± 0.01 | 99.96 (+0.00*) | 99.96 (+0.00*) |
+| sy3 | 5 | 99.43 | 99.22 ± 0.04 | 99.39 ± 0.05 | 99.37 (+0.15*) | 99.37 (+0.15*) |
+| sy3 | 10 | 98.91 | 96.62 ± 0.12 | 98.34 ± 0.08 | 98.38 (+1.76*) | 97.76 (+1.14*) |
+| sy3 | 15 | 97.36 | 89.13 ± 0.35 | 94.88 ± 0.18 | 95.08 (+5.95*) | 92.94 (+3.81*) |
 
-H5 (FIS-σ better than the paper at 10/15 % without loss at 1/5 %) holds; H6 (FIS-σ+A never below the paper) holds; as expected, FIS-σ is practically equal to a fixed σ = 0.9 on this grid (differences -0.02 … +0.19 points). Tuning log: `results/tables/e8_tuning_log.csv`; hypotheses: `results/tables/e8_hypotheses.csv`; figures `results/figures/e8_*.png`.
+H5 (FIS-σ better than the paper at 10/15 % without loss at 1/5 %) holds; H6 (FIS-σ+A never below the paper) holds; as expected, FIS-σ is practically equal to a fixed σ = 0.9 on this grid (differences -0.02 … +0.19 points). Against the values printed in [1] (other implementation and noise realizations, indicative only) FIS-σ agrees at 1–5 % (-0.06 … +0.14 points) but stays below at 10–15 %: 1.53/2.28 points on sy2/sy3 at 15 %, down from 6.15/8.23 with the paper's settings, so the second iteration improves the method but does not exceed the reported results. Tuning log: `results/tables/e8_tuning_log.csv`; hypotheses: `results/tables/e8_hypotheses.csv`; figures `results/figures/e8_*.png`.
 
 **Guideline-format table (second iteration):**
 
@@ -252,7 +252,7 @@ H5 (FIS-σ better than the paper at 10/15 % without loss at 1/5 %) holds; H6 (FI
 - The synthetic images and the BSDS500 ground truths were re-created from the paper's figures; the noise model is our reading of an under-specified description. Remaining differences to the paper are discussed in the report.
 - K must be given in advance (as in the paper).
 - The first fuzzy rule base was designed from an analysis of the synthetic images; it did not generalise to high noise and was not tuned further on the test data.
-- The second iteration was tuned on other noise realisations of the same synthetic images, and its ideas came from observations on the test seeds; on mixed noise its gain equals that of a fixed σ = 0.9, and its image-level noise estimate counts texture as noise.
+- The second iteration was tuned on other noise realisations of the same synthetic images, and its ideas came from observations on the test seeds; on mixed noise its gain equals that of a fixed σ = 0.9, and its image-level noise estimate counts texture as noise. It improves the method under identical conditions but remains below the values reported in [1] at 10–15 % noise.
 - The method is described for gray values; colour images are handled by our minimal multichannel generalisation (D-043). The paper's further datasets (AID, MSRC, NASA, COCO; Table 10) were not used.
 - Run times were measured on one laptop CPU with our Python implementation and are not comparable to the paper's MATLAB timings.
 
