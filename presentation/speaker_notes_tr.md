@@ -20,90 +20,90 @@ Dinleyicinin ne kazandığını söyleyin: sınanmış bir uygulama, yorumlanabi
 
 Kısa tutun (20 saniye).
 
-## 6. Gürültülü görüntü bölütleme FCM için neden zor?
+## 6. Gürültülü görüntüler düz bulanık kümeleme için neden zor?
 
-Gürültülü görüntüleri ve FCM'nin nasıl başarısız olduğunu gösterin. Motivasyon: gerçek görüntülerde (tıbbi, uzaktan algılama) aynı anda birkaç gürültü türü bulunur.
+Gürültülü görüntüleri ve FCM'nin nasıl başarısız olduğunu gösterin. Sorulursa: FCM, Σ_i u = 1 koşuluyla Σ u^m (y − c)² değerini en küçükler; karışık gürültü Gauss + benek + tuz-biberdir (sy3, %15: ACC ≈ %56).
 
-## 7. Önceki çalışmalar FCM'ye uzamsal bilgiyi nasıl ekliyor?
+## 7. Önceki çalışmalar FCM'ye gürültüye karşı nasıl yardım ediyor?
 
-Dört akımı anlatın; makale beş bileşeni birleştiren tek çalışma. En yakın akrabaları: SRFCM (seyreklik çerçevesi) ve FSC_LNML (aynı laboratuvar).
+İsim sorulursa: yerel — BCFCM, FCM_S, FGFCM, FLICM, FRFCM; yerel-olmayan — FCM_SNLS, FALRCM, FSC_LNML; dalgacık/seyrek — WFCM, SRFCM, DSFCM_N.
 
-## 8. Bulanık kümeler, bulanık kümeleme ve bulanık çıkarım
+## 8. Üç fikirde bulanık mantık
 
-Derslerle bağ kurun. FCM üyelik matrisi nedeniyle bulanıktır; makalede açık bir kural tabanı yok — geliştirmemizin çıkış noktası bu.
+Derslerle bağ kurun. Sorulursa: VE = min, çıkarım = min (kırpma), birleştirme = max; durulaştırma ağırlık merkezi, açıortay ya da maksimumların ortalamasıyla; Sugeno sabit çıktılar ve ağırlıklı ortalama kullanır.
 
-## 9. Yöntemin mimarisi (ve geliştirmemizin yeri)
+## 9. Yöntem nasıl çalışıyor?
 
-Akışı soldan sağa anlatın. Turuncu kutu = katkımızın ilk iterasyonu; ikinci iterasyon ξ kutusunun içindeki σ'ya etki ediyor.
+Şekli soldan sağa anlatın. Turuncu kutu = ilk iterasyonumuz (ağırlıklar); ikinci iterasyon 1. görüşün içindeki σ'yı değiştiriyor. Sorulursa: uzaklık d = α(y−c)² + β(ξ−c)² + γ(ϑ−c)², ξ = yerel, ϑ = yerel-olmayan kestirim.
 
-## 10. Yerel bilgi ξ: altın oranlı ödül ve ceza kümeleri
+## 10. 1. görüş: komşuların adil oylaması
 
-Benzetme: en uç puanları silmeyen ama ağırlığını düşüren bir jüri. Küme boyutunu makalenin Şekil 1'indeki gibi aşağı yuvarlıyoruz (D-014).
+Sorulursa: ödül ağırlığı 1+σ, ceza ağırlığı 1−σ, bunlar exp(−Δgri²/τ²)·exp(−uzaklık) ile çarpılır; ödül kümesi boyutu ⌊0.618·(N_R−1)⌋; makalenin Şekil 1'i birebir yeniden üretildi (D-014).
 
-## 11. Dalgacık alanında yerel-olmayan bilgi ϑ
+## 11. 2. görüş: dalgacık alanında temizleme
 
-DTCWT'yi bir şarkıyı bas/orta/tiz kanallarına ayırma benzetmesiyle anlatın.
+Sorulursa: çift ağaçlı karmaşık dalgacık dönüşümü (DTCWT), 1 alçak geçiren + ±15°, ±45°, ±75°'de 6 alt bant; 15×15 arama penceresi ve 5×5 yamalarla yerel-olmayan ortalama, h² = 250.
 
-## 12. Uyarlamalı katsayılar ve seyrek düzenlileştirilmiş FCM
+## 12. Üç görüşü tartmak
 
-Katsayıların ölçeğini vurgulayın — geliştirmemiz için önemli hâle geliyor.
+Sorulursa: ΔG1 = k·exp(y − ξ), ΔG2 = k·exp(y − ϑ); α = 1/(ΔG1+ΔG2), β = ΔG1, γ = ΔG2, k = 15; amaç Σ u^m d + δ‖U‖₀, sert eşik √δ = 0.63, ardından normalize; w=5, S=15, υ=4, g=10, σ=0.3, k=15, δ=0.4, m=2.
 
 ## 13. Projedeki bulanık sistemler bir bakışta
 
 Bu slayt yönergenin istediği öğeleri karşılıyor: girdi/çıktı, üyelik fonksiyonları, kural tabanı, çıkarım, durulaştırma — makale ve iki iterasyon için.
 
-## 14. Veri, gürültü ve protokol
+## 14. Nasıl test ettik?
 
-Adilliği vurgulayın: aynı gürültü örnekleri ve başlangıçlar; her seferinde tek bir etken değişiyor.
+Sorulursa: karışık gürültü %p = Gauss(varyans p) → benek(varyans p) → tuz-biber(p); ölçütler V_PC, V_PE, ACC, F, NMI, Kappa; etiketlerin Macar yöntemiyle eşlenmesi; eşleştirilmiş Wilcoxon testleri; 97 birim testi.
 
 ## 15. Makale neler raporluyor?
 
-Bunlar makalede raporlanan sayılar (her yerde böyle etiketli).
+Bunlar makalede raporlanan sayılar (Tablo 1–9); her yerde böyle etiketli.
 
-## 16. Yeniden üretimimiz ve makale (sentetik görüntüler)
+## 16. Makaleyi yeniden üretebildik mi?
 
-FCM uyumu görüntüleri ve gürültüyü doğruluyor. Yöntem düşük gürültüde tutuyor; üç sınıflı görüntülerde yüksek gürültüde daha düşük — sonraki slaytlarda açıklanıyor.
+FCM uyumu görüntüleri ve gürültüyü doğruluyor. Üç bölgeli görüntülerdeki yüksek gürültü farkı sonraki slaytta açıklanıyor (σ ayarı).
 
-## 17. Ablasyon ve duyarlılık
+## 17. Hangi parçalar önemli?
 
-Ödül katsayısı σ yüksek gürültüde en etkili parametre. Bunu akılda tutun — ikinci iterasyonu yönlendiren bu.
+Sorulursa: yalnız yerel-olmayan terim 97.5–99.6, yalnız yerel 97.5–99.9 (makale: %82.26); %5 gürültüde σ, w ve δ ACC'yi 0.4 puandan az değiştiriyor, k = 1 bozuyor, δ esas olarak iterasyon sayısını belirliyor.
 
-## 18. α, β, γ için Mamdani kural tabanı
+## 18. İterasyon 1: güven ağırlıkları için bulanık kurallar
 
-Çıkarım örneğini adım adım anlatın: hangi kurallar ateşleniyor, çıkış kümesi nasıl oluşuyor, üç durulaştırma sonucu.
+Şekli anlatın: hangi kurallar ateşleniyor, çıkış kümesi nasıl oluşuyor, sonuç. Sorulursa: girdiler Dev = |y − (ξ+ϑ)/2| ve Dis = |ξ − ϑ|; çıktılar α, β, γ; sonradan eklenen 'split' varyantı makalenin α'sını koruyup yalnız β : γ'yı paylaştırıyor.
 
-## 19. Sonuç: ilk kural tabanı doğruluğu artırmadı (H1 reddedildi)
+## 19. Sonuç: ilk kurallar doğruluğu artırmadı
 
-Olumsuz sonuç dürüstçe raporlandı — yönerge iyileşmeyi zorunlu tutmuyor ama analiz edilmesini istiyor. Sonraki slayt analizi gösteriyor.
+Olumsuz sonuç dürüstçe raporlandı — yönerge iyileşmeyi zorunlu tutmuyor ama analiz edilmesini istiyor. Sorulursa: H1 hipotezi reddedildi; '*' = eşleştirilmiş Wilcoxon p < 0.05.
 
-## 20. Neden başarısız oldu — varyantlar ne gösteriyor?
+## 20. Neden başarısız oldu?
 
-Bu teşhis ikinci iterasyona köprü: her aday bu nedenlerden birini hedefliyor.
+Bu teşhis ikinci iterasyona köprü. Sorulursa: H3 ve H4 tuttu; kurallar temiz / %1 gürültüde en iyi, çünkü orada tutarlı piksellere güvenmek doğru.
 
-## 21. İkinci iterasyon: bulanık ödül katsayısı (önceden kayıtlı)
+## 21. İterasyon 2: σ'yı bulanık bir kural seçsin
 
-Protokolü anlatın: ayar kümesi test kümesinden ayrı, deneme bütçesi, ön kayıt. Fikrin test tohumlarındaki C2 ablasyonundan geldiğini açıkça söyleyin — test parametrelere kör, fikre değil.
+Protokolü anlatın: ayar 100–104 tohumlarında, test 0–9'da; izin verilen 12 konfigürasyonun 9'u denendi; H5/H6 hipotezleri testten önce commit'lendi. Sorulursa: gürültü tahmini = Haar dönüşümünün median(|HH|)/0.6745 değeri; σ çıktıları 0.3 / 0.6 / 0.95; iki aday daha denendi (sınırlı α, dürtü girdisi). Fikir, σ üzerindeki önceki testten geldi — test parametrelere kör, fikre değil.
 
-## 22. Sonuç: H5 tuttu, H6 tuttu
+## 22. Sonuç: yüksek gürültüde belirgin kazanç
 
-FIS-σ, %15'te sy2/sy3'te 97.00/95.08'e ulaşıyor (makalede raporlanan 98.53/97.36: daha yakın ama hâlâ altında; sonraki slayt). Dürüst kısım: karışık gürültüde sabit σ = 0.9 de aynı derecede iyi (farklar -0.02 … +0.19); kuralın değeri σ'yı otomatik seçmesi. FIS-σ+A, ilk kural tabanını zararsız ve düşük gürültüde daha iyi hâle getiriyor.
+Kuralın değeri σ'yı otomatik seçmesi; karışık gürültüde sabit σ = 0.9 da aynı derecede iyi (farklar -0.02 … +0.19). 'Bulanık σ + sınırlı güven' (FIS-σ+A) ayrıca gürültülü piksele duyulan güveni sınırlıyor; ilk kural tabanını zararsız hâle getiriyor (en kötü fark +0.00). Sorulursa: %10 ve %15'te p < 0.001; %15'te sy2/sy3 97.00/95.08'e ulaşıyor.
 
-## 23. Test ızgarasının ötesi: gürültü türleri ve gerçek görüntüler
+## 23. Test görüntülerinin dışında da çalışıyor mu?
 
-Kazancın gerçek görüntülere ve tüm gürültü türlerine taşındığını gösterin; sabit σ = 0.9'un nerede aynı derecede iyi olduğunu açıkça söyleyin.
+Sorulursa: %0–20 aralığında dört gürültü türünde bulanık σ ile sabit σ = 0.9 arasındaki fark -0.31 … +0.24 puan; tuz-biber %20: tahmin 0, sabit 0.9 biraz daha iyi.
 
 ## 24. Makalenin kendi sayılarına göre: daha yakın, ama daha iyi değil
 
-İki karşılaştırmayı ayırın. Denetimli (aynı kod, aynı gürültü): FIS-σ %10–15'te makale ayarlarını geçiyor, hiçbir yerde anlamlı kaybı yok. Makalede basılı sayılara göre (başka uygulama, başka gürültü örnekleri; yalnızca yol gösterici): düşük gürültüde eşit, %15'te sy2/sy3'te hâlâ 1.53/2.28 puan aşağıda (önce 6.15/8.23). 'Makaleyi geçtik' demeyin.
+İki karşılaştırmayı ayırın. Aynı kod, aynı gürültü: bulanık σ %10–15'te makale ayarını geçiyor, hiçbir yerde anlamlı kaybı yok. Makalede basılı sayılara göre (başka uygulama, başka gürültü; yalnızca yol gösterici): düşük gürültüde eşit, %15'te sy2/sy3'te hâlâ 1.53/2.28 puan aşağıda (önce 6.15/8.23). 'Makaleyi geçtik' demeyin.
 
-## 25. Gerçek görüntüler: gri ve renkli BSDS500 (%5 karışık gürültü)
+## 25. Gerçek fotoğraflar (BSDS500)
 
-Renkli görüntüleri neden ayrıca çalıştırdığımızı anlatın: makaledeki BSDS500 görüntüleri renkli fotoğraflar; yöntemin çok kanallı bir sürümünü kullanıyoruz (D-043).
+Makaledeki fotoğraflar renkli, bu yüzden yöntemin renkli bir sürümünü de çalıştırdık (D-043). Sorulursa: split varyantı 78.70, H2 hipotezi reddedildi.
 
-## 26. Katkının getirdikleri — ve sınırları
+## 26. Ne öğrendik — ve sınırlar
 
-Neyin yapılıp neyin yapılmadığını açıkça söyleyin; yönerge yalnız doğruluğu değil analizi de değerlendiriyor.
+Neyin yapılıp neyin yapılmadığını açıkça söyleyin; yönerge yalnız doğruluğu değil analizi de değerlendiriyor. Sorulursa: makaledeki 8 karşılaştırma yöntemi yeniden yazılmadı; iterasyon 2 aynı görüntülerin başka gürültü tohumlarıyla ayarlandı.
 
 ## 27. Sonuç
 
-Tek cümleyle özetleyin: σ'yı görüntüden seçen küçük bir kural sistemi yüksek gürültüde kaybedilen doğruluğun çoğunu geri kazandırıyor. Teşekkür edin ve soruları davet edin.
+Tek cümleyle özetleyin, teşekkür edin ve soruları davet edin.

@@ -1,7 +1,8 @@
 """Block diagram of the implemented system (paper method + both iterations of the fuzzy-rule extension).
 
 Usage:  python experiments/plot_architecture.py
-Output: results/figures/architecture.{png,pdf} (English) and architecture_tr.{png,pdf} (Turkish)
+Output: results/figures/architecture.{png,pdf} (English) and architecture_tr.{png,pdf} (Turkish);
+        architecture_simple[_tr].png (slide version without equations)
 """
 from __future__ import annotations
 
@@ -82,9 +83,51 @@ def draw(lang: str) -> None:
     print(f"saved {out.relative_to(ROOT)}.png/.pdf")
 
 
+SIMPLE = {
+    "en": dict(img="noisy\nimage", o1="opinion 1\nneighbours' fair vote", o2="opinion 2\ncleaning in the\nwavelet domain", px="the pixel itself",
+               w="trust weights\nper pixel", cl="fuzzy\nclustering", out="region\nmap",
+               it2="iteration 2 (ours):\nfuzzy rule sets σ", it1="iteration 1 (ours):\nfuzzy rules for the weights"),
+    "tr": dict(img="gürültülü\ngörüntü", o1="1. görüş\nkomşuların adil oylaması", o2="2. görüş\ndalgacık alanında\ntemizleme", px="pikselin kendisi",
+               w="piksel başına\ngüven ağırlıkları", cl="bulanık\nkümeleme", out="bölge\nharitası",
+               it2="iterasyon 2 (bizim):\nσ'yı bulanık kural seçer", it1="iterasyon 1 (bizim):\nağırlıklar için bulanık kurallar"),
+}
+
+
+def draw_simple(lang: str) -> None:
+    """Slide version of the block diagram: no equations, plain words (presentation only)."""
+    T = SIMPLE[lang]
+    fig, ax = plt.subplots(figsize=(7.2, 3.4))
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 4.7)
+    ax.axis("off")
+    box(ax, 0.05, 1.75, 1.2, 1.0, T["img"], "data", fs=9)
+    box(ax, 1.9, 3.1, 2.3, 0.95, T["o1"], "paper", fs=8.5)
+    box(ax, 1.9, 1.75, 2.3, 1.0, T["o2"], "paper", fs=8.5)
+    box(ax, 1.9, 0.5, 2.3, 0.8, T["px"], "data", fs=8.5)
+    box(ax, 4.85, 1.65, 1.6, 1.2, T["w"], "paper", fs=8.5)
+    box(ax, 7.0, 1.75, 1.35, 1.0, T["cl"], "paper", fs=9)
+    box(ax, 8.85, 1.75, 1.1, 1.0, T["out"], "out", fs=9)
+    box(ax, 1.9, 4.15, 2.3, 0.5, T["it2"], "ours", fs=7.5)
+    box(ax, 4.4, 0.25, 2.5, 0.75, T["it1"], "ours", fs=7.5)
+    for yy in (3.57, 2.25, 0.9):
+        arrow(ax, 1.25, 2.25, 1.9, yy)
+    for yy in (3.57, 2.25, 0.9):
+        arrow(ax, 4.2, yy, 4.85, 2.25)
+    arrow(ax, 6.45, 2.25, 7.0, 2.25)
+    arrow(ax, 8.35, 2.25, 8.85, 2.25)
+    arrow(ax, 3.05, 4.15, 3.05, 4.05, color=EDGE["ours"])
+    arrow(ax, 5.65, 1.0, 5.65, 1.65, color=EDGE["ours"])
+    fig.tight_layout(pad=0.2)
+    out = ROOT / "results" / "figures" / ("architecture_simple" + ("" if lang == "en" else "_tr"))
+    fig.savefig(f"{out}.png", dpi=220)
+    plt.close(fig)
+    print(f"saved {out.relative_to(ROOT)}.png")
+
+
 def main() -> None:
     for lang in ("en", "tr"):
         draw(lang)
+        draw_simple(lang)
 
 
 if __name__ == "__main__":

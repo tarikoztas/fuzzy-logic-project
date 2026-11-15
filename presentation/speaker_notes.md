@@ -20,90 +20,90 @@ Say what the listener gains: a checked implementation, interpretable rules and a
 
 Keep this short (20 seconds).
 
-## 6. Why noisy image segmentation is hard for FCM
+## 6. Why noisy images are hard for plain fuzzy clustering
 
-Show the noisy images and how FCM fails. Motivation: real images (medical, remote sensing) contain several noise types at once.
+Show the noisy images and how FCM fails. If asked: FCM minimises Σ u^m (y − c)² with Σ_i u = 1; the mixed noise is Gaussian + speckle + salt-and-pepper (sy3, 15 %: ACC ≈ 56 %).
 
-## 7. How earlier work adds spatial information to FCM
+## 7. How earlier work helps FCM against noise
 
-Explain the four strands; the paper is the only one combining all five ingredients. Closest relatives: SRFCM (sparsity framework) and FSC_LNML (same lab).
+If asked for names: local — BCFCM, FCM_S, FGFCM, FLICM, FRFCM; non-local — FCM_SNLS, FALRCM, FSC_LNML; wavelet/sparse — WFCM, SRFCM, DSFCM_N.
 
-## 8. Fuzzy sets, fuzzy clustering and fuzzy inference
+## 8. Fuzzy logic in three ideas
 
-Connect to the lectures. FCM is fuzzy because of the membership matrix; the paper has no explicit rule base — this motivates our extension.
+Connect to the lectures. If asked: AND = min, implication = min (clipping), aggregation = max; defuzzification by centroid, bisector or mean of maxima; Sugeno uses constant outputs and a weighted average.
 
-## 9. Architecture of the method (and where our extension plugs in)
+## 9. How the method works
 
-Walk through the pipeline left to right. Orange box = first iteration of our contribution; the second iteration acts on σ inside the ξ box.
+Walk through the figure left to right. Orange box = our first iteration (the weights); the second iteration changes σ inside the first opinion. If asked: distance d = α(y−c)² + β(ξ−c)² + γ(ϑ−c)², ξ = local, ϑ = non-local estimate.
 
-## 10. Local information ξ: golden-ratio reward and penalty sets
+## 10. Opinion 1: a fair vote of the neighbours
 
-Analogy: a jury that down-weights, but does not delete, the most extreme scores. We round the set size down, as in Fig. 1 of the paper (D-014).
+If asked: reward weight 1+σ, penalty weight 1−σ, times exp(−Δgray²/τ²)·exp(−distance); reward-set size ⌊0.618·(N_R−1)⌋; Fig. 1 of the paper is reproduced exactly (D-014).
 
-## 11. Non-local information ϑ in the wavelet domain
+## 11. Opinion 2: cleaning in the wavelet domain
 
-Explain DTCWT with the analogy of splitting a song into bass/mid/treble channels.
+If asked: dual-tree complex wavelet transform (DTCWT), 1 low-pass + 6 sub-bands at ±15°, ±45°, ±75°; non-local means with a 15×15 search window and 5×5 patches, h² = 250.
 
-## 12. Adaptive coefficients and sparse-regularised FCM
+## 12. Weighing the three opinions
 
-Emphasise the scale of the coefficients — it becomes important for our extension.
+If asked: ΔG1 = k·exp(y − ξ), ΔG2 = k·exp(y − ϑ); α = 1/(ΔG1+ΔG2), β = ΔG1, γ = ΔG2 with k = 15; objective Σ u^m d + δ‖U‖₀, hard threshold √δ = 0.63 then normalise; w=5, S=15, υ=4, g=10, σ=0.3, k=15, δ=0.4, m=2.
 
 ## 13. The fuzzy systems of the project at a glance
 
 This slide answers the guideline items: inputs/outputs, membership functions, rule base, inference, defuzzification — for the paper and for both iterations.
 
-## 14. Data, noise and protocol
+## 14. How we tested
 
-Stress fairness: identical noise realisations and initialisations; only one factor changes at a time.
+If asked: mixed noise p % = Gaussian(var p) → speckle(var p) → salt-and-pepper(p); metrics V_PC, V_PE, ACC, F, NMI, Kappa; Hungarian matching of labels; paired Wilcoxon tests; 97 unit tests.
 
 ## 15. What the paper reports
 
-These are paper-reported numbers (labelled as such everywhere).
+These are paper-reported numbers (Tables 1–9), labelled as such everywhere.
 
-## 16. Our reproduction vs. the paper (synthetic images)
+## 16. Could we reproduce the paper?
 
-FCM agreement validates images and noise. The method matches at low noise; at high noise on 3-class images it is lower — explained on the next slides.
+FCM agreement validates images and noise. The gap at high noise on the three-region images is explained on the next slide (the σ setting).
 
-## 17. Ablation and sensitivity
+## 17. Which parts matter?
 
-The reward factor σ is the most influential parameter at high noise. Remember this — it drives the second iteration.
+If asked: non-local term alone 97.5–99.6 %, local alone 97.5–99.9 % (paper: 82.26 %); at 5 % noise σ, w and δ change ACC by < 0.4 points, k = 1 degrades, δ mainly controls the iterations.
 
-## 18. A Mamdani rule base for α, β, γ
+## 18. Iteration 1: fuzzy rules for the trust weights
 
-Walk through the inference example: which rules fire, how the output set is built, three defuzzification results.
+Walk through the figure: which rules fire, how the output set is built, the result. If asked: inputs Dev = |y − (ξ+ϑ)/2| and Dis = |ξ − ϑ|; outputs α, β, γ; a post-hoc variant 'split' keeps the paper's α and only splits β : γ.
 
-## 19. Result: the first rule base did not improve accuracy (H1 rejected)
+## 19. Result: the first rules did not improve accuracy
 
-Negative result reported honestly — the guideline says improvement is not required, but it must be analysed. The next slide shows the analysis.
+Negative result reported honestly — the guideline does not require an improvement, but it must be analysed. If asked: hypothesis H1 rejected; '*' = paired Wilcoxon p < 0.05.
 
-## 20. Why it failed — and what the variants show
+## 20. Why it failed
 
-This diagnosis is the bridge to the second iteration: each candidate targets one of these causes.
+This diagnosis is the bridge to the second iteration. If asked: H3 and H4 hold; the rules are best on clean / 1 % noise, where trusting consistent pixels is right.
 
-## 21. Second iteration: a fuzzy reward factor (pre-registered)
+## 21. Iteration 2: let a fuzzy rule choose σ
 
-Explain the protocol: tuning set separate from the test set, budget, pre-registration. Be open that the idea came from the C2 ablation on the test seeds — the test is blind to the parameters, not to the idea.
+Explain the protocol: tuning on seeds 100–104, testing on 0–9; 9 of 12 allowed configurations tried; hypotheses H5/H6 committed before the test. If asked: noise estimate = median(|HH|)/0.6745 of a Haar transform; σ outputs 0.3 / 0.6 / 0.95; two other candidates (bounded α, impulse input) were also tried. The idea came from the earlier test on σ — the test is blind to the parameters, not to the idea.
 
-## 22. Result: H5 holds, H6 holds
+## 22. Result: a clear gain at high noise
 
-FIS-σ reaches 97.00/95.08 % at 15 % on sy2/sy3 (paper-reported 98.53/97.36 %: closer, still below; next slides). Honest part: a fixed σ = 0.9 is as good on mixed noise (differences -0.02 … +0.19); the rule's value is choosing σ automatically. FIS-σ+A is the first rule base made harmless and better at low noise.
+The rule's value is that it picks σ automatically; a fixed σ = 0.9 is as good on mixed noise (differences -0.02 … +0.19). 'Fuzzy σ + bounded trust' (FIS-σ+A) also bounds the trust in the noisy pixel; it makes the first rule base harmless (worst difference +0.00). If asked: p < 0.001 at 10 and 15 %; at 15 % sy2/sy3 reach 97.00/95.08 %.
 
-## 23. Beyond the test grid: noise types and real images
+## 23. Does it work beyond the test images?
 
-Show that the gain carries over to the real images and to all noise types, and say clearly where the fixed σ = 0.9 is equally good.
+If asked: over four noise types at 0–20 % the fuzzy σ differs from a fixed σ = 0.9 by -0.31 … +0.24 points; salt-and-pepper 20 %: estimate 0, fixed 0.9 slightly better.
 
 ## 24. Against the paper's own numbers: closer, not better
 
-Separate the two comparisons. Controlled (same code, same noise): FIS-σ beats the paper's settings at 10–15 % and never loses meaningfully. Against the numbers printed in the paper (other implementation, other noise realizations, so indicative only): equal at low noise, still 1.53/2.28 points below at 15 % on sy2/sy3, down from 6.15/8.23. Do not claim that we beat the paper.
+Separate the two comparisons. Same code, same noise: the fuzzy σ beats the paper's setting at 10–15 % and never loses meaningfully. Against the numbers printed in the paper (other implementation, other noise, so only indicative): equal at low noise, still 1.53/2.28 points below at 15 % on sy2/sy3, down from 6.15/8.23. Do not claim that we beat the paper.
 
-## 25. Real images: BSDS500 in gray and colour (5 % mixed noise)
+## 25. Real photographs (BSDS500)
 
-Explain why we also ran the colour images: the paper's BSDS500 images are colour photographs; we use a multichannel version of the method (D-043).
+The paper's photographs are in colour, so we also ran a colour version of the method (D-043). If asked: split variant 78.70 %, hypothesis H2 rejected.
 
-## 26. What the contribution adds — and its limits
+## 26. What we learned — and the limits
 
-Be clear about what was and was not done; the guideline values the analysis, not only the accuracy.
+Be clear about what was and was not done; the guideline values the analysis, not only the accuracy. If asked: the 8 comparison methods of the paper were not re-implemented; iteration 2 was tuned on other noise seeds of the same images.
 
 ## 27. Conclusion
 
-Summarise in one sentence: a small rule system that sets σ from the image recovers most of the accuracy lost at high noise. Thank the audience and invite questions.
+Summarise in one sentence, thank the audience and invite questions.
