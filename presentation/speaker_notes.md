@@ -2,7 +2,7 @@
 
 ## 1. Reproducing an Adaptive Sparse-Regularized Fuzzy Clustering Method for Noisy Image Segmentation — and Extending It with Mamdani Rule Bases
 
-Introduce yourself and the paper. Say what you will show: re-implementation, reproduction, findings about the paper, two iterations of a fuzzy-rule extension, and an honest evaluation.
+Introduce yourself and the paper. Say what you will show: re-implementation, reproduction, two iterations of a fuzzy-rule extension, and an honest evaluation.
 
 ## 2. Why noisy image segmentation is hard for FCM
 
@@ -22,11 +22,11 @@ Walk through the pipeline left to right. Orange box = first iteration of our con
 
 ## 6. Local information ξ: golden-ratio reward and penalty sets
 
-Analogy: a jury that down-weights, but does not delete, the most extreme scores. Text says ceil, the figure shows floor — we use floor (D-014).
+Analogy: a jury that down-weights, but does not delete, the most extreme scores. We round the set size down, as in Fig. 1 of the paper (D-014).
 
 ## 7. Non-local information ϑ in the wavelet domain
 
-Explain DTCWT with the analogy of splitting a song into bass/mid/treble channels. Then the finding: the patch-similarity part is practically inactive with the published parameters.
+Explain DTCWT with the analogy of splitting a song into bass/mid/treble channels.
 
 ## 8. Adaptive coefficients and sparse-regularised FCM
 
@@ -50,48 +50,44 @@ FCM agreement validates images and noise. The method matches at low noise; at hi
 
 ## 13. Ablation and sensitivity
 
-The reward factor is the key under-determined quantity; the paper's own worked example corresponds to σ ≈ 0.9. Remember this — it drives the second iteration.
+The reward factor σ is the most influential parameter at high noise. Remember this — it drives the second iteration.
 
-## 14. Six inconsistencies we found in the paper
-
-Each finding has evidence in report/decisions.md (D-031, D-032, D-038, D-011r, D-040, D-042). This is the critical-evaluation part of the guideline.
-
-## 15. A Mamdani rule base for α, β, γ
+## 14. A Mamdani rule base for α, β, γ
 
 Walk through the inference example: which rules fire, how the output set is built, three defuzzification results.
 
-## 16. Result: the first rule base did not improve accuracy (H1 rejected)
+## 15. Result: the first rule base did not improve accuracy (H1 rejected)
 
 Negative result reported honestly — the guideline says improvement is not required, but it must be analysed. The next slide shows the analysis.
 
-## 17. Why it failed — and what the variants show
+## 16. Why it failed — and what the variants show
 
 This diagnosis is the bridge to the second iteration: each candidate targets one of these causes.
 
-## 18. Second iteration: a fuzzy reward factor (pre-registered)
+## 17. Second iteration: a fuzzy reward factor (pre-registered)
 
 Explain the protocol: tuning set separate from the test set, budget, pre-registration. Be open that the idea came from the C2 ablation on the test seeds — the test is blind to the parameters, not to the idea.
 
-## 19. Result: H5 holds, H6 holds
+## 18. Result: H5 holds, H6 holds
 
 FIS-σ reaches 97.00/95.08 % at 15 % on sy2/sy3 (paper-reported 98.53/97.36 %: closer, still below; next slides). Honest part: a fixed σ = 0.9 is as good on mixed noise (differences -0.02 … +0.19); the rule's value is choosing σ automatically. FIS-σ+A is the first rule base made harmless and better at low noise.
 
-## 20. Beyond the test grid: noise types and real images
+## 19. Beyond the test grid: noise types and real images
 
 Show that the gain carries over to the real images and to all noise types, and say clearly where the fixed σ = 0.9 is equally good.
 
-## 21. Against the paper's own numbers: closer, not better
+## 20. Against the paper's own numbers: closer, not better
 
 Separate the two comparisons. Controlled (same code, same noise): FIS-σ beats the paper's settings at 10–15 % and never loses meaningfully. Against the numbers printed in the paper (other implementation, other noise realizations, so indicative only): equal at low noise, still 1.53/2.28 points below at 15 % on sy2/sy3, down from 6.15/8.23. Do not claim that we beat the paper.
 
-## 22. BSDS500 (5 % mixed noise) and the colour finding
+## 21. Real images: BSDS500 in gray and colour (5 % mixed noise)
 
-Explain the colour finding (D-042) and the multichannel generalisation (D-043).
+Explain why we also ran the colour images: the paper's BSDS500 images are colour photographs; we use a multichannel version of the method (D-043).
 
-## 23. What the contribution adds — and its limits
+## 22. What the contribution adds — and its limits
 
 Be clear about what was and was not done; the guideline values the analysis, not only the accuracy.
 
-## 24. Live demo and conclusion
+## 23. Conclusion
 
-Run the demo with a different noise type than in the report; backup: results/figures/demo_panel.png.
+Summarise in one sentence: a small rule system that sets σ from the image recovers most of the accuracy lost at high noise. Thank the audience and invite questions.

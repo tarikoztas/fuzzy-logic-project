@@ -70,7 +70,7 @@ py -3.12 -m venv .venv                       # 3.13 değil; bkz. D-024
 
 ## 6. Durum takibi
 
-- **Durum (14.11.2026):** Faz 0–8 + ikinci iterasyon (docs/14; D-044–D-046, CP6) tamam: H5/H6 tuttu; İngilizce ve Türkçe rapor (report.pdf, report_tr.pdf) ve sunum (24 slayt, PDF+PPTX, iki dil; D-047: [1]'de raporlanan değerlerle açık karşılaştırma); son kontrol tamamı PASS. Öğrenciye kalan: rapor/sunum okuma ve onay, DOI kontrolü, demo provası, `docs/13` çalışması, Classroom yüklemesi.
+- **Durum (14.11.2026):** Faz 0–8 + ikinci iterasyon (docs/14; D-044–D-046, CP6) tamam: H5/H6 tuttu; İngilizce ve Türkçe rapor (report.pdf, report_tr.pdf) ve sunum (23 slayt, PDF+PPTX, iki dil; D-047: [1]'de raporlanan değerlerle açık karşılaştırma; D-048: demo ve tutarsızlık slaytı yok); son kontrol tamamı PASS. Öğrenciye kalan: rapor/sunum okuma ve onay, DOI kontrolü, demo provası, `docs/13` çalışması, Classroom yüklemesi.
 
 - İlerleme: `docs/04_FAZLAR_VE_YOL_HARITASI.md` içindeki checkbox'lar (her faz sonunda işaretle).
 - Kararlar: `docs/06_KARARLAR.md` (yeni karar → yeni satır) **ve** herkese açık özeti `report/decisions.md`. Hocaya bağlı sorular kapatıldı (öğrenci hocaya sormayacak); yeni belirsizlikte en savunulabilir seçimi yap, gerekçesiyle iki dosyaya da yaz.

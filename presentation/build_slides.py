@@ -9,7 +9,7 @@ Layout: a header (section label + title), a content area in which the content bl
 is centred vertically (and the columns are centred against each other), and a footer.
 The same geometry is used for the PPTX, so both outputs look alike.
 
-Slide keys: kind ("title"), section, title, bullets (nested lists = sub-bullets),
+Slide keys: kind ("title"), section, title, lead (one or two plain sentences above the content), bullets (nested lists = sub-bullets),
 table {columns, rows, caption}, image, caption, callouts [(value, label), ...],
 narrow_text (text column narrower than the image), notes.
 
@@ -59,6 +59,8 @@ body {{ margin: 0; font-family: "Segoe UI", Calibri, Arial, sans-serif; color: {
 .col.only {{ max-width: 262mm; margin: 0 auto; }}
 .col.only > ul > li {{ font-size: 17.5pt; margin-bottom: 3.4mm; }}
 .col.only li li {{ font-size: 14pt; }}
+.lead {{ font-size: 13.5pt; line-height: 1.4; color: #3c3b36; margin: 0; }}
+.col.only > .lead {{ font-size: 15.5pt; }}
 .col.img {{ flex: 1.25; align-items: center; }}
 .col.img img {{ max-width: 100%; max-height: 118mm; object-fit: contain; }}
 .cap {{ font-size: 9.5pt; color: {MUTED}; margin-top: 1.5mm; text-align: center; }}
@@ -125,7 +127,7 @@ def slide_html(i: int, n: int, s: dict, lang: str) -> str:
         return (f'<section class="slide"><div class="title-slide"><div class="band"></div><div class="band2"></div>'
                 f'<div class="inner"><div class="kicker">{inline(s.get("kicker", ""))}</div><h1>{inline(s["title"])}</h1>'
                 f'<div class="sub">{s.get("subtitle_html") or inline(s.get("subtitle", ""))}</div></div></div></section>')
-    text = ""
+    text = f'<p class="lead">{inline(s["lead"])}</p>' if s.get("lead") else ""
     if s.get("bullets"):
         text += bullets_html(s["bullets"])
     if s.get("callouts"):
@@ -233,11 +235,11 @@ def build_pptx(slides: list[dict], lang: str) -> Path:
             r.font.bold = bold or bool(k % 2)
             r.font.color.rgb = _rgb(ACCENT_DARK if k % 2 and color == INK else color)
 
-    def bullets(sl, items, x, y, w, h, size=17):
+    def bullets(sl, items, x, y, w, h, size=17, anchor=MSO_ANCHOR.MIDDLE):
         tb = sl.shapes.add_textbox(Mm(x), Mm(y), Mm(w), Mm(h))
         tf = tb.text_frame
         tf.word_wrap = True
-        tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        tf.vertical_anchor = anchor  # TOP below a lead text, so that no gap opens between them
         first = [True]
 
         def add(its, level):
@@ -306,7 +308,7 @@ def build_pptx(slides: list[dict], lang: str) -> Path:
             full_w = W - 2 * PAD_X
             if has_img:
                 tw = full_w * (0.8 / 2.05 if s.get("narrow_text") else 1 / 2.25)
-                if not (s.get("bullets") or s.get("table") or s.get("callouts")):
+                if not (s.get("lead") or s.get("bullets") or s.get("table") or s.get("callouts")):
                     tw = 0
                 iw_area = full_w - tw - (10 if tw else 0)
             else:
@@ -317,6 +319,10 @@ def build_pptx(slides: list[dict], lang: str) -> Path:
             fs = 19 if only else 17
             chars = max(20, int(tw / (3.05 if only else 2.75)))
             x0 = PAD_X + (full_w - tw) / 2 if only else PAD_X
+            if s.get("lead"):
+                lfs = 15 if only else 13
+                lchars = max(20, int(tw / (lfs * 0.15)))
+                parts.append(("lead", (-(-len(_plain(s["lead"])) // lchars)) * lfs * 0.45 + 2))
             if s.get("bullets"):
                 parts.append(("bullets", min(area_h, _lines(s["bullets"], chars) * (8.6 if only else 7.6) + 2)))
             if s.get("callouts"):
@@ -327,8 +333,10 @@ def build_pptx(slides: list[dict], lang: str) -> Path:
             total = sum(h for _, h in parts) + gap * max(0, len(parts) - 1)
             y = top + max(0, (area_h - total) / 2)
             for kind, h in parts:
-                if kind == "bullets":
-                    bullets(sl, s["bullets"], x0, y, tw, h, fs)
+                if kind == "lead":
+                    text(sl, x0, y, tw, h, s["lead"], lfs, "#3c3b36")
+                elif kind == "bullets":
+                    bullets(sl, s["bullets"], x0, y, tw, h, fs, MSO_ANCHOR.TOP if s.get("lead") else MSO_ANCHOR.MIDDLE)
                 elif kind == "callouts":
                     cs = s["callouts"]
                     cw = (tw - 6 * (len(cs) - 1)) / len(cs)
