@@ -76,8 +76,8 @@ def slides(lang: str = "en") -> list[dict]:
     return [
         {"kind": "title",
          "kicker": L("Fuzzy Logic · Term Project", "Bulanık Mantık · Dönem Projesi"),
-         "title": L("Reproducing an Adaptive Sparse-Regularized Fuzzy Clustering Method for Noisy Image Segmentation — and Extending It with Mamdani Rule Bases",
-                    "Gürültülü Görüntü Bölütleme için Uyarlamalı Seyrek Düzenlileştirilmiş Bulanık Kümeleme Yönteminin Yeniden Gerçekleştirilmesi ve Mamdani Kural Tabanlarıyla Geliştirilmesi"),
+         "title": L("Adaptive Sparse-Regularized Fuzzy Clustering for Noisy Image Segmentation",
+                    "Gürültülü Görüntü Bölütleme için Uyarlamalı Seyrek Düzenlileştirilmiş Bulanık Kümeleme"),
          "subtitle": L("Tarık Öztaş (1306230040) · İstanbul University-Cerrahpaşa, Computer Engineering · Reference paper: Wu et al., Expert Systems with Applications 256 (2024) 124943",
                        "Tarık Öztaş (1306230040) · İstanbul Üniversitesi-Cerrahpaşa, Bilgisayar Mühendisliği · Referans makale: Wu vd., Expert Systems with Applications 256 (2024) 124943"),
          "notes": L("Introduce yourself and the paper. Say what you will show: re-implementation, reproduction, two iterations of a fuzzy-rule extension, and an honest evaluation.",

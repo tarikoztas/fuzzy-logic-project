@@ -31,8 +31,8 @@ OUT = ROOT / "presentation"
 INK, MUTED, ACCENT, ACCENT_DARK, ORANGE = "#1f1f1e", "#5f5e58", "#2a78d6", "#174a8b", "#eb6834"
 TINT, RULE, ZEBRA = "#eaf2fc", "#d9d8d2", "#f6f6f3"
 
-FOOTER = {"en": "T. Öztaş · Fuzzy Logic term project · İÜC Computer Engineering",
-          "tr": "T. Öztaş · Bulanık Mantık dönem projesi · İÜC Bilgisayar Mühendisliği"}
+FOOTER = {"en": "Tarık Öztaş · Fuzzy Logic term project · İÜC Computer Engineering",
+          "tr": "Tarık Öztaş · Bulanık Mantık dönem projesi · İÜC Bilgisayar Mühendisliği"}
 
 # geometry (mm) shared by HTML and PPTX
 W, H = 338.67, 190.5

@@ -1,6 +1,6 @@
 # Speaker notes
 
-## 1. Reproducing an Adaptive Sparse-Regularized Fuzzy Clustering Method for Noisy Image Segmentation — and Extending It with Mamdani Rule Bases
+## 1. Adaptive Sparse-Regularized Fuzzy Clustering for Noisy Image Segmentation
 
 Introduce yourself and the paper. Say what you will show: re-implementation, reproduction, two iterations of a fuzzy-rule extension, and an honest evaluation.
 
